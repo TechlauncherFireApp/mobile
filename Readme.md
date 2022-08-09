@@ -59,9 +59,9 @@ Connect a physcial Android Device:
  `adb devices`
 8. Allow USB debugging when it pops up on your device
     - if you encounter 'device unauthorised' run
-    `adb kill-server`
-    `adb connect <IP-Address>:5555`
-    `adb devices`
+   * `adb kill-server`
+   * `adb connect <IP-Address>:5555`
+   * `adb devices`
 9. Run `Fflutter doctor` to check if device is recognised by flutte
 
 Steps to setup WiFi/USB sync with Android Devicehttps://blog.codemagic.io/how-to-dockerize-flutter-apps/
