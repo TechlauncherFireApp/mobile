@@ -1,0 +1,44 @@
+# SETUP
+
+### ISOLATED INSTALL
+1. Install Docker Desktop
+    * Windows Instructions: href/link
+    * MacOS Instructions: href/link
+2. Install an android emulator 
+    * Android Studio (Android Virtual Machine)
+        - If using a AMD based Windows computer 
+            1. you will need to enable "Windows HyperVisor Platform"
+            2. Hyper-V MUST be ENABLED in bios/uefi for Docker to work
+    * Visual Studio Emulator for Android
+        - a more lightweight version of the Android Studio one, try this if having issues with android studio
+3. Install VSCode & Remote Container externsion (HIGHLY RECOMMENDED but can install anothe IDE if you prefer)
+    if using a different IDE such as Intellij, PyCharm, Android Studio, etc - see instructions for that software
+    PyCharm - https://www.jetbrains.com/help/pycharm/using-docker-as-a-remote-interpreter.html 
+    JetBraims Space/IntelliJ - https://www.jetbrains.com/help/space/set-up-a-dev-evnvironment.html#using-the-default-dev-environment
+3. Clone Repo
+4. VSCode Remote Container - Open folder in container 
+
+Connect to emulator:
+1. Start the emulator on your local machine
+2. In the docker container terminal type `adb tcpip 5555`
+3. Device not found may pop up - if so just ignore it
+4. Type `adb connect host.docker.internal:5555`
+5. Wait for the emulator to connect
+6. Run the project using `flutter run` from within the fireapp dir 
+
+adb connect host.docker.internal:5555
+
+Note: VSCode Extensions need to be installed in both the local and container - see https://code.visualstudio.com/docs/remote/containers #Managing extensions for more detail 
+
+
+Steps to setup WiFi/USB sync with Android Devicehttps://blog.codemagic.io/how-to-dockerize-flutter-apps/
+
+To emulate iOS you will have to install Flutter locally on a MacOS Machine. Given that Arm based Mac's can't run android & only Mac's can run iOS. I have included instructions for how to complete a local setup below:
+
+
+
+--- 
+For a local windows setup please see
+Android Studio Website
+Flutter Dev Website
+
