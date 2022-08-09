@@ -5,7 +5,6 @@
     * Instructions: https://docs.docker.com/get-docker/
     * Docker is free but you may need to register an account to download the software
     * For windows you made need to install WSL 2 and ensure that Hyper-V is turned on at the BIOS/UEFI level
-    * 
 2. Install an android emulator 
     * Android Studio (Android Virtual Machine)
         - If using a AMD based Windows computer 
