@@ -23,9 +23,9 @@
 7. Wait for the docker container to build (first time will always take longer but after its built it should load instantly)
 
 Now that the Docker container is established you can use 
- `close connection` - to close the container
- `Open folder in container` - to start the container - should automatically get a prompt whenever you open the project.
- `rebuild container` - to recreate the container if you makes  changes to the setup (dockerfile.dockerfile)
+    `close connection` - to close the container
+    `Open folder in container` - to start the container - should automatically get a prompt whenever you open the project.
+    `rebuild container` - to recreate the container if you makes  changes to the setup (dockerfile.dockerfile)
 
 Connect to emulator:
 1. Start the emulator on your local machine
@@ -49,8 +49,8 @@ Connect a physcial Android Device:
 4. Get the IP Address of your Android device 
    * Usually found on your android device under `WiFi Settings -> Advanced`
 3. Enter the following commands
- `adb tcpip 5555`
- `adb connect <Your-Devices-IP-Address>`
+    `adb tcpip 5555`
+    `adb connect <Your-Devices-IP-Address>`
 4. Run `adb devices` again, this time the IP Address should come up
 5. Disconnect the device and run `adb devices` again, to verify if device is still connected wirelessly 
 6. Turn on the docker container
