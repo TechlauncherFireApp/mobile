@@ -12,10 +12,8 @@
             2. Hyper-V/Virtualisation MUST be ENABLED in bios/uefi for Docker to work
     * Visual Studio Emulator for Android
         - a more lightweight Android emulator, try this if having issues with android studio
-3. Install VSCode & the "Remote Container" extension (HIGHLY RECOMMENDED but you can install another IDE if you prefer)
-    if using a different IDE such as Intellij, PyCharm, Android Studio, etc - search for the instructions for enabling docker container dev env for that software
-    PyCharm - https://www.jetbrains.com/help/pycharm/using-docker-as-a-remote-interpreter.html 
-    JetBraims Space/IntelliJ - https://www.jetbrains.com/help/space/set-up-a-dev-evnvironment.html#using-the-default-dev-environment
+3. Install VSCode & the "Remote Container" extension (HIGHLY RECOMMENDED)      
+        - but you can install another IDE if you prefer, search for the instructions for enabling docker container dev env for that software
 3. Clone the repository 
     - `git clone https://github.com/TechlauncherFireApp/FireApp-Mobile <directory>`
 4. Open the repository in VSCode 
