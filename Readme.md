@@ -67,10 +67,10 @@ Connect a physcial Android Device:
 Steps to setup WiFi/USB sync with Android Devicehttps://blog.codemagic.io/how-to-dockerize-flutter-apps/
 
 ### Troubleshooting
-For Docker to work & for the Android emulator to work, Virtualisation MUST BE ENABLED.
-    - https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-11-pcs-c5578302-6e43-4b4b-a449-8ced115f58e1 
-    - Needs to be enabled in your bios
-    - If Docker works but the Android emulator gives the error "Hyper-V must be disabled" - do not disable Hyper-V instead on the windows search bar search for "Windows features" or 'Turn windows features on or off" and ensure that Virtual Machine Platform & Windows Hypervisor Platform are turned on. 
+For Docker to work & for the Android emulator to work, Virtualisation MUST BE ENABLED. 
+* https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-11-pcs-c5578302-6e43-4b4b-a449-8ced115f58e1 
+* Needs to be enabled in your bios
+* If Docker works but the Android emulator gives the error "Hyper-V must be disabled" - do not disable Hyper-V instead on the windows search bar search for "Windows features" or 'Turn windows features on or off" and ensure that Virtual Machine Platform & Windows Hypervisor Platform are turned on. 
 
 ## Local Install 
 > To emulate iOS you will have to install Flutter locally on a MacOS Machine. 
