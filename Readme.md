@@ -74,7 +74,7 @@ For Docker to work & for the Android emulator to work, Virtualisation MUST BE EN
 
 ## Local Install 
 > To emulate iOS you will have to install Flutter locally on a MacOS Machine. 
-> ARM-based Macs (models released 2021 and after) at this point in time cannot emulate android
+> ARM-based Macs (models released 2021 and after) at this point in time (2022) can't emulate android
 
 Step 1: 
 Simply follow these instructions to install flutter from the Flutter website:
