@@ -1,5 +1,5 @@
-#SETUP
-##CONTAINERISED INSTALL
+# SETUP
+## CONTAINERISED INSTALL
 > This method helps to reduce the amount of software installed on your personal computer and reduces issues setting up development environments on multiple computers and makes troubleshooting easier as the development environment will always be consistent. 
 1. Install Docker Desktop
     * Instructions: https://docs.docker.com/get-docker/
