@@ -1,6 +1,14 @@
 # SETUP
-## CONTAINERISED INSTALL
-> This method helps to reduce the amount of software installed on your personal computer and reduces issues setting up development environments on multiple computers and makes troubleshooting easier as the development environment will always be consistent. 
+
+You have two options for setting up the development environment; you can set it up in a container or do a local install.
+
+Container - This method reduces the amount of software installed on your personal computer and reduces issues setting up dev env (such as incompatibility with other software) on different computers. It also makes troubleshooting easier as the dev env will remain consistent across users. 
+
+Local - This is the standard method of installation, this project has no dependecies outside of Flutter & Dart, so it is a pretty easy install.
+
+Note: Either way you will have to install an emulator on your machine. 
+
+## CONTAINER INSTALL
 1. Install Docker Desktop
     * Instructions: https://docs.docker.com/get-docker/
     * Docker is free but you may need to register an account to download the software
