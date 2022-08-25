@@ -1,9 +1,84 @@
 import 'package:flutter/material.dart';
+import 'pages/calendar.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int currentAppBarIndex = 0;
+
+  // Right now navigation happens by changing the body of the scaffold
+  // This is not best practice as a Scaffold is placed over a scaffold
+  // Need to implement Navigator / Routing in the future for improved app experience.
+  // see https://maheshmnj.medium.com/everything-about-the-bottomnavigationbar-in-flutter-e99e5470dddb
+  // see https://medium.com/@theboringdeveloper/common-bottom-navigation-bar-flutter-e3693305d2d
+  final screens = [
+    HelloWorldTest(),
+    const CalendarPage(),
+    Center(child: Text('Training', style: TextStyle(fontSize: 60))),
+    Center(child: Text('Settings', style: TextStyle(fontSize: 60))),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(backgroundColor: Colors.green),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month),
+              label: 'Calendar',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              label: 'Training',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
+          currentIndex: currentAppBarIndex,
+          backgroundColor: Colors.red,
+          selectedItemColor: Colors.white,
+          iconSize: 30,
+          onTap: (index) => setState(() => currentAppBarIndex = index),
+        ),
+        body: screens[currentAppBarIndex],
+      ),
+    );
+  }
+}
+
+class HelloWorldTest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
+        color: Colors.red,
+        child: const Text('Helloworld'),
+      ),
+    );
+  }
+}
+
+/* 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -113,3 +188,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+*/
