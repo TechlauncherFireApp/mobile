@@ -57,9 +57,17 @@ class _CalendarPageState extends State<CalendarPage> {
   // Core page
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Calendar')),
         body: Column(
           children: [
-            Center(
+            //Style for calendar Border
+            Card(
+              margin: const EdgeInsets.all(8),
+              elevation: 5.0,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              // THE CALENDAR
               child: TableCalendar(
                 // Max day and min day the calendar can go to
                 firstDay: DateTime.utc(2022, 1, 1),
@@ -117,6 +125,10 @@ class _CalendarPageState extends State<CalendarPage> {
                 headerStyle: const HeaderStyle(
                   decoration: BoxDecoration(
                     color: Colors.red,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
                   ),
                   formatButtonDecoration: BoxDecoration(
                     color: Colors.white,
