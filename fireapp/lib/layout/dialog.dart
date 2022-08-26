@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+/// Display toast
+///
+/// Generate an additional file generated_plugin_registrant.dart in lib
+/// Currently only used to show the result of login
 void showToast(var text) {
   Fluttertoast.showToast(
       msg: text.toString(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// The specific content of top navigation bar
 AppBar buildTopNavBar(context) {
   return AppBar(
     leading: const IconButton(
