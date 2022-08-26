@@ -13,3 +13,6 @@ MyCalendarEvents testEvent1 =
 
 MyCalendarEvents testEvent2 =
     MyCalendarEvents(title: "event2", description: "test?");
+
+MyCalendarEvents testEvent3 =
+    MyCalendarEvents(title: "event3", description: "test?");

@@ -6,12 +6,12 @@ import 'calendar_logic.dart';
 
 /*
 * Improve Styling of the Calendar
-* Fix bug where only 1 event is showing
 * Can add events
 * Can add cyclic events - see TableCalendar Documentation 
 * Backend Integration w/ existing FireApp APIs
 * Change navigation method... 
-* Create AppColors for a consistent app colour scheme that can be used between pages... 
+* Create AppColors for a consistent app colour scheme that can be used between pages...
+* Fix overflow error 
 */
 
 class CalendarPage extends StatefulWidget {
@@ -36,9 +36,13 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     eventsForDay = {
-      DateTime.utc(2022, 8, 7): [testEvent1],
-      DateTime.utc(2022, 8, 7): [testEvent2],
-      DateTime.now(): [testEvent1],
+      DateTime.utc(2022, 8, 10): [testEvent3],
+      DateTime.utc(2022, 8, 7): [
+        testEvent1,
+        testEvent2,
+        testEvent2,
+      ],
+      DateTime.utc(2022, 8, 26): [testEvent2],
       // this is just a test event, should be blank {} or load from API
     };
     super.initState();
@@ -47,7 +51,6 @@ class _CalendarPageState extends State<CalendarPage> {
   List<MyCalendarEvents> _listOfEventsForSelectedDay = [];
 
   List<MyCalendarEvents> getListOfEventsForDay(DateTime day) {
-    print(eventsForDay[day] ?? []);
     return eventsForDay[day] ?? [];
   } //Gets the list of the events from the map when you have date time
 
@@ -84,6 +87,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     _focusedDay = focusedDay;
                     _listOfEventsForSelectedDay =
                         getListOfEventsForDay(selectedDay);
+                    print(_listOfEventsForSelectedDay.length);
                   });
                 },
                 onPageChanged: (focusedDay) {

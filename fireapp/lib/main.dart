@@ -31,7 +31,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(backgroundColor: Colors.green),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
