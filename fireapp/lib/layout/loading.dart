@@ -1,17 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+/// Loading Animation
 @immutable
 class NetLoadingDialog extends StatefulWidget {
   final String loadingText;
+  // The async method which need some time to execute
   final Future<dynamic> loadingMethod;
+  // Deal with the return value of loadingMethod,
+  // which is the only input of operation
   final Function operation;
 
   const NetLoadingDialog(
       {key,
       this.loadingText = 'Loading...',
       required this.loadingMethod,
-      required this.operation})
+      required this.operation
+      })
       : super(key: key);
 
   @override
@@ -22,8 +27,11 @@ class _LoadingDialog extends State<NetLoadingDialog> {
   @override
   void initState() {
     super.initState();
+    // Method execution completed
     widget.loadingMethod.then((value) {
+      // Hide loading dialog
       Navigator.pop(context);
+      // Execute the operation
       widget.operation(value);
     });
   }

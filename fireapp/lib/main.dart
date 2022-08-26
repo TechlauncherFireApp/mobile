@@ -24,9 +24,12 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        // Change the primary color of all the widget in red
         primarySwatch: Colors.red,
       ),
       routes: {
+        // The current root page is login page
+        //  (You can change it to the page you develop in the beginning)
         '/':(context) => const BasicWrapper(page: LoginPage()),
       },
     );

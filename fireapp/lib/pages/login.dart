@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
 import 'package:fireapp/layout/loading.dart';
 
+/// The login page container
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -21,6 +22,12 @@ class LoginPage extends StatelessWidget {
   }
 }
 
+/// Login box
+///
+/// contains username text field, password text field,
+/// forgot password and sign in button
+///
+/// Hint: You can try to imitate the way to develop your own page
 class LoginBox extends StatefulWidget {
   const LoginBox({Key? key}) : super(key: key);
 
@@ -28,8 +35,16 @@ class LoginBox extends StatefulWidget {
   State<StatefulWidget> createState() => _LoginBoxState();
 }
 
+/// State Object of Login Box
+///
+/// Specific implementation of login box
+///
+/// In this class I choose to put the implementation of
+/// different component functions in different methods
+/// which makes the structure clearer,
+/// and the method name represents the purpose of the component
 class _LoginBoxState extends State<LoginBox> {
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
   late String _user, _password;
   bool _isObscure = true; // Password is obscure or not
 
@@ -41,7 +56,7 @@ class _LoginBoxState extends State<LoginBox> {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 20), // Blank lines of a certain height
           buildTitle(), // Login
           const SizedBox(height: 20),
           buildUserTextField(),
@@ -169,6 +184,7 @@ class _LoginBoxState extends State<LoginBox> {
   }
 }
 
+/// The bottom register module
 class RegisterText extends StatelessWidget {
   const RegisterText({Key? key}) : super(key: key);
 
