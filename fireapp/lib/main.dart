@@ -20,23 +20,23 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainNavigation(),
+      home: MainRoute(),
     );
   }
 }
 
 //Main Navigation
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+class MainRoute extends StatefulWidget {
+  const MainRoute({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  State<MainRoute> createState() => _MainRouteState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
-  int currentAppBarIndex = 0;
+class _MainRouteState extends State<MainRoute> {
+  int currentNavIndex = 0;
 
-  final screens = [
+  final mainScreens = [
     Center(child: Text('Home', style: TextStyle(fontSize: 60))),
     const CalendarPage(),
     Center(child: Text('Training', style: TextStyle(fontSize: 60))),
@@ -46,34 +46,39 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Training',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentAppBarIndex,
-        backgroundColor: Colors.red,
-        selectedItemColor: Colors.white,
-        iconSize: 30,
-        onTap: (index) => setState(() => currentAppBarIndex = index),
-      ),
-      body: screens[currentAppBarIndex],
-    );
+        bottomNavigationBar: NavigationBar(
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.calendar_month),
+              label: 'Calendar',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.school),
+              label: 'Training',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          //type: BottomNavigationBarType.fixed,
+          selectedIndex: currentNavIndex,
+          //backgroundColor: Colors.red,
+          //selectedItemColor: Colors.white,
+          //iconSize: 30,
+          onDestinationSelected: (index) =>
+              setState(() => currentNavIndex = index),
+        ),
+        body: IndexedStack(
+          index: currentNavIndex,
+          children: mainScreens,
+        )
+        //screens[currentAppBarIndex],
+        );
   }
 }
 
@@ -87,6 +92,7 @@ https://maheshmnj.medium.com/everything-about-the-bottomnavigationbar-in-flutter
 https://www.bradcypert.com/flutter-routing-inside-of-the-scaffold/
 https://codewithandrea.com/articles/multiple-navigators-bottom-navigation-bar/
 https://blog.logrocket.com/how-to-build-a-bottom-navigation-bar-in-flutter/
+https://stackoverflow.com/questions/69894199/flutter-fix-bottom-navigation-bar-in-whole-app
 
 2. Integrate with Login Page, etc
 

@@ -164,9 +164,81 @@ class _CalendarPageState extends State<CalendarPage> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              setState(() {
-                print("sfjhkasdfjhksdfjhk");
-              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarFormRoute()),
+              );
             }),
       );
+}
+
+// Creating a 'form' widget
+class CalendarForm extends StatefulWidget {
+  @override
+  _CalendarFormState createState() {
+    return _CalendarFormState();
+  }
+}
+
+class _CalendarFormState extends State<CalendarForm> {
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: const Icon(Icons.person),
+              hintText: 'Enter the event Title',
+              labelText: 'Title',
+            ),
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: const Icon(Icons.phone),
+              hintText: 'Enter a phone number',
+              labelText: 'Phone',
+            ),
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: const Icon(Icons.calendar_today),
+              hintText: 'Enter your date of birth',
+              labelText: 'Dob',
+            ),
+          ),
+          new Container(
+              padding: const EdgeInsets.only(left: 150.0, top: 40.0),
+              child: new ElevatedButton(
+                child: const Text('Submit'),
+                onPressed: null,
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+//Form Page
+class CalendarFormRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'Flutter Form Demo';
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: CalendarForm(),
+      ),
+    );
+  }
 }
