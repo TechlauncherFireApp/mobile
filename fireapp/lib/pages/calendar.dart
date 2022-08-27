@@ -22,6 +22,9 @@ class CalendarPage extends StatefulWidget {
   _CalendarPageState createState() => _CalendarPageState();
 }
 
+//Event Setup - Map of DateTime + A list of events on that Day
+late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
+
 class _CalendarPageState extends State<CalendarPage> {
   //Setup for stateful calendar format - default format is month, could try week?
   CalendarFormat calendarFormat = CalendarFormat.month;
@@ -30,12 +33,9 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  //Event Setup - Map of DateTime + A list of events on that Day
-  late Map<DateTime, List<MyCalendarEvents>> eventsForDay;
-
   @override
   void initState() {
-    eventsForDay = {
+    eventsDateMap = {
       DateTime.utc(2022, 8, 10): [testEvent3],
       DateTime.utc(2022, 8, 7): [
         testEvent1,
@@ -50,8 +50,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   List<MyCalendarEvents> _listOfEventsForSelectedDay = [];
 
-  List<MyCalendarEvents> getListOfEventsForDay(DateTime day) {
-    return eventsForDay[day] ?? [];
+  List<MyCalendarEvents> eventsOnDay(DateTime day) {
+    return eventsDateMap[day] ?? [];
   } //Gets the list of the events from the map when you have date time
 
   // Core page
@@ -93,8 +93,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
-                    _listOfEventsForSelectedDay =
-                        getListOfEventsForDay(selectedDay);
+                    _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
                     print(_listOfEventsForSelectedDay.length);
                   });
                 },
@@ -104,7 +103,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 },
                 // Calendar Events - see note below on how Calendar Event Handling works
                 eventLoader: (day) {
-                  return getListOfEventsForDay(day);
+                  return eventsOnDay(day);
                 },
                 // Styling the calendar
                 calendarStyle: const CalendarStyle(
@@ -163,10 +162,11 @@ class _CalendarPageState extends State<CalendarPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            setState(() {});
-          },
-        ),
+            child: const Icon(Icons.add),
+            onPressed: () {
+              setState(() {
+                print("sfjhkasdfjhksdfjhk");
+              });
+            }),
       );
 }
