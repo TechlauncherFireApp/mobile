@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'calendar_logic.dart';
+import 'package:intl/intl.dart';
 
 //We are using the table calendar package
 
 /*
-* Improve Styling of the Calendar
-* Can add events
+* Check that dateTime formatting is good.
+* Styling of input form - see Material 3 guidelines for TimeInputPicker
+* Events get added to the calendar
+* Events show start and end time
 * Can add cyclic events - see TableCalendar Documentation 
 * Backend Integration w/ existing FireApp APIs
-* Change navigation method... 
-* Create AppColors for a consistent app colour scheme that can be used between pages...
-* Fix overflow error 
+* Fix overflow error with scrolling with too many events
 */
 
 class CalendarPage extends StatefulWidget {
@@ -185,6 +186,10 @@ class _CalendarFormState extends State<CalendarForm> {
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController inputDate = TextEditingController();
+  TextEditingController startTime = TextEditingController();
+  TextEditingController endTime = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -200,25 +205,75 @@ class _CalendarFormState extends State<CalendarForm> {
               labelText: 'Title',
             ),
           ),
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: const Icon(Icons.phone),
-              hintText: 'Enter a phone number',
-              labelText: 'Phone',
-            ),
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: const Icon(Icons.calendar_today),
-              hintText: 'Enter your date of birth',
-              labelText: 'Dob',
-            ),
-          ),
+          // Date Time Picker
+          TextField(
+              controller: inputDate,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.calendar_today),
+                labelText: "Enter Date",
+              ),
+              readOnly: true,
+              onTap: () async {
+                DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2020),
+                  lastDate: DateTime(2100),
+                );
+                // If input is not dull
+                if (selectedDate != null) {
+                  setState(() {
+                    inputDate.text =
+                        DateFormat('yyyy-MM-dd').format(selectedDate);
+                  });
+                }
+              }),
+          // StartTime - Input
+          TextField(
+              controller: startTime,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.calendar_today),
+                labelText: "Enter Time",
+              ),
+              readOnly: true,
+              onTap: () async {
+                TimeOfDay? newTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (newTime != null) {
+                  setState(() {
+                    inputDate.text = newTime.toString();
+                  });
+                }
+              }),
+          // End Time Input
+          TextField(
+              controller: startTime,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.calendar_today),
+                labelText: "Enter Time",
+              ),
+              readOnly: true,
+              onTap: () async {
+                TimeOfDay? newTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (newTime != null) {
+                  setState(() {
+                    inputDate.text = newTime.toString();
+                  });
+                }
+              }),
+          // Submit Buttin
           new Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
               child: new ElevatedButton(
                 child: const Text('Submit'),
-                onPressed: null,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               )),
         ],
       ),
