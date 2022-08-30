@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'pages/Calendar/calendar.dart';
+import 'layout/wrapper.dart';
+import 'package:fireapp/pages/login.dart';
 
 // Main Function
 void main() {
@@ -20,7 +22,17 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainRoute(),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        // Change the primary color of all the widget in red
+        primarySwatch: Colors.red,
+      ),
+      routes: {
+        // The current root page is login page
+        //  (You can change it to the page you develop in the beginning)
+        '/':(context) => const BasicWrapper(page: LoginPage()),
+      },
     );
   }
 }
@@ -81,19 +93,3 @@ class _MainRouteState extends State<MainRoute> {
         );
   }
 }
-
-/*
-ToDo:
-1. Refactor navigation so that it uses Routes & IndexedStack 
-see:
-https://medium.com/@theboringdeveloper/common-bottom-navigation-bar-flutter-e3693305d2d
-https://api.flutter.dev/flutter/widgets/IndexedStack-class.html
-https://maheshmnj.medium.com/everything-about-the-bottomnavigationbar-in-flutter-e99e5470dddb
-https://www.bradcypert.com/flutter-routing-inside-of-the-scaffold/
-https://codewithandrea.com/articles/multiple-navigators-bottom-navigation-bar/
-https://blog.logrocket.com/how-to-build-a-bottom-navigation-bar-in-flutter/
-https://stackoverflow.com/questions/69894199/flutter-fix-bottom-navigation-bar-in-whole-app
-
-2. Integrate with Login Page, etc
-
-*/
