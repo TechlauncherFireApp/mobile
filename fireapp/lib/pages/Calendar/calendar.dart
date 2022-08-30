@@ -1,0 +1,193 @@
+// ignore_for_file: unnecessary_new
+
+// PACKAGES
+import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
+
+//PAGES
+import 'calendar_logic.dart';
+import 'calendarForm.dart';
+
+//We are using the table calendar package
+
+/*
+* Errors
+  - Check that dateTime formatting is good.
+* Styling of input form - see Material 3 guidelines for TimeInputPicker
+  - Repeat events toggle
+  - All Day toggle -> hides time input
+* Events get added to the calendar
+* Events show start and end time (or all day...)
+* Can add cyclic events 
+
+- see TableCalendar Documentation 
+* Backend Integration w/ existing FireApp APIs
+* Fix overflow error with scrolling with too many events
+* Form Validation
+*/
+
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CalendarPageState createState() => _CalendarPageState();
+}
+
+//Event Setup - Map of DateTime + A list of events on that Day
+//late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
+
+Map<DateTime, List<MyCalendarEvents>> eventsDateMap = {
+  DateTime.utc(2022, 8, 10): [testEvent3],
+  DateTime.utc(2022, 8, 7): [
+    testEvent1,
+    testEvent2,
+    testEvent2,
+  ],
+  DateTime.utc(2022, 8, 26): [testEvent2],
+  // this is just a test event, should be blank {} or load from API
+};
+
+class _CalendarPageState extends State<CalendarPage> {
+  //Setup for stateful calendar format - default format is month, could try week?
+  CalendarFormat calendarFormat = CalendarFormat.month;
+
+  // Selected day on Calendar - set to current date
+  DateTime _focusedDay = DateTime.now();
+  DateTime _selectedDay = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+  } // The initial state when the widget is loaded
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  List<MyCalendarEvents> _listOfEventsForSelectedDay = [];
+
+  List<MyCalendarEvents> eventsOnDay(DateTime day) {
+    return eventsDateMap[day] ?? [];
+  } //Gets the list of the events from the map when you have date time
+
+  // Core page
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Calendar')),
+        body: Column(
+          children: [
+            //Style for calendar Border
+            Card(
+              margin: const EdgeInsets.all(8),
+              elevation: 5.0,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              // THE CALENDAR
+              child: TableCalendar(
+                // Max day and min day the calendar can go to
+                firstDay: DateTime.utc(2022, 1, 1),
+                lastDay: DateTime.utc(2030, 12, 12),
+                // Set the selected day
+                focusedDay: _focusedDay,
+                // Setting the Calendar Format & Labels for those formats
+                availableCalendarFormats: const {
+                  CalendarFormat.month: 'Month',
+                  CalendarFormat.week: 'Week',
+                },
+                calendarFormat: calendarFormat,
+                onFormatChanged: (format) {
+                  setState(() {
+                    calendarFormat = format;
+                  });
+                },
+                // Allows the user to select different days other than current day
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                    _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
+                    print(_listOfEventsForSelectedDay.length);
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay =
+                      focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
+                },
+                // Calendar Events - see note below on how Calendar Event Handling works
+                eventLoader: eventsOnDay,
+                // eventLoader: (day) {
+                //  return eventsOnDay(day);
+                //},
+                // Styling the calendar
+                calendarStyle: const CalendarStyle(
+                    todayDecoration: BoxDecoration(
+                      color: Color.fromARGB(132, 244, 67, 54),
+                      shape: BoxShape.circle,
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: Color.fromARGB(255, 207, 59, 48),
+                      shape: BoxShape.circle,
+                    ),
+                    markerDecoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    )),
+                daysOfWeekHeight: 50.0,
+                rowHeight: 50.0,
+                headerStyle: const HeaderStyle(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                  ),
+                  formatButtonDecoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                  leftChevronIcon: Icon(
+                    Icons.chevron_left,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  rightChevronIcon: Icon(
+                    Icons.chevron_right,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  titleTextStyle: TextStyle(color: Colors.white, fontSize: 21),
+                ),
+              ),
+            ),
+            ListView.builder(
+              itemCount: _listOfEventsForSelectedDay.length,
+              shrinkWrap: true,
+              // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                      // onTap: () {}
+                      title: Text(_listOfEventsForSelectedDay[index].title)),
+                );
+              },
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarFormRoute()),
+              );
+            }),
+      );
+}
