@@ -12,17 +12,16 @@ import 'calendarForm.dart';
 //We are using the table calendar package
 
 /*
-* Errors
-  - Check that dateTime formatting is good.
-* Styling of input form - see Material 3 guidelines for TimeInputPicker
-  - Repeat events toggle
-  - All Day toggle -> hides time input
-* Events get added to the calendar
-* Events show start and end time (or all day...)
-* Can add cyclic events 
+SPRINT 2
+TODO: 
+* Connect with API 
 
-- see TableCalendar Documentation 
-* Backend Integration w/ existing FireApp APIs
+SPRINT 3
+TODO: 
+* Styling of input form - see Material 3 guidelines for TimeInputPicker
+* Repeat events toggle - cylic evennts - see tablecalendar documentation
+* All Day toggle -> hides time input
+* Events show start and end time (or all day...)
 * Fix overflow error with scrolling with too many events
 * Form Validation
 */
@@ -51,7 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat calendarFormat = CalendarFormat.month;
 
   //Event Setup - Map of DateTime + A list of events on that Day
-  late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
+  late Map<DateTime, List<CalendarEvents>> eventsDateMap;
 
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
@@ -76,9 +75,9 @@ class _CalendarPageState extends State<CalendarPage> {
     super.dispose();
   }
 
-  List<MyCalendarEvents> _listOfEventsForSelectedDay = [];
+  List<CalendarEvents> _listOfEventsForSelectedDay = [];
 
-  List<MyCalendarEvents> eventsOnDay(DateTime day) {
+  List<CalendarEvents> eventsOnDay(DateTime day) {
     return eventsDateMap[day] ?? [];
   } //Gets the list of the events from the map when you have date time
 
@@ -194,17 +193,12 @@ class _CalendarPageState extends State<CalendarPage> {
                 MaterialPageRoute(builder: (context) => CalendarFormRoute()),
               );
               setState(() {
-                if (eventsDateMap[result] != null) {
-                  eventsDateMap[result]
-                      ?.add(MyCalendarEvents(title: 'xxx', description: 'x'));
+                if (eventsDateMap[result.resultDate] != null) {
+                  eventsDateMap[result.resultDate]?.add(result.resultEvent);
                 } else {
-                  eventsDateMap[result] = [
-                    MyCalendarEvents(title: 'xxx', description: 'x')
-                  ];
+                  eventsDateMap[result.resultDate] = [result.resultEvent];
                 }
-                print(eventsDateMap);
               });
-              print(eventsDateMap);
             }),
       );
 }

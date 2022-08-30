@@ -1,3 +1,4 @@
+import 'package:fireapp/pages/Calendar/calendar_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +16,7 @@ class _CalendarFormState extends State<CalendarForm> {
   final _formKey = GlobalKey<FormState>();
 
   var setDate;
+  TextEditingController titleController = TextEditingController();
   TextEditingController inputDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
@@ -28,6 +30,7 @@ class _CalendarFormState extends State<CalendarForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+            controller: titleController,
             decoration: const InputDecoration(
               icon: const Icon(Icons.person),
               hintText: 'Enter the event Title',
@@ -103,32 +106,35 @@ class _CalendarFormState extends State<CalendarForm> {
               child: ElevatedButton(
                 child: const Text('Submit'),
                 onPressed: () {
-                  // setState(() {
-                  //   MyCalendarEvents tempEvent =
-                  //       MyCalendarEvents(title: "x", description: "x");
+                  // Calendar Widget only accepts UTC dates without any time values
+                  var submittedDate =
+                      DateTime.utc(setDate.year, setDate.month, setDate.day);
 
-                  //   if (eventsDateMap[tempTime] != null) {
-                  //     eventsDateMap[tempTime]?.add(tempEvent);
-                  //   } else {
-                  //     eventsDateMap[tempTime] = [tempEvent];
-                  //   }
-                  // });
+                  CalendarFormResult calendarResult = CalendarFormResult(
+                      resultDate: submittedDate,
+                      resultEvent: CalendarEvents(
+                          title: titleController.text, description: "test"));
 
-                  // inputDate.clear();
-                  // startTime.clear();
-                  // endTime.clear();
-                  var submittedDate = DateTime.utc(
-                      setDate.year,
-                      setDate.month,
-                      setDate
-                          .day); // Calendar Widget only accepts UTC dates without any time values
-                  Navigator.pop(context, submittedDate);
+                  inputDateController.clear();
+                  startTimeController.clear();
+                  endTimeController.clear();
+                  Navigator.pop(context, calendarResult);
                 },
               )),
         ],
       ),
     );
   }
+}
+
+class CalendarFormResult {
+  final CalendarEvents resultEvent;
+  final DateTime resultDate;
+
+  CalendarFormResult({required this.resultDate, required this.resultEvent});
+
+  @override
+  String toString() => resultDate.toString();
 }
 
 //Form Page
