@@ -1,9 +1,13 @@
 // ignore_for_file: unnecessary_new
 
+// PACKAGES
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'calendar_logic.dart';
 import 'package:intl/intl.dart';
+
+//PAGES
+import 'calendar_logic.dart';
+import 'calendarForm.dart';
 
 //We are using the table calendar package
 
@@ -15,9 +19,12 @@ import 'package:intl/intl.dart';
   - All Day toggle -> hides time input
 * Events get added to the calendar
 * Events show start and end time (or all day...)
-* Can add cyclic events - see TableCalendar Documentation 
+* Can add cyclic events 
+
+- see TableCalendar Documentation 
 * Backend Integration w/ existing FireApp APIs
 * Fix overflow error with scrolling with too many events
+* Form Validation
 */
 
 class CalendarPage extends StatefulWidget {
@@ -29,7 +36,18 @@ class CalendarPage extends StatefulWidget {
 }
 
 //Event Setup - Map of DateTime + A list of events on that Day
-late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
+//late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
+
+Map<DateTime, List<MyCalendarEvents>> eventsDateMap = {
+  DateTime.utc(2022, 8, 10): [testEvent3],
+  DateTime.utc(2022, 8, 7): [
+    testEvent1,
+    testEvent2,
+    testEvent2,
+  ],
+  DateTime.utc(2022, 8, 26): [testEvent2],
+  // this is just a test event, should be blank {} or load from API
+};
 
 class _CalendarPageState extends State<CalendarPage> {
   //Setup for stateful calendar format - default format is month, could try week?
@@ -41,18 +59,13 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
-    eventsDateMap = {
-      DateTime.utc(2022, 8, 10): [testEvent3],
-      DateTime.utc(2022, 8, 7): [
-        testEvent1,
-        testEvent2,
-        testEvent2,
-      ],
-      DateTime.utc(2022, 8, 26): [testEvent2],
-      // this is just a test event, should be blank {} or load from API
-    };
     super.initState();
   } // The initial state when the widget is loaded
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   List<MyCalendarEvents> _listOfEventsForSelectedDay = [];
 
@@ -108,9 +121,10 @@ class _CalendarPageState extends State<CalendarPage> {
                       focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
                 },
                 // Calendar Events - see note below on how Calendar Event Handling works
-                eventLoader: (day) {
-                  return eventsOnDay(day);
-                },
+                eventLoader: eventsOnDay,
+                // eventLoader: (day) {
+                //  return eventsOnDay(day);
+                //},
                 // Styling the calendar
                 calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
@@ -176,139 +190,4 @@ class _CalendarPageState extends State<CalendarPage> {
               );
             }),
       );
-}
-
-// Creating a 'form' widget
-class CalendarForm extends StatefulWidget {
-  @override
-  _CalendarFormState createState() {
-    return _CalendarFormState();
-  }
-}
-
-class _CalendarFormState extends State<CalendarForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  final _formKey = GlobalKey<FormState>();
-
-  TextEditingController inputDate = TextEditingController();
-  DateTime tempTime = DateTime.now();
-
-  TextEditingController startTime = TextEditingController();
-  TextEditingController endTime = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: const Icon(Icons.person),
-              hintText: 'Enter the event Title',
-              labelText: 'Title',
-            ),
-          ),
-          // Date Time Picker
-          TextField(
-              controller: inputDate,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
-                labelText: "Enter Date",
-              ),
-              readOnly: true,
-              onTap: () async {
-                DateTime? selectedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2100),
-                );
-                // If input is not dull
-                if (selectedDate != null) {
-                  setState(() {
-                    inputDate.text =
-                        DateFormat('yyyy-MM-dd').format(selectedDate);
-                    tempTime = selectedDate;
-                  });
-                }
-              }),
-          // StartTime - Input
-          TextField(
-              controller: startTime,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
-                labelText: "Enter Time",
-              ),
-              readOnly: true,
-              onTap: () async {
-                TimeOfDay? newTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (newTime != null) {
-                  setState(() {
-                    inputDate.text = newTime.toString();
-                  });
-                }
-              }),
-          // End Time Input
-          TextField(
-              controller: startTime,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
-                labelText: "Enter Time",
-              ),
-              readOnly: true,
-              onTap: () async {
-                TimeOfDay? newTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (newTime != null) {
-                  setState(() {
-                    inputDate.text = newTime.toString();
-                  });
-                }
-              }),
-          // Submit Buttin
-          Container(
-              padding: const EdgeInsets.only(left: 150.0, top: 40.0),
-              child: new ElevatedButton(
-                child: const Text('Submit'),
-                onPressed: () {
-                  Navigator.pop(context);
-
-                  MyCalendarEvents tempEvent =
-                      MyCalendarEvents(title: "x", description: "x");
-
-                  if (eventsDateMap[tempTime] == null) {
-                    eventsDateMap[tempTime] = [tempEvent];
-                  } else {
-                    List<MyCalendarEvents>? tempList = eventsDateMap[tempTime];
-                    tempList?.add(tempEvent);
-                    eventsDateMap[tempTime] = tempList!;
-                  }
-                },
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-//Form Page
-class CalendarFormRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Unavailability'),
-      ),
-      body: CalendarForm(),
-    );
-  }
 }
