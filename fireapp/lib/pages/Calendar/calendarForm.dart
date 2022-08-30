@@ -14,11 +14,10 @@ class _CalendarFormState extends State<CalendarForm> {
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController inputDate = TextEditingController();
-  DateTime tempTime = DateTime.now();
-
-  TextEditingController startTime = TextEditingController();
-  TextEditingController endTime = TextEditingController();
+  var setDate;
+  TextEditingController inputDateController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class _CalendarFormState extends State<CalendarForm> {
           ),
           // Date Time Picker
           TextField(
-              controller: inputDate,
+              controller: inputDateController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: "Enter Date",
@@ -53,15 +52,15 @@ class _CalendarFormState extends State<CalendarForm> {
                 // If input is not dull
                 if (selectedDate != null) {
                   setState(() {
-                    inputDate.text =
+                    inputDateController.text =
                         DateFormat('yyyy-MM-dd').format(selectedDate);
-                    tempTime = selectedDate;
+                    setDate = selectedDate;
                   });
                 }
               }),
           // StartTime - Input
           TextField(
-              controller: startTime,
+              controller: startTimeController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: "Enter Time",
@@ -74,13 +73,13 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    inputDate.text = newTime.toString();
+                    inputDateController.text = newTime.toString();
                   });
                 }
               }),
           // End Time Input
           TextField(
-              controller: startTime,
+              controller: startTimeController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: "Enter Time",
@@ -93,7 +92,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    inputDate.text = newTime.toString();
+                    inputDateController.text = newTime.toString();
                   });
                 }
               }),
@@ -118,8 +117,12 @@ class _CalendarFormState extends State<CalendarForm> {
                   // inputDate.clear();
                   // startTime.clear();
                   // endTime.clear();
-
-                  Navigator.pop(context);
+                  var submittedDate = DateTime.utc(
+                      setDate.year,
+                      setDate.month,
+                      setDate
+                          .day); // Calendar Widget only accepts UTC dates without any time values
+                  Navigator.pop(context, submittedDate);
                 },
               )),
         ],

@@ -28,10 +28,12 @@ class _MyAppState extends State<MyApp> {
         // Change the primary color of all the widget in red
         primarySwatch: Colors.red,
       ),
+      // The current root page is login page
+      initialRoute: '/nav',
       routes: {
-        // The current root page is login page
         //  (You can change it to the page you develop in the beginning)
-        '/':(context) => const BasicWrapper(page: LoginPage()),
+        '/nav': (context) => MainRoute(),
+        '/login': (context) => const BasicWrapper(page: LoginPage()),
       },
     );
   }

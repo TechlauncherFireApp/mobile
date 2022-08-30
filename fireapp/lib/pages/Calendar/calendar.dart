@@ -35,23 +35,23 @@ class CalendarPage extends StatefulWidget {
   _CalendarPageState createState() => _CalendarPageState();
 }
 
-//Event Setup - Map of DateTime + A list of events on that Day
-//late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
-
-Map<DateTime, List<MyCalendarEvents>> eventsDateMap = {
-  DateTime.utc(2022, 8, 10): [testEvent3],
-  DateTime.utc(2022, 8, 7): [
-    testEvent1,
-    testEvent2,
-    testEvent2,
-  ],
-  DateTime.utc(2022, 8, 26): [testEvent2],
-  // this is just a test event, should be blank {} or load from API
-};
+// Map<DateTime, List<MyCalendarEvents>> eventsDateMap = {
+//   DateTime.utc(2022, 8, 10): [testEvent3],
+//   DateTime.utc(2022, 8, 7): [
+//     testEvent1,
+//     testEvent2,
+//     testEvent2,
+//   ],
+//   DateTime.utc(2022, 8, 26): [testEvent2],
+//   // this is just a test event, should be blank {} or load from API
+// };
 
 class _CalendarPageState extends State<CalendarPage> {
   //Setup for stateful calendar format - default format is month, could try week?
   CalendarFormat calendarFormat = CalendarFormat.month;
+
+  //Event Setup - Map of DateTime + A list of events on that Day
+  late Map<DateTime, List<MyCalendarEvents>> eventsDateMap;
 
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
@@ -59,6 +59,15 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
+    eventsDateMap = {
+      DateTime.utc(2022, 8, 10): [testEvent3],
+      DateTime.utc(2022, 8, 7): [
+        testEvent1,
+        testEvent2,
+        testEvent2,
+      ],
+      // this is just a test event, should be blank {} or load from API};
+    };
     super.initState();
   } // The initial state when the widget is loaded
 
@@ -113,7 +122,6 @@ class _CalendarPageState extends State<CalendarPage> {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                     _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
-                    print(_listOfEventsForSelectedDay.length);
                   });
                 },
                 onPageChanged: (focusedDay) {
@@ -122,9 +130,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 },
                 // Calendar Events - see note below on how Calendar Event Handling works
                 eventLoader: eventsOnDay,
-                // eventLoader: (day) {
-                //  return eventsOnDay(day);
-                //},
                 // Styling the calendar
                 calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
@@ -183,11 +188,23 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CalendarFormRoute()),
               );
+              setState(() {
+                if (eventsDateMap[result] != null) {
+                  eventsDateMap[result]
+                      ?.add(MyCalendarEvents(title: 'xxx', description: 'x'));
+                } else {
+                  eventsDateMap[result] = [
+                    MyCalendarEvents(title: 'xxx', description: 'x')
+                  ];
+                }
+                print(eventsDateMap);
+              });
+              print(eventsDateMap);
             }),
       );
 }
