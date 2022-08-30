@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'calendar_logic.dart';
@@ -6,10 +8,13 @@ import 'package:intl/intl.dart';
 //We are using the table calendar package
 
 /*
-* Check that dateTime formatting is good.
+* Errors
+  - Check that dateTime formatting is good.
 * Styling of input form - see Material 3 guidelines for TimeInputPicker
+  - Repeat events toggle
+  - All Day toggle -> hides time input
 * Events get added to the calendar
-* Events show start and end time
+* Events show start and end time (or all day...)
 * Can add cyclic events - see TableCalendar Documentation 
 * Backend Integration w/ existing FireApp APIs
 * Fix overflow error with scrolling with too many events
@@ -187,6 +192,8 @@ class _CalendarFormState extends State<CalendarForm> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController inputDate = TextEditingController();
+  DateTime tempTime = DateTime.now();
+
   TextEditingController startTime = TextEditingController();
   TextEditingController endTime = TextEditingController();
 
@@ -225,6 +232,7 @@ class _CalendarFormState extends State<CalendarForm> {
                   setState(() {
                     inputDate.text =
                         DateFormat('yyyy-MM-dd').format(selectedDate);
+                    tempTime = selectedDate;
                   });
                 }
               }),
@@ -267,12 +275,23 @@ class _CalendarFormState extends State<CalendarForm> {
                 }
               }),
           // Submit Buttin
-          new Container(
+          Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
               child: new ElevatedButton(
                 child: const Text('Submit'),
                 onPressed: () {
                   Navigator.pop(context);
+
+                  MyCalendarEvents tempEvent =
+                      MyCalendarEvents(title: "x", description: "x");
+
+                  if (eventsDateMap[tempTime] == null) {
+                    eventsDateMap[tempTime] = [tempEvent];
+                  } else {
+                    List<MyCalendarEvents>? tempList = eventsDateMap[tempTime];
+                    tempList?.add(tempEvent);
+                    eventsDateMap[tempTime] = tempList!;
+                  }
                 },
               )),
         ],
@@ -285,15 +304,11 @@ class _CalendarFormState extends State<CalendarForm> {
 class CalendarFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Flutter Form Demo';
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: CalendarForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Unavailability'),
       ),
+      body: CalendarForm(),
     );
   }
 }
