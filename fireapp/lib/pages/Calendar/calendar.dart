@@ -12,18 +12,21 @@ import 'calendarForm.dart';
 //We are using the table calendar package
 
 /*
-SPRINT 2
-TODO: 
+SPRINT 2 - TODO: What's left...
 * Connect with API 
-
-SPRINT 3
-TODO: 
-* Styling of input form - see Material 3 guidelines for TimeInputPicker
-* Repeat events toggle - cylic evennts - see tablecalendar documentation
-* All Day toggle -> hides time input
 * Events show start and end time (or all day...)
-* Fix overflow error with scrolling with too many events
-* Form Validation
+
+SPRINT 3 - TODO: 
+* General Calendar Events Styling & Improvements
+  - 
+  - Fix overflow error with scrolling with too many events
+* Events now clickable... 
+  - Bottom tray w/ edit/remove functionality 
+* Event Adding Form Improvemennts
+  - Event Input Form has Form Validation 
+  - add "All Day toggle" which hides the time input options... 
+  - Repeat events toggle (selection) + show on calendar (see tablecalendar documentation for cylic events)
+  - Styling of input form - see Material 3 guidelines for TimeInputPicker, + spacing, theming, etc
 */
 
 class CalendarPage extends StatefulWidget {
@@ -33,17 +36,6 @@ class CalendarPage extends StatefulWidget {
   // ignore: library_private_types_in_public_api
   _CalendarPageState createState() => _CalendarPageState();
 }
-
-// Map<DateTime, List<MyCalendarEvents>> eventsDateMap = {
-//   DateTime.utc(2022, 8, 10): [testEvent3],
-//   DateTime.utc(2022, 8, 7): [
-//     testEvent1,
-//     testEvent2,
-//     testEvent2,
-//   ],
-//   DateTime.utc(2022, 8, 26): [testEvent2],
-//   // this is just a test event, should be blank {} or load from API
-// };
 
 class _CalendarPageState extends State<CalendarPage> {
   //Setup for stateful calendar format - default format is month, could try week?
