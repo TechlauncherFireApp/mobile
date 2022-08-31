@@ -47,12 +47,13 @@ class _LoginBoxState extends State<LoginBox> {
   final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
   late String _user, _password;
   bool _isObscure = true; // Password is obscure or not
+  final clearPassword = TextEditingController();
+  int loginCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
@@ -94,27 +95,29 @@ class _LoginBoxState extends State<LoginBox> {
 
   Widget buildPasswordTextField() {
     return TextFormField(
-        obscureText: _isObscure,
-        validator: (v) {
-          if (v!.isEmpty) {
-            return 'Password is empty!';
-          }
-          return null;
-        },
-        onSaved: (v) => _password = v!,
-        decoration: InputDecoration(
-          labelText: 'Password',
-          suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isObscure = !_isObscure;
-                });
-              },
-              icon: _isObscure ?
-              const Icon(Icons.remove_red_eye_outlined) :
-              const Icon(Icons.remove_red_eye),
-              splashRadius: 20),
-        ));
+      obscureText: _isObscure,
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Password is empty!';
+        }
+        return null;
+      },
+      onSaved: (v) => _password = v!,
+      decoration: InputDecoration(
+        labelText: 'Password',
+        suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            },
+            icon: _isObscure
+                ? const Icon(Icons.remove_red_eye_outlined)
+                : const Icon(Icons.remove_red_eye),
+            splashRadius: 20),
+      ),
+      controller: clearPassword,
+    );
   }
 
   Widget buildForgotPasswordText(BuildContext context) {
@@ -164,6 +167,7 @@ class _LoginBoxState extends State<LoginBox> {
 
   /// Http post request to ask for login
   Future<LoginResult> login() async {
+    loginCount++;
     var url = Uri.https(constants.domain, 'authentication/login');
     try {
       var response = await http.post(url,
@@ -186,6 +190,8 @@ class _LoginBoxState extends State<LoginBox> {
   /// Operation after login
   loginOperation(var result) {
     showToast(result);
+    // Clear password text field and value after login
+    clearPassword.clear();
     _password = "";
     if (result == LoginResult.success) {
       Navigator.pushNamed(context, '/nav');
@@ -220,9 +226,4 @@ class RegisterText extends StatelessWidget {
   }
 }
 
-enum LoginResult {
-  success,
-  fail,
-  networkError,
-  timeout
-}
+enum LoginResult { success, fail, networkError, timeout }
