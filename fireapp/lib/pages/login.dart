@@ -49,6 +49,13 @@ class _LoginBoxState extends State<LoginBox> {
   bool _isObscure = true; // Password is obscure or not
 
   @override
+  void initState() {
+    super.initState();
+    _user = "";
+    _password = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -153,7 +160,7 @@ class _LoginBoxState extends State<LoginBox> {
                   barrierDismissible: false,
                   builder: (context) {
                     return NetLoadingDialog(
-                        loadingMethod: login(), operation: showToast);
+                        loadingMethod: login(), operation: loginOperation);
                   });
             }
           },
@@ -180,6 +187,14 @@ class _LoginBoxState extends State<LoginBox> {
       }
     } catch (_) {
       return LoginResult.timeout;
+    }
+  }
+
+  /// Operation after login
+  loginOperation(var result) {
+    showToast(result);
+    if (result == LoginResult.success) {
+      Navigator.pushNamed(context, '/nav');
     }
   }
 }
