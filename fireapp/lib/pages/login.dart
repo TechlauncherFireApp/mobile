@@ -49,13 +49,6 @@ class _LoginBoxState extends State<LoginBox> {
   bool _isObscure = true; // Password is obscure or not
 
   @override
-  void initState() {
-    super.initState();
-    _user = "";
-    _password = "";
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -193,6 +186,7 @@ class _LoginBoxState extends State<LoginBox> {
   /// Operation after login
   loginOperation(var result) {
     showToast(result);
+    _password = "";
     if (result == LoginResult.success) {
       Navigator.pushNamed(context, '/nav');
     }
