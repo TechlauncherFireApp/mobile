@@ -51,6 +51,13 @@ class _LoginBoxState extends State<LoginBox> {
   int loginCount = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _user = "";
+    _password = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,

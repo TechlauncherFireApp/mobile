@@ -76,13 +76,13 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    inputDateController.text = newTime.toString();
+                    startTimeController.text = newTime.toString();
                   });
                 }
               }),
           // End Time Input
           TextField(
-              controller: startTimeController,
+              controller: endTimeController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: "Enter Time",
@@ -95,7 +95,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    inputDateController.text = newTime.toString();
+                    endTimeController.text = newTime.toString();
                   });
                 }
               }),
@@ -113,7 +113,7 @@ class _CalendarFormState extends State<CalendarForm> {
                   CalendarFormResult calendarResult = CalendarFormResult(
                       resultDate: submittedDate,
                       resultEvent: CalendarEvents(
-                          title: titleController.text, description: "test"));
+                          title: titleController.text, eventID: 4));
 
                   inputDateController.clear();
                   startTimeController.clear();
