@@ -18,7 +18,6 @@ SPRINT 2 - TODO: What's left...
 
 SPRINT 3 - TODO: 
 * General Calendar Events Styling & Improvements
-  - 
   - Fix overflow error with scrolling with too many events
 * Events now clickable... 
   - Bottom tray w/ edit/remove functionality 
@@ -59,6 +58,9 @@ class _CalendarPageState extends State<CalendarPage> {
       ],
       // this is just a test event, should be blank {} or load from API};
     };
+
+    // print(eventRequest()); - testing
+
     super.initState();
   } // The initial state when the widget is loaded
 
