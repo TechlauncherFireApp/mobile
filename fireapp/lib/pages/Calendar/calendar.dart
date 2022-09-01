@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 //PAGES
 import 'calendar_logic.dart';
@@ -14,6 +15,7 @@ import 'calendarForm.dart';
 /*
 SPRINT 2 - TODO: What's left...
 * Connect with API 
+  - Half Complete
 * Events show start and end time (or all day...)
 
 SPRINT 3 - TODO: 
@@ -59,7 +61,7 @@ class _CalendarPageState extends State<CalendarPage> {
       // this is just a test event, should be blank {} or load from API};
     };
 
-    // print(eventRequest()); - testing
+    print(eventRequest(http.Client()));
 
     super.initState();
   } // The initial state when the widget is loaded

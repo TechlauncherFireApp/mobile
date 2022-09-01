@@ -110,9 +110,9 @@ class _LoginBoxState extends State<LoginBox> {
                   _isObscure = !_isObscure;
                 });
               },
-              icon: _isObscure ?
-              const Icon(Icons.remove_red_eye_outlined) :
-              const Icon(Icons.remove_red_eye),
+              icon: _isObscure
+                  ? const Icon(Icons.remove_red_eye_outlined)
+                  : const Icon(Icons.remove_red_eye),
               splashRadius: 20),
         ));
   }
@@ -211,9 +211,4 @@ class RegisterText extends StatelessWidget {
   }
 }
 
-enum LoginResult {
-  success,
-  fail,
-  networkError,
-  timeout
-}
+enum LoginResult { success, fail, networkError, timeout }

@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
+
 import '../../constants.dart' as constants;
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 //For testing purposes
-var user = 49;
+var user = '49';
 
 enum repeatStats { none, weekly, monthly, yearly }
 
@@ -26,20 +29,51 @@ CalendarEvents testEvent2 = CalendarEvents(title: "event2", eventID: 2);
 
 CalendarEvents testEvent3 = CalendarEvents(title: "event3", eventID: 3);
 
-/*
-Future<List<CalendarEvents>> eventRequest() async {
-    var url = Uri.https(constants.domain, 'unavailability/showUnavailableEvent?userId='+user);
-    try {
-        var response = await http.post(url);
-        List<CalendarEvents> tempList = []; 
-        response.forEach((element) {
-            tempList.add(CalendarEvent(eventID: element.eventID, title: element.title)); 
-        });
-        return tempList;
-    }
-    catch (_) {
-        print('failure');
-        return;
-    }
+class EventAlbum {
+  final int userId;
+  final int eventId;
+  final String title;
+  final DateTime start;
+  final DateTime end;
+  final int periodicity;
+
+  const EventAlbum({
+    required this.userId,
+    required this.eventId,
+    required this.title,
+    required this.start,
+    required this.end,
+    required this.periodicity,
+  });
+
+  factory EventAlbum.fromJson(Map<String, dynamic> json) {
+    return EventAlbum(
+      userId: json['userId'],
+      eventId: json['eventId'],
+      title: json['title'],
+      start: json['start'],
+      end: json['end'],
+      periodicity: json['periodicity'],
+    );
+  }
 }
-*/
+
+// Function that converts a response body into a list of events
+List<EventAlbum> parseEvents(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<EventAlbum>((json) => EventAlbum.fromJson(json)).toList();
+}
+
+Future<List<EventAlbum>> eventRequest(http.Client client) async {
+  String apiPath = 'unavailability/showUnavailableEvent';
+  Map<String, String> queryParameters = {
+    'userId': user,
+  };
+  var url = Uri.https(constants.domain, apiPath, queryParameters);
+
+  final response = await client.get(url);
+  print(response.statusCode);
+  print(url);
+
+  return compute(parseEvents, response.body);
+}
