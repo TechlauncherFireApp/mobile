@@ -3,7 +3,6 @@
 // PACKAGES
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 //PAGES
@@ -43,7 +42,8 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat calendarFormat = CalendarFormat.month;
 
   //Event Setup - Map of DateTime + A list of events on that Day
-  late Map<DateTime, List<CalendarEvents>> eventsDateMap;
+  //late Map<DateTime, List<CalendarEvents>> eventsDateMap;
+  late Map<DateTime, List<EventAlbum>> eventsDateMap;
 
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
@@ -51,18 +51,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
-    eventsDateMap = {
-      DateTime.utc(2022, 8, 10): [testEvent3],
-      DateTime.utc(2022, 8, 7): [
-        testEvent1,
-        testEvent2,
-        testEvent2,
-      ],
-      // this is just a test event, should be blank {} or load from API};
-    };
-
-    //print(eventRequest(http.Client()));
-    print(eventRequest());
+    runFutureEventsList();
+    eventsDateMap = futureEventsList;
+    print(eventsDateMap);
 
     super.initState();
   } // The initial state when the widget is loaded
@@ -72,9 +63,9 @@ class _CalendarPageState extends State<CalendarPage> {
     super.dispose();
   }
 
-  List<CalendarEvents> _listOfEventsForSelectedDay = [];
+  List<EventAlbum> _listOfEventsForSelectedDay = [];
 
-  List<CalendarEvents> eventsOnDay(DateTime day) {
+  List<EventAlbum> eventsOnDay(DateTime day) {
     return eventsDateMap[day] ?? [];
   } //Gets the list of the events from the map when you have date time
 

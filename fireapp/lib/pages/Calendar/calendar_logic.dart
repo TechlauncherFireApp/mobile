@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import '../../constants.dart' as constants;
+import '../../constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 //For testing purposes
 var user = '49';
-
-enum repeatStats { none, weekly, monthly, yearly }
 
 class CalendarEvents {
   final String title;
@@ -29,51 +28,112 @@ CalendarEvents testEvent2 = CalendarEvents(title: "event2", eventID: 2);
 
 CalendarEvents testEvent3 = CalendarEvents(title: "event3", eventID: 3);
 
+/*
+* @Desc - Calendar Event object 
+*/
 class EventAlbum {
+  // Properties
   final int userId;
   final int eventId;
   final String title;
-  final DateTime start;
-  final DateTime end;
-  final int periodicity;
+  final DateTime date;
+  final String start; //Start Time
+  final String end; //End Time
+  final int periodicity; // 0: no-repeat, 1: Daily, 2: Weekly, 3: Monthly
 
+  // Constructor
   const EventAlbum({
     required this.userId,
     required this.eventId,
     required this.title,
     required this.start,
     required this.end,
+    required this.date,
     required this.periodicity,
   });
 
+  /*
+  * @Desc - A function of EventAlbum (Events) that allows one to be created from a json file easily
+  * @Param - JSON Object
+  * @Return - An EventAlbum object (An event)
+  */
   factory EventAlbum.fromJson(Map<String, dynamic> json) {
+    DateTime tempDateTime = DateTime.parse(json['start']);
     return EventAlbum(
       userId: json['userId'],
       eventId: json['eventId'],
       title: json['title'],
-      start: DateTime.parse(json['start']),
-      end: DateTime.parse(json['end']),
+      date:
+          DateTime.utc(tempDateTime.year, tempDateTime.month, tempDateTime.day),
+      start: DateFormat.Hm().format(DateTime.parse(json['start'])),
+      end: DateFormat.Hm().format(DateTime.parse(json['end'])),
       periodicity: json['periodicity'],
     );
   }
 }
 
-// Function that converts a response body into a list of events
+/*
+* @Desc - Function that converts a response body into a list of events
+* @Param - response.body of an API request - specifically the one for our calendar events
+* @return - A list of events 
+*/
 List<EventAlbum> parseEvents(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
   return parsed.map<EventAlbum>((json) => EventAlbum.fromJson(json)).toList();
 }
 
+/*
+* @Desc - Turns the list of events (EventAlbum) into a Date | List(Event) Map 
+that can be used by the calendar
+* @Param - List of Events (EventAlbum)
+* @Return - Map of Date|List(EventAlbum)
+*/
+Map<DateTime, List<EventAlbum>> mapEventsToDates(List<EventAlbum> eventsToMap) {
+  Map<DateTime, List<EventAlbum>> tempMap = {};
+  for (var element in eventsToMap) {
+    if (tempMap[element.date] != null) {
+      tempMap[element.date]?.add(element);
+    } else {
+      tempMap[element.date] = [element];
+    }
+  }
+  return tempMap;
+}
+
+/*
+* @Desc - Takes the future from EventRequest and converts it into a synchronous Date|EventList Map
+* @Param - None
+* @Return - Map of Date|List(EventAlbum)
+*/
+late Map<DateTime, List<EventAlbum>> futureEventsList = {};
+void runFutureEventsList() {
+  eventRequest().then((value) {
+    futureEventsList = mapEventsToDates(value);
+    print(futureEventsList);
+  }).catchError((error) => print("Failed: " + error));
+}
+
+/* ***** API REQUESTS ****** */
+
+/*
+* @Desc - API Request for retrieving all calendar events 
+* @Param - None
+* @return - A future (async) list of events 
+*/
 Future<List<EventAlbum>> eventRequest() async {
   //http.Client client
-  String apiPath = 'unavailability/showUnavailableEvent';
+  String apiPath =
+      'unavailability/showUnavailableEvent'; //Specific API path for this request
   Map<String, String> queryParameters = {
     'userId': user,
-  };
-  var url = Uri.https(constants.domain, apiPath, queryParameters);
+  }; //API Query parameters
 
-  final response = await http.get(url); //client.get(url);
+  var url = Uri.https(
+      constants.domain, apiPath, queryParameters); //Completed HTTPS URL
 
+  final response = await http.get(url); //the GET Request
+
+  //Check if request successful else print url + errorcode
   if (response.statusCode == 200) {
     print('200');
     print(url);
@@ -82,5 +142,6 @@ Future<List<EventAlbum>> eventRequest() async {
     print(url);
   }
 
+  //Return the request reponse
   return compute(parseEvents, response.body);
 }
