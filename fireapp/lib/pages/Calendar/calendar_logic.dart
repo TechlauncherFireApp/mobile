@@ -51,8 +51,8 @@ class EventAlbum {
       userId: json['userId'],
       eventId: json['eventId'],
       title: json['title'],
-      start: json['start'],
-      end: json['end'],
+      start: DateTime.parse(json['start']),
+      end: DateTime.parse(json['end']),
       periodicity: json['periodicity'],
     );
   }
@@ -64,16 +64,23 @@ List<EventAlbum> parseEvents(String responseBody) {
   return parsed.map<EventAlbum>((json) => EventAlbum.fromJson(json)).toList();
 }
 
-Future<List<EventAlbum>> eventRequest(http.Client client) async {
+Future<List<EventAlbum>> eventRequest() async {
+  //http.Client client
   String apiPath = 'unavailability/showUnavailableEvent';
   Map<String, String> queryParameters = {
     'userId': user,
   };
   var url = Uri.https(constants.domain, apiPath, queryParameters);
 
-  final response = await client.get(url);
-  print(response.statusCode);
-  print(url);
+  final response = await http.get(url); //client.get(url);
+
+  if (response.statusCode == 200) {
+    print('200');
+    print(url);
+  } else {
+    print(response.statusCode);
+    print(url);
+  }
 
   return compute(parseEvents, response.body);
 }

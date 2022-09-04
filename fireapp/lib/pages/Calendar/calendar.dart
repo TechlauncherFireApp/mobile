@@ -61,7 +61,8 @@ class _CalendarPageState extends State<CalendarPage> {
       // this is just a test event, should be blank {} or load from API};
     };
 
-    print(eventRequest(http.Client()));
+    //print(eventRequest(http.Client()));
+    print(eventRequest());
 
     super.initState();
   } // The initial state when the widget is loaded
@@ -80,7 +81,8 @@ class _CalendarPageState extends State<CalendarPage> {
   // Core page
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Calendar')),
+        appBar: AppBar(
+            title: const Text('Calendar'), automaticallyImplyLeading: false),
         body: Column(
           children: [
             //Style for calendar Border

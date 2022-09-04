@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.red,
       ),
       // The current root page is login page
-      initialRoute: '/login',
+      initialRoute: '/nav',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => MainRoute(),
