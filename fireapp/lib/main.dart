@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:fireapp/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'pages/Calendar/calendar.dart';
 import 'layout/wrapper.dart';
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => MainRoute(),
         '/login': (context) => const BasicWrapper(page: LoginPage()),
+        '/register': (context) => const BasicWrapper(page: RegisterPage()),
       },
     );
   }
