@@ -91,7 +91,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    startTimeController.text = newTime.toString();
+                    startTimeController.text = newTime.format(context);
                     setStart = newTime;
                   });
                 }
@@ -111,7 +111,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 );
                 if (newTime != null) {
                   setState(() {
-                    endTimeController.text = newTime.toString();
+                    endTimeController.text = newTime.format(context);
                     setEnd = newTime;
                   });
                 }
