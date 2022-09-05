@@ -2,6 +2,19 @@ import 'package:fireapp/pages/Calendar/calendar_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+//Form Page
+class CalendarFormRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Unavailability'),
+      ),
+      body: CalendarForm(),
+    );
+  }
+}
+
 // Creating a 'form' widget
 class CalendarForm extends StatefulWidget {
   @override
@@ -16,6 +29,8 @@ class _CalendarFormState extends State<CalendarForm> {
   final _formKey = GlobalKey<FormState>();
 
   var setDate;
+  var setStart;
+  var setEnd;
   TextEditingController titleController = TextEditingController();
   TextEditingController inputDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
@@ -44,7 +59,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 icon: Icon(Icons.calendar_today),
                 labelText: "Enter Date",
               ),
-              readOnly: true,
+              readOnly: true, //So it can't be changed without using the picker
               onTap: () async {
                 DateTime? selectedDate = await showDatePicker(
                   context: context,
@@ -77,6 +92,7 @@ class _CalendarFormState extends State<CalendarForm> {
                 if (newTime != null) {
                   setState(() {
                     startTimeController.text = newTime.toString();
+                    setStart = newTime;
                   });
                 }
               }),
@@ -96,56 +112,38 @@ class _CalendarFormState extends State<CalendarForm> {
                 if (newTime != null) {
                   setState(() {
                     endTimeController.text = newTime.toString();
+                    setEnd = newTime;
                   });
                 }
               }),
-          // Submit Buttin
+          // Submit Button
           Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
               // ignore: unnecessary_new
               child: ElevatedButton(
                 child: const Text('Submit'),
+                // SUBMIT FUNCTION
                 onPressed: () {
                   // Calendar Widget only accepts UTC dates without any time values
-                  var submittedDate =
-                      DateTime.utc(setDate.year, setDate.month, setDate.day);
+                  String startDate = convertTimeToISO8601(setStart, setDate);
+                  String endDate = convertTimeToISO8601(setEnd, setDate);
 
-                  CalendarFormResult calendarResult = CalendarFormResult(
-                      resultDate: submittedDate,
-                      resultEvent: CalendarEvents(
-                          title: titleController.text, eventID: 4));
+                  // POST Request
+                  createEvent(startDate, endDate, titleController.text, 0);
 
+                  //Clear Controllers
+                  titleController.clear();
                   inputDateController.clear();
                   startTimeController.clear();
                   endTimeController.clear();
-                  Navigator.pop(context, calendarResult);
+
+                  //Return to calendar page
+                  Navigator.pop(context);
+                  // Navigator.pop(context, calendarResult);
                 },
               )),
         ],
       ),
-    );
-  }
-}
-
-class CalendarFormResult {
-  final CalendarEvents resultEvent;
-  final DateTime resultDate;
-
-  CalendarFormResult({required this.resultDate, required this.resultEvent});
-
-  @override
-  String toString() => resultDate.toString();
-}
-
-//Form Page
-class CalendarFormRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Unavailability'),
-      ),
-      body: CalendarForm(),
     );
   }
 }

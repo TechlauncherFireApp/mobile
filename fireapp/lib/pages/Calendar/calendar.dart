@@ -10,9 +10,8 @@ import 'calendar_logic.dart';
 import 'calendarForm.dart';
 
 //We are using the table calendar package
-
 /*
-SPRINT 3 - TODO: 
+SPRINT 3 -TODO: 
 * General Calendar Events Styling & Improvements
   - Fix overflow error with scrolling with too many events
   - Events show start and end time (or all day...), & periodicity, etc
@@ -205,17 +204,12 @@ class _CalendarPageState extends State<CalendarPage> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CalendarFormRoute()),
-              );
-              setState(() {
-                if (eventsDateMap[result.resultDate] != null) {
-                  eventsDateMap[result.resultDate]?.add(result.resultEvent);
-                } else {
-                  eventsDateMap[result.resultDate] = [result.resultEvent];
-                }
-              });
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CalendarFormRoute()));
+              // final result = await Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => CalendarFormRoute()),
+              // );
             }),
       );
 }

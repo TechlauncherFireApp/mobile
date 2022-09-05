@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../../constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
@@ -44,7 +45,7 @@ class EventAlbum {
 
   // Constructor
   const EventAlbum({
-    required this.userId,
+    required this.userId, // Can probably remove userID - unused by calendar
     required this.eventId,
     required this.title,
     required this.start,
@@ -114,7 +115,7 @@ void runFutureEventsList() async {
   }).catchError((error) => print("Failed: " + error));
 }
 
-/* ***** API REQUESTS ****** */
+/* ***** API REQUESTS FOR CALENDAR EVENTS ****** */
 
 /*
 * @Desc - API Request for retrieving all calendar events 
@@ -145,4 +146,45 @@ Future<List<EventAlbum>> eventRequest() async {
 
   //Return the request reponse
   return compute(parseEvents, response.body);
+}
+
+/* ***** ADD NEW EVENTS TO CALENDAR ***** */
+
+/*
+* @Desc - Produces DateTime in ISO8601 which is the format used by the backend
+* @Param - a time (in TimeOfDay format/object) and a date
+* @Return - String of Date+Time in ISO7801 Format
+*/
+String convertTimeToISO8601(TimeOfDay time, DateTime date) {
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute)
+      .toIso8601String();
+}
+
+void createEvent(String startTime, String endTime, String title, int p) async {
+  //http.Client client
+  String apiPath =
+      'unavailability/createUnavailableEvent'; //Specific API path for this request
+  Map<String, String> queryParameters = {
+    'userId': user,
+  }; //API Query parameters
+
+  var url = Uri.https(
+      constants.domain, apiPath, queryParameters); //Completed HTTPS URL
+
+  final response = await http.post(url,
+      body: json.encode({
+        "userID": user,
+        "start": startTime,
+        "end": endTime,
+        "title": title,
+        "periodicity": p,
+      })); //the POST Request, send Event to backend
+
+  //Check if request successful else print url + errorcode
+  if (response.statusCode == 200) {
+    print('200');
+  } else {
+    print(response.statusCode);
+    print(url);
+  }
 }
