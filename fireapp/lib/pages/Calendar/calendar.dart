@@ -13,7 +13,7 @@ import 'calendarForm.dart';
 /*
 SPRINT 3 -TODO: 
 * General Calendar Events Styling & Improvements
-  - Fix overflow error with scrolling with too many events
+  - Fix bottom overflow error with scrolling with too many events
   - Events show start and end time (or all day...), & periodicity, etc
 * Events now clickable... 
   - Bottom tray w/ edit/remove functionality 
