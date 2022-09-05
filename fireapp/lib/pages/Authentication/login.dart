@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart' as constants;
+import '../../constants.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';

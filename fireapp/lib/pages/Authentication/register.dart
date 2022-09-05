@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart' as constants;
+import '../../constants.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
@@ -65,10 +65,10 @@ class _RegisterBoxState extends State<RegisterBox> {
     List<DropdownMenuItem> dietaryList = [];
     dietaryList.add(DropdownMenuItem(child: Text(""), value: ""));
     dietaryList.add(DropdownMenuItem(child: Text("meals"), value: "meals"));
-    dietaryList.add(DropdownMenuItem(child: Text("vegetarian"), value: "vegetarian"));
+    dietaryList
+        .add(DropdownMenuItem(child: Text("vegetarian"), value: "vegetarian"));
     return dietaryList;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +177,6 @@ class _RegisterBoxState extends State<RegisterBox> {
         ));
   }
 
-
-
   Widget buildUserTextField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Please enter your email'),
@@ -210,16 +208,17 @@ class _RegisterBoxState extends State<RegisterBox> {
                   _isObscure = !_isObscure;
                 });
               },
-              icon: _isObscure ?
-              const Icon(Icons.remove_red_eye_outlined) :
-              const Icon(Icons.remove_red_eye),
+              icon: _isObscure
+                  ? const Icon(Icons.remove_red_eye_outlined)
+                  : const Icon(Icons.remove_red_eye),
               splashRadius: 20),
         ));
   }
 
   Widget buildGivenNameTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Please enter your given name'),
+      decoration:
+          const InputDecoration(labelText: 'Please enter your given name'),
       validator: (v) {
         if (v!.isEmpty) {
           return 'given is empty!';
@@ -232,7 +231,8 @@ class _RegisterBoxState extends State<RegisterBox> {
 
   Widget buildLastNameTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Please enter your last name'),
+      decoration:
+          const InputDecoration(labelText: 'Please enter your last name'),
       validator: (v) {
         if (v!.isEmpty) {
           return 'Last name is empty!';
@@ -245,7 +245,8 @@ class _RegisterBoxState extends State<RegisterBox> {
 
   Widget buildPhoneTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Please enter your phone number'),
+      decoration:
+          const InputDecoration(labelText: 'Please enter your phone number'),
       validator: (v) {
         if (v!.isEmpty) {
           return 'Phone number is empty!';
@@ -303,20 +304,19 @@ class _RegisterBoxState extends State<RegisterBox> {
 
   Widget genderDropDownList(BuildContext context) {
     return DropdownButton<dynamic>(
-        hint: Text("Select your gender"),
-        items: getGenderList(),
-        onChanged: (value) {
-          setState(() {
-            _genderValue = value;
-          });
-        },
-        isExpanded: true,
-        value: _genderValue,
+      hint: Text("Select your gender"),
+      items: getGenderList(),
+      onChanged: (value) {
+        setState(() {
+          _genderValue = value;
+        });
+      },
+      isExpanded: true,
+      value: _genderValue,
       iconSize: 48,
       style: TextStyle(color: Colors.green),
     );
   }
-
 
   Widget dietaryDropDownList(BuildContext context) {
     return DropdownButton<dynamic>(
@@ -336,49 +336,57 @@ class _RegisterBoxState extends State<RegisterBox> {
 
   /// Http post request to ask for login
 
-  Future<String> register() async{
+  Future<String> register() async {
     var url = Uri.https(constants.domain, 'authentication/register');
     try {
       var response;
       if (_genderValue == null && _dietaryValue == null) {
         response = await http.post(url,
-            body:  json.encode({"email": _user,
+            body: json.encode({
+              "email": _user,
               "password": _password,
               "given_name": _givenName,
               "last_name": _lastName,
-              "phone": _phone}));
-      } else if(_genderValue == null) {
+              "phone": _phone
+            }));
+      } else if (_genderValue == null) {
         response = await http.post(url,
-            body:  json.encode({"email": _user,
+            body: json.encode({
+              "email": _user,
               "password": _password,
               "given_name": _givenName,
               "last_name": _lastName,
               "phone": _phone,
-              "gender": _genderValue}));
-      } else if(_dietaryValue == null){
+              "gender": _genderValue
+            }));
+      } else if (_dietaryValue == null) {
         response = await http.post(url,
-            body:  json.encode({"email": _user,
+            body: json.encode({
+              "email": _user,
               "password": _password,
               "given_name": _givenName,
               "last_name": _lastName,
               "phone": _phone,
-              "diet": _dietaryValue}));
+              "diet": _dietaryValue
+            }));
       } else {
         response = await http.post(url,
-            body:  json.encode({"email": _user,
+            body: json.encode({
+              "email": _user,
               "password": _password,
               "given_name": _givenName,
               "last_name": _lastName,
               "phone": _phone,
               "gender": _genderValue,
-              "diet": _dietaryValue}));
+              "diet": _dietaryValue
+            }));
       }
 
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "SUCCESS") {
           return "SUCCESS";
-        } else if (loginBean['result'] == "USERNAME_ALREADY_REGISTERED"){
+        } else if (loginBean['result'] == "USERNAME_ALREADY_REGISTERED") {
           return "USERNAME ALREADY REGISTERED";
         } else if (loginBean['result'] == "BAD_USERNAME") {
           return "BAD USERNAME";
@@ -390,15 +398,11 @@ class _RegisterBoxState extends State<RegisterBox> {
       } else {
         return "NETWORK ERROR";
       }
-    } catch(_){
+    } catch (_) {
       return "TIME OUT";
     }
   }
 }
-
-
-
-
 
 /// The bottom register module
 // class RegisterText extends StatelessWidget {
