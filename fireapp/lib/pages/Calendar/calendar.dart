@@ -12,14 +12,10 @@ import 'calendarForm.dart';
 //We are using the table calendar package
 
 /*
-SPRINT 2 - TODO: What's left...
-* Connect with API 
-  - Half Complete
-* Events show start and end time (or all day...)
-
 SPRINT 3 - TODO: 
 * General Calendar Events Styling & Improvements
   - Fix overflow error with scrolling with too many events
+  - Events show start and end time (or all day...), & periodicity, etc
 * Events now clickable... 
   - Bottom tray w/ edit/remove functionality 
 * Event Adding Form Improvemennts
@@ -29,8 +25,45 @@ SPRINT 3 - TODO:
   - Styling of input form - see Material 3 guidelines for TimeInputPicker, + spacing, theming, etc
 */
 
+/* Initial Component */
+class MyCalendarPage extends StatefulWidget {
+  //Refactor into Calendar Page
+  @override
+  _MyCalendarPage createState() => _MyCalendarPage();
+}
+
+class _MyCalendarPage extends State<MyCalendarPage> {
+  late Future<List<EventAlbum>> _eventData;
+
+  @override
+  void initState() {
+    _eventData = eventRequest(); // API Request - See Calendar_Logic.dart
+    super.initState();
+  }
+
+  //IF API Request returns then create calendar and parse in the data
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _eventData, //Data from API Request
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasData) {
+          return CalendarPage(eventData: snapshot.data);
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+//Calendar Component//
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  final List<EventAlbum> eventData;
+
+  const CalendarPage({Key? key, required this.eventData}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -38,38 +71,33 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  /* SETUP */
   //Setup for stateful calendar format - default format is month, could try week?
   CalendarFormat calendarFormat = CalendarFormat.month;
-
-  //Event Setup - Map of DateTime + A list of events on that Day
-  //late Map<DateTime, List<CalendarEvents>> eventsDateMap;
-  late Map<DateTime, List<EventAlbum>> eventsDateMap;
-
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-
+  //Initialise Map of DateTime + A list of events on that Day & pull that from the API
+  late Map<DateTime, List<EventAlbum>> eventsDateMap;
   @override
   void initState() {
-    runFutureEventsList();
-    eventsDateMap = futureEventsList;
-    print(eventsDateMap);
-
+    eventsDateMap = mapEventsToDates(widget.eventData);
     super.initState();
-  } // The initial state when the widget is loaded
+  }
 
+  // Boilderplate
   @override
   void dispose() {
     super.dispose();
   }
 
+  //Functions for assorting events by days
   List<EventAlbum> _listOfEventsForSelectedDay = [];
-
   List<EventAlbum> eventsOnDay(DateTime day) {
     return eventsDateMap[day] ?? [];
   } //Gets the list of the events from the map when you have date time
 
-  // Core page
+  /* WIDGET BUILD METHOD */
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(

@@ -52,7 +52,7 @@ class _MainRouteState extends State<MainRoute> {
 
   final mainScreens = [
     Center(child: Text('Home', style: TextStyle(fontSize: 60))),
-    const CalendarPage(),
+    MyCalendarPage(),
     Center(child: Text('Training', style: TextStyle(fontSize: 60))),
     Center(child: Text('Settings', style: TextStyle(fontSize: 60))),
   ];

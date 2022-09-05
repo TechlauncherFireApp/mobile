@@ -4,6 +4,7 @@ import '../../constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'calendar.dart';
 
 //For testing purposes
 var user = '49';
@@ -106,7 +107,7 @@ Map<DateTime, List<EventAlbum>> mapEventsToDates(List<EventAlbum> eventsToMap) {
 * @Return - Map of Date|List(EventAlbum)
 */
 late Map<DateTime, List<EventAlbum>> futureEventsList = {};
-void runFutureEventsList() {
+void runFutureEventsList() async {
   eventRequest().then((value) {
     futureEventsList = mapEventsToDates(value);
     print(futureEventsList);
