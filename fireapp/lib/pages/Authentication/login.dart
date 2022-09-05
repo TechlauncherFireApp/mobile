@@ -1,5 +1,6 @@
+import 'package:fireapp/global/access.dart';
 import 'package:flutter/material.dart';
-import '../../constants.dart' as constants;
+import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
@@ -182,6 +183,10 @@ class _LoginBoxState extends State<LoginBox> {
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "SUCCESS") {
+          userId = loginBean['id'];
+          accessToken = loginBean['access_token'];
+          role = loginBean['role'];
+          print(userId);
           return LoginResult.success;
         } else {
           return LoginResult.fail;

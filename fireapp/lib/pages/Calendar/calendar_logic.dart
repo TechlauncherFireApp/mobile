@@ -1,14 +1,16 @@
+//Flutter packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+//FireApp Files
+import 'package:fireapp/global/constants.dart' as constants; //API URL
+import 'package:fireapp/global/access.dart';
 import 'calendar.dart';
 
-//For testing purposes
-var user = '49';
+var user = userId.toString();
+//var user = '49'; //For testing purposes
 
 class CalendarEvents {
   final String title;
