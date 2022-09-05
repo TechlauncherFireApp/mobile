@@ -160,7 +160,14 @@ String convertTimeToISO8601(TimeOfDay time, DateTime date) {
       .toIso8601String();
 }
 
-void createEvent(String startTime, String endTime, String title, int p) async {
+/*
+* @Desc - An API Request to create a new event
+* @Param - startTime, endTime (as strings of DateTime's in ISO8601)
+* @Param - String title, and periodicity which is an int
+* @Return - None, set to Future<void> so await can be called
+*/
+Future<void> createEvent(
+    String startTime, String endTime, String title, int p) async {
   //http.Client client
   String apiPath =
       'unavailability/createUnavailableEvent'; //Specific API path for this request
@@ -183,8 +190,9 @@ void createEvent(String startTime, String endTime, String title, int p) async {
   //Check if request successful else print url + errorcode
   if (response.statusCode == 200) {
     print('200');
+    var tmpResponse = json.decode(response.body);
   } else {
     print(response.statusCode);
     print(url);
   }
-}
+} // Future<void> fn - when you want to use 'await fn' 

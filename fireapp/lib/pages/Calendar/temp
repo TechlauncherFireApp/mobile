@@ -62,7 +62,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
           return Container();
         },
       ),
-      //Floating Action Button
+      //Floating Action Buttonn
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
@@ -70,10 +70,9 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             context,
             MaterialPageRoute(builder: (context) => CalendarFormRoute()),
           );
-          setState(() {
-            _eventData = eventRequest();
-          });
-          //Note that if using an await - usually better to await before a sync setState and then setState but ok here because using futureBuilder instead so we can use a sync (not async) setState by default
+          _eventData = eventRequest();
+          setState(
+              () {}); //SetState after the await not during it otherwise the data won't be loaded yet
         },
       ),
     );

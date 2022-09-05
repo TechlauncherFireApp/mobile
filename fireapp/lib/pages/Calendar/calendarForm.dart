@@ -123,13 +123,14 @@ class _CalendarFormState extends State<CalendarForm> {
               child: ElevatedButton(
                 child: const Text('Submit'),
                 // SUBMIT FUNCTION
-                onPressed: () {
+                onPressed: () async {
                   // Calendar Widget only accepts UTC dates without any time values
                   String startDate = convertTimeToISO8601(setStart, setDate);
                   String endDate = convertTimeToISO8601(setEnd, setDate);
 
                   // POST Request
-                  createEvent(startDate, endDate, titleController.text, 0);
+                  await createEvent(
+                      startDate, endDate, titleController.text, 0);
 
                   //Clear Controllers
                   titleController.clear();
@@ -139,7 +140,7 @@ class _CalendarFormState extends State<CalendarForm> {
 
                   //Return to calendar page
                   Navigator.pop(context);
-                  // Navigator.pop(context, calendarResult);
+                  // Need to return a value with navigator in order to use navigator.then(()=>setState(){})
                 },
               )),
         ],
