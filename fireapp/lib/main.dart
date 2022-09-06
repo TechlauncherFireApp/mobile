@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/login',
       routes: {
         //  (You can change it to the page you develop in the beginning)
-        '/nav': (context) => MainRoute(), // See Layout/Navigation.dart
+        '/nav': (context) => mainNav(), // See Layout/Navigation.dart
         '/login': (context) => const BasicWrapper(
             page: LoginPage()), // See Authentication/Login.dart
         '/register': (context) => const BasicWrapper(

@@ -21,7 +21,7 @@ SPRINT 3 -TODO:
   - Event Input Form has Form Validation
   - add "All Day toggle" which hides the time input options... 
   - Repeat events toggle (selection) + show on calendar (see tablecalendar documentation for cylic events)
-  - Styling of input form - see Material 3 guidelines for TimeInputPicker, + spacing, theming, etc
+  - Padding on input form
 */
 
 /* Initial Component */
