@@ -35,7 +35,7 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
   Widget build(BuildContext context) {
     final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
     return Scaffold(
-        appBar: new AppBar(title: Text('Reset Password'),),
+        // appBar: new AppBar(title: Text('Reset Password'),),
         body: Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -46,6 +46,8 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
           buildTitle(), // Reset Password
           const SizedBox(height: 20),
           buildPasswordTextField(),
+          const SizedBox(height: 20),
+          buildRepeatPasswordTextField(),
           const SizedBox(height: 30),
           buildSubmitButton(context),
         ],

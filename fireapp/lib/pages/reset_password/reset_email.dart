@@ -120,7 +120,7 @@ class _ResetBoxState extends State<ResetBox> {
               if(value == LoginResult.success){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ResetCodePage(email:_email)),)
+                MaterialPageRoute(builder: (context) => ResetCodePage(email:myController.text)),)
               }
               // Navigator.push(
               //   context,

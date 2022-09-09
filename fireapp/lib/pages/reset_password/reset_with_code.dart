@@ -35,7 +35,7 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
   Widget build(BuildContext context) {
     final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
     return Scaffold(
-      appBar: new AppBar(title: Text('Reset Password'),),
+      // appBar: new AppBar(title: Text('Reset Password'),),
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -86,7 +86,7 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
           body: json.encode({"email":widget.email,"code": myController.text}));
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
-        if (loginBean['result'] == "SUCCESS") {
+        if (loginBean['result'] == "CODE_CORRECT") {
           return LoginResult.success;
         } else {
           return LoginResult.fail;
