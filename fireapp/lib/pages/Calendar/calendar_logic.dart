@@ -201,7 +201,7 @@ Future<void> createEvent(
   }
 } // Future<void> fn - when you want to use 'await fn'
 
-Future<bool> removeEvent(int id) async {
+Future<void> removeEvent(int id) async {
   //http.Client client
   String apiPath =
       'unavailability/removeUnavailableEvent'; //Specific API path for this request
@@ -218,9 +218,9 @@ Future<bool> removeEvent(int id) async {
   //Check if request successful else print url + errorcode
   if (response.statusCode == 200) {
     print(response.statusCode);
-    return true;
+    //return true;
   } else {
     print(response.statusCode);
-    return false;
+    //return false;
   }
 }

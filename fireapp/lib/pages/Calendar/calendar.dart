@@ -22,6 +22,8 @@ SPRINT 3 -TODO:
   - Padding on input form
 */
 
+/* Found a bug - cards on selected day arent being built right away on addition*/
+
 /* Initial Component */
 class MyCalendarPage extends StatefulWidget {
   const MyCalendarPage({super.key});
@@ -220,15 +222,14 @@ class _CalendarPageState extends State<CalendarPage> {
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
-                onDismissed: (direction) {
-                  setState(() async {
-                    if (await removeEvent(
-                        _listOfEventsForSelectedDay[index].eventId))
-                      _listOfEventsForSelectedDay.removeAt(index);
+                onDismissed: (direction) async {
+                  await removeEvent(_listOfEventsForSelectedDay[index].eventId);
+                  setState(() {
+                    _listOfEventsForSelectedDay.removeAt(index);
                   });
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          '${_listOfEventsForSelectedDay[index]} dismissed')));
+                          '${_listOfEventsForSelectedDay[index]} removed')));
                 },
                 // The card itself
                 child: Card(
