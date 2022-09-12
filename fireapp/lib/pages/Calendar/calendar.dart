@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new
 
 // PACKAGES
+import 'package:fireapp/global/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -16,13 +17,16 @@ SPRINT 3 -TODO:
   - add "All Day toggle" which hides the time input options... 
   - Repeat events toggle (selection in form & show on calendar) [DONE]
   - calendar can handle cylical events 
-  - Padding/Styling on input form
 * Modifying Events
   - Events now deleteable [DONE]
   - Events now clickable... [DONE]
   - Create a copy of the pre-existing form... - Maybe refactor into a widget...
   - Opens form - prefilled with the event details
   - Onsubmit it deletes the old one and adds a new one. 
+* VISUAL
+  - Event on day calendar - dif shade...
+  - Padding/Styling on input form
+  - Center loading circle - currently it shows in top left cornor
 */
 
 /* BUGS:
@@ -182,7 +186,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     shape: BoxShape.circle,
                   ),
                   markerDecoration: BoxDecoration(
-                    color: Colors.red,
+                    color: Color.fromARGB(255, 58, 57, 57),
                     shape: BoxShape.circle,
                   )),
               daysOfWeekHeight: 50.0,
@@ -250,7 +254,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       icon: const Icon(Icons.more_vert),
                     ),
                     leading: CircleAvatar(
-                        backgroundColor: Colors.red,
+                        backgroundColor:
+                            leadingRepeatIndicatorColor, //See Global/Theme.dart
                         child: Text(repeatLeadingLetter(
                             _listOfEventsForSelectedDay[index].periodicity))),
                   ),
