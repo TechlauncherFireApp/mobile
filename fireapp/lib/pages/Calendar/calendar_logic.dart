@@ -1,4 +1,6 @@
 //Flutter packages
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -197,4 +199,28 @@ Future<void> createEvent(
     print(response.statusCode);
     print(url);
   }
-} // Future<void> fn - when you want to use 'await fn' 
+} // Future<void> fn - when you want to use 'await fn'
+
+Future<bool> removeEvent(int id) async {
+  //http.Client client
+  String apiPath =
+      'unavailability/removeUnavailableEvent'; //Specific API path for this request
+  Map<String, String> queryParameters = {
+    'eventId': id.toString(),
+    'userId': user,
+  }; //API Query parameters
+
+  var url = Uri.https(
+      constants.domain, apiPath, queryParameters); //Completed HTTPS URL
+
+  final response = await http.get(url); //the GET Request
+
+  //Check if request successful else print url + errorcode
+  if (response.statusCode == 200) {
+    print(response.statusCode);
+    return true;
+  } else {
+    print(response.statusCode);
+    return false;
+  }
+}

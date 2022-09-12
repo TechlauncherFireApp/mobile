@@ -204,17 +204,40 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           ),
+          // EVENT LIST
           ListView.builder(
             itemCount: _listOfEventsForSelectedDay.length,
             shrinkWrap: true,
             // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
             itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  // onTap: () {}
-                  title: Text(_listOfEventsForSelectedDay[index].title),
-                  subtitle: Text(
-                      "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+              return Dismissible(
+                // Makes the card dismissable via a swipe
+                key: ValueKey(_listOfEventsForSelectedDay[index]),
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.center,
+                  child: const Text("Remove",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+                onDismissed: (direction) {
+                  setState(() async {
+                    if (await removeEvent(
+                        _listOfEventsForSelectedDay[index].eventId))
+                      _listOfEventsForSelectedDay.removeAt(index);
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          '${_listOfEventsForSelectedDay[index]} dismissed')));
+                },
+                // The card itself
+                child: Card(
+                  child: ListTile(
+                    // onTap: () {}
+                    title: Text(_listOfEventsForSelectedDay[index].title),
+                    subtitle: Text(
+                        "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+                  ),
                 ),
               );
             },
