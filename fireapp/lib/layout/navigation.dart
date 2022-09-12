@@ -39,19 +39,23 @@ class _VolunteerRouteState extends State<VolunteerRoute> {
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.event_available),
             label: 'Calendar',
           ),
           NavigationDestination(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.school_outlined),
+            selectedIcon: Icon(Icons.school),
             label: 'Training',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.manage_accounts_outlined),
+            selectedIcon: Icon(Icons.manage_accounts),
             label: 'Settings',
           ),
         ],
@@ -92,19 +96,23 @@ class _SupervisorRouteState extends State<SupervisorRoute> {
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.pending_actions_outlined),
+            selectedIcon: Icon(Icons.pending_actions),
             label: 'Shifts',
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(Icons.schedule),
+            selectedIcon: Icon(Icons.watch_later),
             label: 'Schedule',
           ),
           NavigationDestination(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.group_outlined),
+            selectedIcon: Icon(Icons.group),
             label: 'Volunteers',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.admin_panel_settings_outlined),
+            selectedIcon: Icon(Icons.admin_panel_settings),
             label: 'Settings',
           ),
         ],
