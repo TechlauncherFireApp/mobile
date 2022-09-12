@@ -11,18 +11,24 @@ import 'calendarForm.dart';
 //We are using the table calendar package
 /*
 SPRINT 3 -TODO: 
-* General Calendar Events Styling & Improvements
-  - Fix bottom overflow error with scrolling with too many events 
-* Events now clickable... 
-  - Bottom tray w/ edit/remove functionality 
 * Event Adding Form Improvemennts
   - Event Input Form has Form Validation
   - add "All Day toggle" which hides the time input options... 
   - Repeat events toggle (selection) + show on calendar (see tablecalendar documentation for cylic events)
-  - Padding on input form
+  - Padding/Styling on input form
+* Modifying Events
+  - Events now deleteable [DONE]
+  - Events now clickable... [DONE]
+  - Create a copy of the pre-existing form... - Maybe refactor into a widget...
+  - Opens form - prefilled with the event details
+  - Onsubmit it deletes the old one and adds a new one. 
 */
 
-/* Found a bug - cards on selected day arent being built right away on addition*/
+/* BUGS:
+1. cards on selected day arent being built right away on addition
+2. bottom overflow error when too many events on a given day
+3. error message in console when removing the last event from a day
+*/
 
 /* Initial Component */
 class MyCalendarPage extends StatefulWidget {
@@ -238,6 +244,9 @@ class _CalendarPageState extends State<CalendarPage> {
                     title: Text(_listOfEventsForSelectedDay[index].title),
                     subtitle: Text(
                         "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+                    trailing: IconButton(
+                        onPressed: () {}, // Add exist function here
+                        icon: const Icon(Icons.more_vert)),
                   ),
                 ),
               );
@@ -246,3 +255,5 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       );
 }
+
+// Show periodicity using Empty, D, W, M 

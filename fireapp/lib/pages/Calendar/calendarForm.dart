@@ -31,6 +31,7 @@ class _CalendarFormState extends State<CalendarForm> {
   var setDate;
   var setStart;
   var setEnd;
+  var repeatDropDownValue = 0;
   TextEditingController titleController = TextEditingController();
   TextEditingController inputDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
@@ -116,6 +117,22 @@ class _CalendarFormState extends State<CalendarForm> {
                   });
                 }
               }),
+          DropdownButtonFormField(
+            items: [
+              DropdownMenuItem(child: Text('None'), value: 0),
+              DropdownMenuItem(child: Text('Daily'), value: 1),
+              DropdownMenuItem(child: Text('Weekly'), value: 2),
+              DropdownMenuItem(child: Text('Monthly'), value: 3),
+            ],
+            onChanged: (int? value) {
+              setState(() {
+                repeatDropDownValue = value!;
+              }); // Assign selected value
+              //print(repeatDropDownValue);
+            },
+            decoration: const InputDecoration(
+                labelText: "Repeat?", icon: Icon(Icons.refresh)),
+          ),
           // Submit Button
           Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
