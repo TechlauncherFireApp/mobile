@@ -65,7 +65,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
         future: _eventData, //Data from API Request
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
             return CalendarPage(eventData: snapshot.data);
