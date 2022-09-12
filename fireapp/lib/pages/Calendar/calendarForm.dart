@@ -118,11 +118,11 @@ class _CalendarFormState extends State<CalendarForm> {
                 }
               }),
           DropdownButtonFormField(
-            items: [
-              DropdownMenuItem(child: Text('None'), value: 0),
-              DropdownMenuItem(child: Text('Daily'), value: 1),
-              DropdownMenuItem(child: Text('Weekly'), value: 2),
-              DropdownMenuItem(child: Text('Monthly'), value: 3),
+            items: const [
+              DropdownMenuItem(value: 0, child: Text('None')),
+              DropdownMenuItem(value: 1, child: Text('Daily')),
+              DropdownMenuItem(value: 2, child: Text('Weekly')),
+              DropdownMenuItem(value: 3, child: Text('Monthly')),
             ],
             onChanged: (int? value) {
               setState(() {
@@ -146,8 +146,8 @@ class _CalendarFormState extends State<CalendarForm> {
                   String endDate = convertTimeToISO8601(setEnd, setDate);
 
                   // POST Request
-                  await createEvent(
-                      startDate, endDate, titleController.text, 0);
+                  await createEvent(startDate, endDate, titleController.text,
+                      repeatDropDownValue);
 
                   //Clear Controllers
                   titleController.clear();

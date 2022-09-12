@@ -14,7 +14,8 @@ SPRINT 3 -TODO:
 * Event Adding Form Improvemennts
   - Event Input Form has Form Validation
   - add "All Day toggle" which hides the time input options... 
-  - Repeat events toggle (selection) + show on calendar (see tablecalendar documentation for cylic events)
+  - Repeat events toggle (selection in form & show on calendar) [DONE]
+  - calendar can handle cylical events 
   - Padding/Styling on input form
 * Modifying Events
   - Events now deleteable [DONE]
@@ -245,8 +246,13 @@ class _CalendarPageState extends State<CalendarPage> {
                     subtitle: Text(
                         "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
                     trailing: IconButton(
-                        onPressed: () {}, // Add exist function here
-                        icon: const Icon(Icons.more_vert)),
+                      onPressed: () {}, // Add exist function here
+                      icon: const Icon(Icons.more_vert),
+                    ),
+                    leading: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        child: Text(repeatLeadingLetter(
+                            _listOfEventsForSelectedDay[index].periodicity))),
                   ),
                 ),
               );
@@ -254,6 +260,26 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         ],
       );
+}
+
+/*
+* @Desc - A function to return the indicator letter for repeating events
+* @Param - integer representing an events periodicity
+* @Return - A single character in String format
+*/
+String repeatLeadingLetter(int periodicity) {
+  switch (periodicity) {
+    case 0:
+      return " ";
+    case 1:
+      return "D";
+    case 2:
+      return "W";
+    case 3:
+      return "M";
+    default:
+      return " ";
+  }
 }
 
 // Show periodicity using Empty, D, W, M 
