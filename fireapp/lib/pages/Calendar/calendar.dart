@@ -27,6 +27,7 @@ SPRINT 3 -TODO:
   - Event on day calendar - dif shade...
   - Padding/Styling on input form
   - Center loading circle - currently it shows in top left cornor
+  - See idea @ bottom of page...
 */
 
 /* BUGS:
@@ -267,6 +268,10 @@ class _CalendarPageState extends State<CalendarPage> {
       );
 }
 
+// IDEA: Could use Bedtime, NightStay, LightMode, Brightness icons to turn the leading- part of card
+// into a time of day indicator rather than repeat indicator
+// then do the repeat indicator differently
+
 /*
 * @Desc - A function to return the indicator letter for repeating events
 * @Param - integer representing an events periodicity
@@ -287,4 +292,4 @@ String repeatLeadingLetter(int periodicity) {
   }
 }
 
-// Show periodicity using Empty, D, W, M 
+// Show periodicity using Empty, D, W, M

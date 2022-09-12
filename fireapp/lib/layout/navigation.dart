@@ -106,8 +106,8 @@ class _SupervisorRouteState extends State<SupervisorRoute> {
             label: 'Schedule',
           ),
           NavigationDestination(
-            icon: Icon(Icons.group_outlined),
-            selectedIcon: Icon(Icons.group),
+            icon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups),
             label: 'Volunteers',
           ),
           NavigationDestination(

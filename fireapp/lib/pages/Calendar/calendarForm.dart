@@ -48,7 +48,7 @@ class _CalendarFormState extends State<CalendarForm> {
           TextFormField(
             controller: titleController,
             decoration: const InputDecoration(
-              icon: const Icon(Icons.person),
+              icon: Icon(Icons.title),
               hintText: 'Enter the event Title',
               labelText: 'Title',
             ),
@@ -81,7 +81,7 @@ class _CalendarFormState extends State<CalendarForm> {
           TextField(
               controller: startTimeController,
               decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
+                icon: Icon(Icons.hourglass_top),
                 labelText: "Enter Time",
               ),
               readOnly: true,
@@ -101,7 +101,7 @@ class _CalendarFormState extends State<CalendarForm> {
           TextField(
               controller: endTimeController,
               decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
+                icon: Icon(Icons.hourglass_bottom),
                 labelText: "Enter Time",
               ),
               readOnly: true,
