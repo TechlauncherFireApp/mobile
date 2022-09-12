@@ -3,7 +3,6 @@
 // PACKAGES
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:http/http.dart' as http;
 
 //PAGES
 import 'calendar_logic.dart';
@@ -13,8 +12,7 @@ import 'calendarForm.dart';
 /*
 SPRINT 3 -TODO: 
 * General Calendar Events Styling & Improvements
-  - Fix bottom overflow error with scrolling with too many events
-  - Events show start and end time (or all day...), & periodicity, etc
+  - Fix bottom overflow error with scrolling with too many events 
 * Events now clickable... 
   - Bottom tray w/ edit/remove functionality 
 * Event Adding Form Improvemennts
@@ -213,8 +211,11 @@ class _CalendarPageState extends State<CalendarPage> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                    // onTap: () {}
-                    title: Text(_listOfEventsForSelectedDay[index].title)),
+                  // onTap: () {}
+                  title: Text(_listOfEventsForSelectedDay[index].title),
+                  subtitle: Text(
+                      "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+                ),
               );
             },
           ),

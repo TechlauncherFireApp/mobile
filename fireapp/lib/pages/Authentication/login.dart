@@ -229,7 +229,7 @@ class RegisterText extends StatelessWidget {
             child:
                 const Text('Create an account', style: TextStyle(fontSize: 16)),
             onPressed: () {
-              // TODO Register page
+              Navigator.pushNamed(context, '/register');
             },
           )
         ],
