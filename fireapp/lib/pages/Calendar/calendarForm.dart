@@ -17,6 +17,8 @@ class CalendarFormRoute extends StatelessWidget {
 
 // Creating a 'form' widget
 class CalendarForm extends StatefulWidget {
+  const CalendarForm({super.key});
+
   @override
   _CalendarFormState createState() {
     return _CalendarFormState();

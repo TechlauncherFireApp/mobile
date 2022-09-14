@@ -4,13 +4,13 @@ import '../pages/Calendar/calendar.dart';
 
 Widget mainNav() {
   print(role);
-  if (role == "VOLUNTEER") {
-    // If logged in user is a supervisor then send them to the supervisor menu\
-    return const VolunteerRoute();
-  } else if (role == "ROOT_ADMIN") {
-    return const SupervisorRoute();
-  } else {
-    return const VolunteerRoute();
+  switch (role) {
+    case "VOLUNTEER":
+      return const VolunteerRoute();
+    case "ROOT_ADMIN":
+      return const SupervisorRoute();
+    default:
+      return const VolunteerRoute();
   }
 }
 
@@ -97,7 +97,7 @@ class _SupervisorRouteState extends State<SupervisorRoute> {
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.pending_actions_outlined),
-            selectedIcon: Icon(Icons.pending_actions),
+            selectedIcon: Icon(Icons.pending_actions_sharp),
             label: 'Shifts',
           ),
           NavigationDestination(
