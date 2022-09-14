@@ -13,8 +13,8 @@ import 'calendarForm.dart';
 /*
 SPRINT 3 -TODO: 
 * Event Adding Form Improvemennts
-  - Event Input Form has Form Validation
-  - add "All Day toggle" which hides the time input options... 
+  - Event Input Form has Form Validation [DONE]
+  - add "All Day toggle" which hides the time input options... [DONE]
   - Repeat events toggle (selection in form & show on calendar) [DONE]
   - calendar can handle cylical events 
 * Modifying Events
@@ -24,16 +24,17 @@ SPRINT 3 -TODO:
   - Opens form - prefilled with the event details
   - Onsubmit it deletes the old one and adds a new one. 
 * VISUAL
-  - Event on day calendar - dif shade...
+  - Event on day calendar - dif shade... [DONE]
   - Padding/Styling on input form
-  - Center loading circle - currently it shows in top left cornor
+  - Center loading circle - currently it shows in top left corner [DONE]
   - See idea @ bottom of page...
 */
 
 /* BUGS:
 1. cards on selected day arent being built right away on addition
 2. bottom overflow error when too many events on a given day
-3. error message in console when removing the last event from a day
+3. error message in console when removing the last event from a day [SOLVED]
+4. Overflow on form w/ keyboard open...
 */
 
 /* Initial Component */
@@ -248,17 +249,15 @@ class _CalendarPageState extends State<CalendarPage> {
             setState(() {
               _listOfEventsForSelectedDay.removeAt(index);
             });
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text('${_listOfEventsForSelectedDay[index]} removed')));
           },
           // THE INDIVIDUAL EVENT CARD
           child: Card(
             child: ListTile(
               // onTap: () {}
               title: Text(_listOfEventsForSelectedDay[index].title),
-              subtitle: Text(
-                  "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+              subtitle: Text(timeString(
+                  _listOfEventsForSelectedDay[index].start,
+                  _listOfEventsForSelectedDay[index].end)),
               trailing: IconButton(
                 onPressed: () {}, // Add exist function here
                 icon: const Icon(Icons.more_vert),
@@ -273,6 +272,19 @@ class _CalendarPageState extends State<CalendarPage> {
         );
       },
     );
+  }
+
+  /* 
+  * @Desc - Returns the appropriate string for event time
+  * @Param - two Strings, start time and end time
+  * @Return - A String that represents time an event goes for
+  */
+  String timeString(String startTime, String endTime) {
+    if (startTime == "00:00" && endTime == "23:59") {
+      return "All-Day";
+    } else {
+      return "$startTime - $endTime";
+    }
   }
 
   /*

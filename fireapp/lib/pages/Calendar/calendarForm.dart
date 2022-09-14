@@ -52,10 +52,10 @@ class _CalendarFormState extends State<CalendarForm> {
         children: <Widget>[
           buildTitleField(),
           buildDatePicker(),
-          buildAllDayCheckbox(),
           //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
           Visibility(visible: !allDayChecked, child: buildStartTimeField()),
           Visibility(visible: !allDayChecked, child: buildEndTimeField()),
+          buildAllDayCheckbox(),
           buildEventDropDown(),
           buildSubmitButton(context),
         ],
