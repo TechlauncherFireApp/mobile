@@ -75,6 +75,16 @@ class EventAlbum {
   }
 }
 
+//TestEvent
+EventAlbum TestEvent = EventAlbum(
+    userId: 49,
+    eventId: 700,
+    title: "Test Pls",
+    date: DateTime.now(),
+    start: "00:00",
+    end: "23:59",
+    periodicity: 0);
+
 /*
 * @Desc - Function that converts a response body into a list of events
 * @Param - response.body of an API request - specifically the one for our calendar events

@@ -20,9 +20,9 @@ SPRINT 3 -TODO:
 * Modifying Events
   - Events now deleteable [DONE]
   - Events now clickable... [DONE]
-  - Create a copy of the pre-existing form... - Maybe refactor into a widget...
-  - Opens form - prefilled with the event details
-  - Onsubmit it deletes the old one and adds a new one. 
+  - Create a copy of the pre-existing form... - Maybe refactor into a widget... [DONE]
+  - Opens form - prefilled with the event details [DONE]
+  - Onsubmit it deletes the old one and adds a new one. [DONE]
 * VISUAL
   - Event on day calendar - dif shade... [DONE]
   - Padding/Styling on input form
@@ -35,6 +35,7 @@ SPRINT 3 -TODO:
 2. bottom overflow error when too many events on a given day
 3. error message in console when removing the last event from a day [SOLVED]
 4. Overflow on form w/ keyboard open...
+5. Modifying form can't call a new eventRequest() 
 */
 
 /* Initial Component */
@@ -259,8 +260,17 @@ class _CalendarPageState extends State<CalendarPage> {
                   _listOfEventsForSelectedDay[index].start,
                   _listOfEventsForSelectedDay[index].end)),
               trailing: IconButton(
-                onPressed: () {}, // Add exist function here
-                icon: const Icon(Icons.more_vert),
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ModifyEventFormRoute(
+                            event: _listOfEventsForSelectedDay[index])),
+                  );
+                  setState(
+                      () {}); // May need to find away to eventRequest from here...
+                },
+                icon: const Icon(Icons.edit_note),
               ),
               leading: CircleAvatar(
                   backgroundColor:
@@ -312,6 +322,3 @@ class _CalendarPageState extends State<CalendarPage> {
 // IDEA: Could use Bedtime, NightStay, LightMode, Brightness icons to turn the leading- part of card
 // into a time of day indicator rather than repeat indicator
 // then do the repeat indicator differently
-
-
-

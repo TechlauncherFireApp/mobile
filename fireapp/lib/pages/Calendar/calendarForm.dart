@@ -1,10 +1,9 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
-
 import 'package:fireapp/pages/Calendar/calendar_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-//Form Page
+//Default Form Page - For adding an event
 class CalendarFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,9 +16,29 @@ class CalendarFormRoute extends StatelessWidget {
   }
 }
 
+//Modify an Event Form Page
+class ModifyEventFormRoute extends StatelessWidget {
+  final EventAlbum event;
+  const ModifyEventFormRoute({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Modify Event'),
+      ),
+      body: CalendarForm(eventBasis: event),
+    );
+  }
+}
+
 // Creating a 'form' widget
 class CalendarForm extends StatefulWidget {
-  const CalendarForm({super.key});
+  final eventBasis;
+  const CalendarForm({
+    super.key,
+    this.eventBasis,
+  });
 
   @override
   _CalendarFormState createState() {
@@ -43,24 +62,73 @@ class _CalendarFormState extends State<CalendarForm> {
   TextEditingController endTimeController = TextEditingController();
 
   @override
+  void initState() {
+    //For modifying events - prefill out form with event details
+    if (widget.eventBasis != null) {
+      setDate = widget.eventBasis.date;
+      setStart = TimeOfDay(
+          hour: int.parse(widget.eventBasis.start.split(":")[0]),
+          minute: int.parse(widget.eventBasis.start.split(":")[1]));
+      setEnd = TimeOfDay(
+          hour: int.parse(widget.eventBasis.end.split(":")[0]),
+          minute: int.parse(widget.eventBasis.end.split(":")[1]));
+      repeatDropDownValue = widget.eventBasis.periodicity;
+      titleController.text = widget.eventBasis.title;
+      if (setStart == "00:00" && setEnd == "23:59") {
+        allDayChecked = true;
+      } else {
+        startTimeController.text = widget.eventBasis.start;
+        endTimeController.text = widget.eventBasis.end;
+      }
+      inputDateController.text = DateFormat('yyyy-MM-dd').format(setDate);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          buildTitleField(),
-          buildDatePicker(),
-          //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
-          Visibility(visible: !allDayChecked, child: buildStartTimeField()),
-          Visibility(visible: !allDayChecked, child: buildEndTimeField()),
-          buildAllDayCheckbox(),
-          buildEventDropDown(),
-          buildSubmitButton(context),
-        ],
-      ),
-    );
+
+    // MODIFY EVENT FORM - IN THE IF STATEMENT
+    if (widget.eventBasis != null) {
+      return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            buildTitleField(),
+            buildDatePicker(),
+            //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
+            Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+            Visibility(visible: !allDayChecked, child: buildEndTimeField()),
+            buildAllDayCheckbox(),
+            buildEventDropDown(),
+            buildSubmitButton(context,
+                modifySubmitFunction), // Change to modifySubmitFunction
+            buildDeleteButton(context),
+          ],
+        ),
+      );
+    }
+    // ADD EVENT FORM - BELOW
+    else {
+      return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            buildTitleField(),
+            buildDatePicker(),
+            //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
+            Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+            Visibility(visible: !allDayChecked, child: buildEndTimeField()),
+            buildAllDayCheckbox(),
+            buildEventDropDown(),
+            buildSubmitButton(context, defaultSubmitFunction),
+          ],
+        ),
+      );
+    }
   }
 
   //Title Text Field
@@ -212,7 +280,7 @@ class _CalendarFormState extends State<CalendarForm> {
   }
 
   // Submit Button
-  Widget buildSubmitButton(BuildContext context) {
+  Widget buildSubmitButton(BuildContext context, Function fn) {
     return Container(
       padding: const EdgeInsets.only(left: 150.0, top: 40.0),
       // ignore: unnecessary_new
@@ -220,7 +288,7 @@ class _CalendarFormState extends State<CalendarForm> {
         child: const Text('Submit'),
         // SUBMIT FUNCTION
         onPressed: () async {
-          submitFunction();
+          fn();
         },
       ),
     );
@@ -229,7 +297,7 @@ class _CalendarFormState extends State<CalendarForm> {
   /* Submit Function
   *  DESC: validates form, converts datetime format, sends request to server, and navigates back to calendar page
   */
-  void submitFunction() async {
+  void defaultSubmitFunction() async {
     //Form Validationn --- Checks if all fields with a validate property are filled out
     if (_formKey.currentState!.validate()) {
       // Checks that end time is after start time
@@ -269,5 +337,72 @@ class _CalendarFormState extends State<CalendarForm> {
         }
       }
     }
+  }
+
+  /* Modify Function
+  *  DESC: validates form, converts datetime format, 
+  *  Deletes old event, adds new event,
+  * , and navigates back to calendar page
+  */
+  void modifySubmitFunction() async {
+    //Form Validationn --- Checks if all fields with a validate property are filled out
+    if (_formKey.currentState!.validate()) {
+      // Checks that end time is after start time
+      if (allDayChecked) {
+        //If all day is checked then pass event as 12AM - 12PM
+        String startDate =
+            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setDate);
+        String endDate = convertTimeToISO8601(
+            const TimeOfDay(hour: 23, minute: 59), setDate);
+
+        //Remove old event ... then add new one
+        await removeEvent(widget.eventBasis.eventId);
+
+        await createEvent(
+            startDate, endDate, titleController.text, repeatDropDownValue);
+
+        //Return to calendar page
+        Navigator.pop(context);
+      } else {
+        if (timeToDouble(setEnd) > timeToDouble(setStart)) {
+          // Calendar Widget only accepts UTC dates without any time values
+          // If all day not checked then parse date w/ selected time values
+          String startDate = convertTimeToISO8601(setStart, setDate);
+          String endDate = convertTimeToISO8601(setEnd, setDate);
+
+          //Remove old event ... then add new one
+          await removeEvent(widget.eventBasis.eventId);
+
+          await createEvent(
+              startDate, endDate, titleController.text, repeatDropDownValue);
+
+          //Return to calendar page
+          Navigator.pop(context);
+
+          // Check if allday is checked...
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("End time can't be before Start time")),
+          );
+        }
+      }
+    }
+  }
+
+  // Delete the event button
+  Widget buildDeleteButton(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 150.0, top: 40.0),
+      // ignore: unnecessary_new
+      child: ElevatedButton(
+        child: const Text('Delete '),
+        // SUBMIT FUNCTION
+        onPressed: () async {
+          await removeEvent(widget.eventBasis.eventId);
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 }
