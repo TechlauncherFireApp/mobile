@@ -16,7 +16,7 @@ SPRINT 3 -TODO:
   - Event Input Form has Form Validation [DONE]
   - add "All Day toggle" which hides the time input options... [DONE]
   - Repeat events toggle (selection in form & show on calendar) [DONE]
-  - calendar can handle cylical events 
+  - calendar can handle cylical events [DONE]
 * Modifying Events
   - Events now deleteable [DONE]
   - Events now clickable... [DONE]
@@ -25,9 +25,10 @@ SPRINT 3 -TODO:
   - Onsubmit it deletes the old one and adds a new one. [DONE]
 * VISUAL
   - Event on day calendar - dif shade... [DONE]
-  - Padding/Styling on input form
   - Center loading circle - currently it shows in top left corner [DONE]
-  - See idea @ bottom of page...
+  - Make event cards more stylish? 
+  - Padding/Styling on input form
+
 */
 
 /* BUGS:
@@ -41,6 +42,7 @@ SPRINT 3 -TODO:
 
 /* CONCERNS:
 1. Adjustable spacing... how will it look on bigger form factors?
+2. Print statements left in code...
 */
 
 /* Initial Component */
@@ -78,8 +80,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
           if (snapshot.hasData) {
             return Column(
               children: [
-                //Note: MapEventsToDates - Puts _eventData (snapshot.data) into the format of Map<DateTime, List<EventAlbum>>
-                buildCalendar(mapEventsToDates(snapshot.data)),
+                buildCalendar(snapshot.data),
                 buildEventsList(),
               ],
             );
@@ -113,21 +114,41 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   // List of events for a selected day
   List<EventAlbum> _listOfEventsForSelectedDay = [];
 
-  Widget calendarPage(eventData) {
-    //Initialise Map of DateTime + A list of events on that Day & pull that from the API
-    Map<DateTime, List<EventAlbum>> eventsDateMap = mapEventsToDates(eventData);
-    //Functions for assorting events by days
+  /*
+  * @Desc - gets all the events that should be on a specific day, including repeating events
+  * @Param - the day (selection), the list of events
+  * @Return - A list of events (that match the selected day)
+  */
+  List<EventAlbum> eventloading(DateTime day, List<EventAlbum> eList) {
+    List<EventAlbum> noRepeatList = [];
+    List<EventAlbum> dailyList = [];
+    List<EventAlbum> returnList = [];
+    Map<DateTime, List<EventAlbum>> map;
 
-    return Column(
-      children: [
-        buildCalendar(eventsDateMap),
-        buildEventsList(),
-      ],
-    );
+    for (var e in eList) {
+      if (e.periodicity == 1) {
+        dailyList.add(e);
+      } else if (e.periodicity == 2 &&
+          (day.isAfter(e.date) || day.isAtSameMomentAs(e.date))) {
+        if (e.date.weekday == day.weekday) {
+          returnList.add(e);
+        }
+      } else if (e.periodicity == 3) {
+        if (e.date.day == day.day &&
+            (day.isAfter(e.date) || day.isAtSameMomentAs(e.date))) {
+          returnList.add(e);
+        }
+      } else {
+        noRepeatList.add(e);
+      }
+    }
+    map = mapEventsToDates(noRepeatList);
+    returnList = returnList + dailyList + (map[day] ?? []);
+    return returnList;
   }
 
 // Calendar Widget
-  Widget buildCalendar(Map<DateTime, List<EventAlbum>> eventsDateMap) {
+  Widget buildCalendar(List<EventAlbum> eventsList) {
     return Card(
       //The card which the calendar sits ontop of
       margin: const EdgeInsets.all(8),
@@ -161,7 +182,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
           setState(() {
             _selectedDay = selectedDay;
             _focusedDay = focusedDay;
-            _listOfEventsForSelectedDay = eventsDateMap[_selectedDay] ?? [];
+            _listOfEventsForSelectedDay = eventloading(selectedDay, eventsList);
           });
         },
         onPageChanged: (focusedDay) {
@@ -169,8 +190,8 @@ class _MyCalendarPage extends State<MyCalendarPage> {
               focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
         },
         // Calendar Events - see note below on how Calendar Event Handling works
-        eventLoader: (DateTime day) {
-          return eventsDateMap[day] ?? [];
+        eventLoader: (day) {
+          return eventloading(day, eventsList);
         },
         // Styling the calendar
         calendarStyle: const CalendarStyle(
