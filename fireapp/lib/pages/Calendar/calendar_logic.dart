@@ -1,6 +1,4 @@
 //Flutter packages
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +7,6 @@ import 'package:intl/intl.dart';
 //FireApp Files
 import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:fireapp/global/access.dart';
-import 'calendar.dart';
 
 //var user = userId.toString();
 var user = '49'; //For testing purposes
@@ -224,3 +221,12 @@ Future<void> removeEvent(int id) async {
     //return false;
   }
 }
+
+/* MISC */
+
+/*
+* @Desc - Turns a timeofday value into a double so that it can be compared
+* @Param - A TimeOfDay
+* @Return - a double
+*/
+double timeToDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;

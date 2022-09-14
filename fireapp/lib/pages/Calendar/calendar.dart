@@ -134,162 +134,172 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Card(
-            margin: const EdgeInsets.all(8),
-            elevation: 5.0,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-
-            // THE CALENDAR
-            child: TableCalendar(
-              // Max day and min day the calendar can go to
-              firstDay: DateTime.utc(2022, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 12),
-              // Set the selected day
-              focusedDay: _focusedDay,
-              // Setting the Calendar Format & Labels for those formats
-              availableCalendarFormats: const {
-                CalendarFormat.month: 'Month',
-                CalendarFormat.week: 'Week',
-              },
-              calendarFormat: calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  calendarFormat = format;
-                });
-              },
-              // Allows the user to select different days other than current day
-              selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                  _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
-                });
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay =
-                    focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
-              },
-              // Calendar Events - see note below on how Calendar Event Handling works
-              eventLoader: eventsOnDay,
-              // Styling the calendar
-              calendarStyle: const CalendarStyle(
-                  todayDecoration: BoxDecoration(
-                    color: Color.fromARGB(132, 244, 67, 54),
-                    shape: BoxShape.circle,
-                  ),
-                  selectedDecoration: BoxDecoration(
-                    color: Color.fromARGB(255, 207, 59, 48),
-                    shape: BoxShape.circle,
-                  ),
-                  markerDecoration: BoxDecoration(
-                    color: Color.fromARGB(255, 58, 57, 57),
-                    shape: BoxShape.circle,
-                  )),
-              daysOfWeekHeight: 50.0,
-              rowHeight: 50.0,
-              headerStyle: const HeaderStyle(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                ),
-                formatButtonDecoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                ),
-                leftChevronIcon: Icon(
-                  Icons.chevron_left,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                rightChevronIcon: Icon(
-                  Icons.chevron_right,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                titleTextStyle: TextStyle(color: Colors.white, fontSize: 21),
-              ),
-            ),
-          ),
-          // EVENT LIST
-          ListView.builder(
-            itemCount: _listOfEventsForSelectedDay.length,
-            shrinkWrap: true,
-            // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
-            itemBuilder: (context, index) {
-              return Dismissible(
-                // Makes the card dismissable via a swipe
-                key: ValueKey(_listOfEventsForSelectedDay[index]),
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.center,
-                  child: const Text("Remove",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onDismissed: (direction) async {
-                  await removeEvent(_listOfEventsForSelectedDay[index].eventId);
-                  setState(() {
-                    _listOfEventsForSelectedDay.removeAt(index);
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          '${_listOfEventsForSelectedDay[index]} removed')));
-                },
-                // The card itself
-                child: Card(
-                  child: ListTile(
-                    // onTap: () {}
-                    title: Text(_listOfEventsForSelectedDay[index].title),
-                    subtitle: Text(
-                        "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
-                    trailing: IconButton(
-                      onPressed: () {}, // Add exist function here
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                    leading: CircleAvatar(
-                        backgroundColor:
-                            leadingRepeatIndicatorColor, //See Global/Theme.dart
-                        child: Text(repeatLeadingLetter(
-                            _listOfEventsForSelectedDay[index].periodicity))),
-                  ),
-                ),
-              );
-            },
-          ),
+          buildCalendar(),
+          buildEventsList(),
         ],
       );
+
+  // Calendar Widget
+  Widget buildCalendar() {
+    return Card(
+      //The card which the calendar sits ontop of
+      margin: const EdgeInsets.all(8),
+      elevation: 5.0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      // THE CALENDAR ITSELF
+      child: TableCalendar(
+        // Max day and min day the calendar can go to
+        firstDay: DateTime.utc(2022, 1, 1),
+        lastDay: DateTime.utc(2030, 12, 12),
+        // Set the selected day
+        focusedDay: _focusedDay,
+        // Setting the Calendar Format & Labels for those formats
+        availableCalendarFormats: const {
+          CalendarFormat.month: 'Month',
+          CalendarFormat.week: 'Week',
+        },
+        calendarFormat: calendarFormat,
+        onFormatChanged: (format) {
+          setState(() {
+            calendarFormat = format;
+          });
+        },
+        // Allows the user to select different days other than current day
+        selectedDayPredicate: (day) {
+          return isSameDay(_selectedDay, day);
+        },
+        onDaySelected: (selectedDay, focusedDay) {
+          setState(() {
+            _selectedDay = selectedDay;
+            _focusedDay = focusedDay;
+            _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
+          });
+        },
+        onPageChanged: (focusedDay) {
+          _focusedDay =
+              focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
+        },
+        // Calendar Events - see note below on how Calendar Event Handling works
+        eventLoader: eventsOnDay,
+        // Styling the calendar
+        calendarStyle: const CalendarStyle(
+            todayDecoration: BoxDecoration(
+              color: Color.fromARGB(132, 244, 67, 54),
+              shape: BoxShape.circle,
+            ),
+            selectedDecoration: BoxDecoration(
+              color: Color.fromARGB(255, 207, 59, 48),
+              shape: BoxShape.circle,
+            ),
+            markerDecoration: BoxDecoration(
+              color: Color.fromARGB(255, 58, 57, 57),
+              shape: BoxShape.circle,
+            )),
+        daysOfWeekHeight: 50.0,
+        rowHeight: 50.0,
+        headerStyle: const HeaderStyle(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+          formatButtonDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(7.0)),
+          ),
+          leftChevronIcon: Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+            size: 30,
+          ),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+            color: Colors.white,
+            size: 30,
+          ),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 21),
+        ),
+      ),
+    );
+  }
+
+  Widget buildEventsList() {
+    return ListView.builder(
+      itemCount: _listOfEventsForSelectedDay.length,
+      shrinkWrap: true,
+      // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
+      itemBuilder: (context, index) {
+        return Dismissible(
+          // Makes the card dismissable via a swipe
+          key: ValueKey(_listOfEventsForSelectedDay[index]),
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.center,
+            child: const Text("Remove",
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          onDismissed: (direction) async {
+            await removeEvent(_listOfEventsForSelectedDay[index].eventId);
+            setState(() {
+              _listOfEventsForSelectedDay.removeAt(index);
+            });
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text('${_listOfEventsForSelectedDay[index]} removed')));
+          },
+          // THE INDIVIDUAL EVENT CARD
+          child: Card(
+            child: ListTile(
+              // onTap: () {}
+              title: Text(_listOfEventsForSelectedDay[index].title),
+              subtitle: Text(
+                  "${_listOfEventsForSelectedDay[index].start} - ${_listOfEventsForSelectedDay[index].end}"),
+              trailing: IconButton(
+                onPressed: () {}, // Add exist function here
+                icon: const Icon(Icons.more_vert),
+              ),
+              leading: CircleAvatar(
+                  backgroundColor:
+                      leadingRepeatIndicatorColor, //See Global/Theme.dart
+                  child: Text(repeatLeadingLetter(
+                      _listOfEventsForSelectedDay[index].periodicity))),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /*
+  * @Desc - A function to return the indicator letter for repeating events
+  * @Param - integer representing an events periodicity
+  * @Return - A single character in String format
+  */
+  String repeatLeadingLetter(int periodicity) {
+    switch (periodicity) {
+      case 0:
+        return " ";
+      case 1:
+        return "D";
+      case 2:
+        return "W";
+      case 3:
+        return "M";
+      default:
+        return " ";
+    } // Show periodicity using Empty, D, W, M
+  }
+  //
 }
 
 // IDEA: Could use Bedtime, NightStay, LightMode, Brightness icons to turn the leading- part of card
 // into a time of day indicator rather than repeat indicator
 // then do the repeat indicator differently
 
-/*
-* @Desc - A function to return the indicator letter for repeating events
-* @Param - integer representing an events periodicity
-* @Return - A single character in String format
-*/
-String repeatLeadingLetter(int periodicity) {
-  switch (periodicity) {
-    case 0:
-      return " ";
-    case 1:
-      return "D";
-    case 2:
-      return "W";
-    case 3:
-      return "M";
-    default:
-      return " ";
-  }
-}
 
-// Show periodicity using Empty, D, W, M
+

@@ -10,7 +10,7 @@ class CalendarFormRoute extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Add Unavailability'),
       ),
-      body: CalendarForm(),
+      body: const CalendarForm(),
     );
   }
 }
@@ -68,18 +68,30 @@ class _CalendarFormState extends State<CalendarForm> {
         hintText: 'Enter the event Title',
         labelText: 'Title',
       ),
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Title is empty!';
+        }
+        return null;
+      },
     );
   }
 
   Widget buildDatePicker() {
     // Date Time Picker
-    return TextField(
+    return TextFormField(
       controller: inputDateController,
       decoration: const InputDecoration(
         icon: Icon(Icons.calendar_today),
         labelText: "Enter Date",
       ),
       readOnly: true, //So it can't be changed without using the picker
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Date is empty!';
+        }
+        return null;
+      },
       onTap: () async {
         DateTime? selectedDate = await showDatePicker(
           context: context,
@@ -101,13 +113,19 @@ class _CalendarFormState extends State<CalendarForm> {
 
   Widget buildStartTimeField() {
     // StartTime - Input
-    return TextField(
+    return TextFormField(
       controller: startTimeController,
       decoration: const InputDecoration(
         icon: Icon(Icons.hourglass_top),
         labelText: "Enter Start Time",
       ),
       readOnly: true,
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Start Time is empty!';
+        }
+        return null;
+      },
       onTap: () async {
         TimeOfDay? newTime = await showTimePicker(
           context: context,
@@ -125,13 +143,19 @@ class _CalendarFormState extends State<CalendarForm> {
 
   // End Time Input
   Widget buildEndTimeField() {
-    return TextField(
+    return TextFormField(
       controller: endTimeController,
       decoration: const InputDecoration(
         icon: Icon(Icons.hourglass_bottom),
         labelText: "Enter End Time",
       ),
       readOnly: true,
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'End Time is empty!';
+        }
+        return null;
+      },
       onTap: () async {
         TimeOfDay? newTime = await showTimePicker(
           context: context,
@@ -150,6 +174,7 @@ class _CalendarFormState extends State<CalendarForm> {
   //eventDropDown
   Widget buildEventDropDown() {
     return DropdownButtonFormField(
+      value: repeatDropDownValue,
       items: const [
         DropdownMenuItem(value: 0, child: Text('None')),
         DropdownMenuItem(value: 1, child: Text('Daily')),
@@ -177,16 +202,26 @@ class _CalendarFormState extends State<CalendarForm> {
         child: const Text('Submit'),
         // SUBMIT FUNCTION
         onPressed: () async {
-          // Calendar Widget only accepts UTC dates without any time values
-          String startDate = convertTimeToISO8601(setStart, setDate);
-          String endDate = convertTimeToISO8601(setEnd, setDate);
+          //Form Validationn --- Checks if all fields with a validate property are filled out
+          if (_formKey.currentState!.validate()) {
+            // Checks that end time is after start time
+            if (timeToDouble(setEnd) > timeToDouble(setStart)) {
+              // Calendar Widget only accepts UTC dates without any time values
+              String startDate = convertTimeToISO8601(setStart, setDate);
+              String endDate = convertTimeToISO8601(setEnd, setDate);
 
-          // POST Request
-          await createEvent(startDate, endDate, title, repeatDropDownValue);
+              // POST Request
+              await createEvent(startDate, endDate, title, repeatDropDownValue);
 
-          //Return to calendar page
-          Navigator.pop(context);
-          // Need to return a value with navigator in order to use navigator.then(()=>setState(){})
+              //Return to calendar page
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text("End time can't be before Start time")),
+              );
+            }
+          }
         },
       ),
     );
