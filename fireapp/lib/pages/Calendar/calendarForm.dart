@@ -92,41 +92,47 @@ class _CalendarFormState extends State<CalendarForm> {
 
     // MODIFY EVENT FORM - IN THE IF STATEMENT
     if (widget.eventBasis != null) {
-      return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            buildTitleField(),
-            buildDatePicker(),
-            //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
-            Visibility(visible: !allDayChecked, child: buildStartTimeField()),
-            Visibility(visible: !allDayChecked, child: buildEndTimeField()),
-            buildAllDayCheckbox(),
-            buildEventDropDown(),
-            buildSubmitButton(context,
-                modifySubmitFunction), // Change to modifySubmitFunction
-            buildDeleteButton(context),
-          ],
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildTitleField(),
+              buildDatePicker(),
+              //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
+              Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+              Visibility(visible: !allDayChecked, child: buildEndTimeField()),
+              buildAllDayCheckbox(),
+              buildEventDropDown(),
+              buildSubmitButton(context,
+                  modifySubmitFunction), // Change to modifySubmitFunction
+              buildDeleteButton(context),
+            ],
+          ),
         ),
       );
     }
     // ADD EVENT FORM - BELOW
     else {
-      return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            buildTitleField(),
-            buildDatePicker(),
-            //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
-            Visibility(visible: !allDayChecked, child: buildStartTimeField()),
-            Visibility(visible: !allDayChecked, child: buildEndTimeField()),
-            buildAllDayCheckbox(),
-            buildEventDropDown(),
-            buildSubmitButton(context, defaultSubmitFunction),
-          ],
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildTitleField(),
+              buildDatePicker(),
+              //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
+              Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+              Visibility(visible: !allDayChecked, child: buildEndTimeField()),
+              buildAllDayCheckbox(),
+              buildEventDropDown(),
+              buildSubmitButton(context, defaultSubmitFunction),
+            ],
+          ),
         ),
       );
     }
@@ -282,15 +288,17 @@ class _CalendarFormState extends State<CalendarForm> {
 
   // Submit Button
   Widget buildSubmitButton(BuildContext context, Function fn) {
-    return Container(
-      padding: const EdgeInsets.only(left: 150.0, top: 40.0),
-      // ignore: unnecessary_new
-      child: ElevatedButton(
-        child: const Text('Submit'),
-        // SUBMIT FUNCTION
-        onPressed: () async {
-          fn();
-        },
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.only(top: 40.0),
+        // ignore: unnecessary_new
+        child: ElevatedButton(
+          child: const Text('Submit'),
+          // SUBMIT FUNCTION
+          onPressed: () async {
+            fn();
+          },
+        ),
       ),
     );
   }
@@ -393,16 +401,18 @@ class _CalendarFormState extends State<CalendarForm> {
 
   // Delete the event button
   Widget buildDeleteButton(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 150.0, top: 40.0),
-      // ignore: unnecessary_new
-      child: ElevatedButton(
-        child: const Text('Delete '),
-        // SUBMIT FUNCTION
-        onPressed: () async {
-          await removeEvent(widget.eventBasis.eventId);
-          Navigator.pop(context);
-        },
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.only(top: 25.0),
+        // ignore: unnecessary_new
+        child: ElevatedButton(
+          child: const Text('Delete '),
+          // SUBMIT FUNCTION
+          onPressed: () async {
+            await removeEvent(widget.eventBasis.eventId);
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }
