@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
+
 import 'package:fireapp/pages/Calendar/calendar_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +36,7 @@ class _CalendarFormState extends State<CalendarForm> {
   var setStart;
   var setEnd;
   var repeatDropDownValue = 0;
+  bool allDayChecked = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController inputDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
@@ -49,11 +52,12 @@ class _CalendarFormState extends State<CalendarForm> {
         children: <Widget>[
           buildTitleField(),
           buildDatePicker(),
-          buildStartTimeField(),
-          buildEndTimeField(),
+          buildAllDayCheckbox(),
+          //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
+          Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+          Visibility(visible: !allDayChecked, child: buildEndTimeField()),
           buildEventDropDown(),
-          buildSubmitButton(context, setDate, setStart, setEnd,
-              titleController.text, repeatDropDownValue),
+          buildSubmitButton(context),
         ],
       ),
     );
@@ -107,6 +111,21 @@ class _CalendarFormState extends State<CalendarForm> {
             setDate = selectedDate;
           });
         }
+      },
+    );
+  }
+
+  //All Day Checkbox
+  Widget buildAllDayCheckbox() {
+    return CheckboxListTile(
+      title: const Text("All Day?"),
+      controlAffinity: ListTileControlAffinity
+          .leading, //Where to place it relative to the text/label
+      value: allDayChecked,
+      onChanged: (bool? _allDayChecked) {
+        setState(() {
+          allDayChecked = _allDayChecked!;
+        });
       },
     );
   }
@@ -193,8 +212,7 @@ class _CalendarFormState extends State<CalendarForm> {
   }
 
   // Submit Button
-  Widget buildSubmitButton(BuildContext context, setDate, setStart, setEnd,
-      title, repeatDropDownValue) {
+  Widget buildSubmitButton(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 150.0, top: 40.0),
       // ignore: unnecessary_new
@@ -202,28 +220,54 @@ class _CalendarFormState extends State<CalendarForm> {
         child: const Text('Submit'),
         // SUBMIT FUNCTION
         onPressed: () async {
-          //Form Validationn --- Checks if all fields with a validate property are filled out
-          if (_formKey.currentState!.validate()) {
-            // Checks that end time is after start time
-            if (timeToDouble(setEnd) > timeToDouble(setStart)) {
-              // Calendar Widget only accepts UTC dates without any time values
-              String startDate = convertTimeToISO8601(setStart, setDate);
-              String endDate = convertTimeToISO8601(setEnd, setDate);
-
-              // POST Request
-              await createEvent(startDate, endDate, title, repeatDropDownValue);
-
-              //Return to calendar page
-              Navigator.pop(context);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text("End time can't be before Start time")),
-              );
-            }
-          }
+          submitFunction();
         },
       ),
     );
+  }
+
+  /* Submit Function
+  *  DESC: validates form, converts datetime format, sends request to server, and navigates back to calendar page
+  */
+  void submitFunction() async {
+    //Form Validationn --- Checks if all fields with a validate property are filled out
+    if (_formKey.currentState!.validate()) {
+      // Checks that end time is after start time
+      if (allDayChecked) {
+        //If all day is checked then pass event as 12AM - 12PM
+        String startDate =
+            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setDate);
+        String endDate = convertTimeToISO8601(
+            const TimeOfDay(hour: 23, minute: 59), setDate);
+
+        // POST REQUEST
+        await createEvent(
+            startDate, endDate, titleController.text, repeatDropDownValue);
+
+        //Return to calendar page
+        Navigator.pop(context);
+      } else {
+        if (timeToDouble(setEnd) > timeToDouble(setStart)) {
+          // Calendar Widget only accepts UTC dates without any time values
+          // If all day not checked then parse date w/ selected time values
+          String startDate = convertTimeToISO8601(setStart, setDate);
+          String endDate = convertTimeToISO8601(setEnd, setDate);
+
+          // POST REQUEST
+          await createEvent(
+              startDate, endDate, titleController.text, repeatDropDownValue);
+
+          //Return to calendar page
+          Navigator.pop(context);
+
+          // Check if allday is checked...
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("End time can't be before Start time")),
+          );
+        }
+      }
+    }
   }
 }
