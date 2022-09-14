@@ -35,7 +35,8 @@ SPRINT 3 -TODO:
 2. bottom overflow error when too many events on a given day
 3. error message in console when removing the last event from a day [SOLVED]
 4. Overflow on form w/ keyboard open...
-5. Modifying form can't call a new eventRequest() 
+5. Modifying form can't call a new eventRequest()  [SOLVED]
+6. Floating Action Button covers the edit button for the third evennt if only three events
 */
 
 /* Initial Component */
@@ -71,7 +72,13 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return CalendarPage(eventData: snapshot.data);
+            return Column(
+              children: [
+                //Note: MapEventsToDates - Puts _eventData (snapshot.data) into the format of Map<DateTime, List<EventAlbum>>
+                buildCalendar(mapEventsToDates(snapshot.data)),
+                buildEventsList(),
+              ],
+            );
           }
           return Container();
         },
@@ -92,57 +99,31 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       ),
     );
   }
-}
 
-//Calendar Component//
-class CalendarPage extends StatefulWidget {
-  final List<EventAlbum> eventData;
-
-  const CalendarPage({Key? key, required this.eventData}) : super(key: key);
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _CalendarPageState createState() => _CalendarPageState();
-}
-
-class _CalendarPageState extends State<CalendarPage> {
-  /* SETUP */
+  /* Calendar SETUP */
   //Setup for stateful calendar format - default format is month, could try week?
   CalendarFormat calendarFormat = CalendarFormat.month;
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  //Initialise Map of DateTime + A list of events on that Day & pull that from the API
-  late Map<DateTime, List<EventAlbum>> eventsDateMap;
-  @override
-  void initState() {
-    eventsDateMap = mapEventsToDates(widget.eventData);
-    super.initState();
-  }
-
-  // Boilderplate
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  //Functions for assorting events by days
+  // List of events for a selected day
   List<EventAlbum> _listOfEventsForSelectedDay = [];
-  List<EventAlbum> eventsOnDay(DateTime day) {
-    return eventsDateMap[day] ?? [];
-  } //Gets the list of the events from the map when you have date time
 
-  /* WIDGET BUILD METHOD */
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          buildCalendar(),
-          buildEventsList(),
-        ],
-      );
+  Widget calendarPage(eventData) {
+    //Initialise Map of DateTime + A list of events on that Day & pull that from the API
+    Map<DateTime, List<EventAlbum>> eventsDateMap = mapEventsToDates(eventData);
+    //Functions for assorting events by days
 
-  // Calendar Widget
-  Widget buildCalendar() {
+    return Column(
+      children: [
+        buildCalendar(eventsDateMap),
+        buildEventsList(),
+      ],
+    );
+  }
+
+// Calendar Widget
+  Widget buildCalendar(Map<DateTime, List<EventAlbum>> eventsDateMap) {
     return Card(
       //The card which the calendar sits ontop of
       margin: const EdgeInsets.all(8),
@@ -176,7 +157,7 @@ class _CalendarPageState extends State<CalendarPage> {
           setState(() {
             _selectedDay = selectedDay;
             _focusedDay = focusedDay;
-            _listOfEventsForSelectedDay = eventsOnDay(selectedDay);
+            _listOfEventsForSelectedDay = eventsDateMap[_selectedDay] ?? [];
           });
         },
         onPageChanged: (focusedDay) {
@@ -184,7 +165,9 @@ class _CalendarPageState extends State<CalendarPage> {
               focusedDay; // Prevents widget rebuild errors with focusedday - does not require setState()
         },
         // Calendar Events - see note below on how Calendar Event Handling works
-        eventLoader: eventsOnDay,
+        eventLoader: (DateTime day) {
+          return eventsDateMap[day] ?? [];
+        },
         // Styling the calendar
         calendarStyle: const CalendarStyle(
             todayDecoration: BoxDecoration(
@@ -267,8 +250,9 @@ class _CalendarPageState extends State<CalendarPage> {
                         builder: (context) => ModifyEventFormRoute(
                             event: _listOfEventsForSelectedDay[index])),
                   );
-                  setState(
-                      () {}); // May need to find away to eventRequest from here...
+                  setState(() {
+                    _eventData = eventRequest();
+                  });
                 },
                 icon: const Icon(Icons.edit_note),
               ),
@@ -316,7 +300,6 @@ class _CalendarPageState extends State<CalendarPage> {
         return " ";
     } // Show periodicity using Empty, D, W, M
   }
-  //
 }
 
 // IDEA: Could use Bedtime, NightStay, LightMode, Brightness icons to turn the leading- part of card

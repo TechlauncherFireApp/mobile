@@ -74,7 +74,8 @@ class _CalendarFormState extends State<CalendarForm> {
           minute: int.parse(widget.eventBasis.end.split(":")[1]));
       repeatDropDownValue = widget.eventBasis.periodicity;
       titleController.text = widget.eventBasis.title;
-      if (setStart == "00:00" && setEnd == "23:59") {
+      if (widget.eventBasis.start == "00:00" &&
+          widget.eventBasis.end == "23:59") {
         allDayChecked = true;
       } else {
         startTimeController.text = widget.eventBasis.start;
