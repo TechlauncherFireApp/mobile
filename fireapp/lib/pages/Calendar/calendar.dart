@@ -39,6 +39,10 @@ SPRINT 3 -TODO:
 6. Floating Action Button covers the edit button for the third evennt if only three events
 */
 
+/* CONCERNS:
+1. Adjustable spacing... how will it look on bigger form factors?
+*/
+
 /* Initial Component */
 class MyCalendarPage extends StatefulWidget {
   const MyCalendarPage({super.key});
@@ -239,9 +243,16 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             child: ListTile(
               // onTap: () {}
               title: Text(_listOfEventsForSelectedDay[index].title),
-              subtitle: Text(timeString(
-                  _listOfEventsForSelectedDay[index].start,
-                  _listOfEventsForSelectedDay[index].end)),
+              subtitle: Row(
+                children: [
+                  Text(
+                    timeString(_listOfEventsForSelectedDay[index].start,
+                        _listOfEventsForSelectedDay[index].end),
+                  ),
+                  SizedBox(width: 25),
+                  repeatIcon(_listOfEventsForSelectedDay[index].periodicity),
+                ],
+              ),
               trailing: IconButton(
                 onPressed: () async {
                   await Navigator.push(
@@ -256,16 +267,26 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                 },
                 icon: const Icon(Icons.edit_note),
               ),
-              leading: CircleAvatar(
-                  backgroundColor:
-                      leadingRepeatIndicatorColor, //See Global/Theme.dart
-                  child: Text(repeatLeadingLetter(
-                      _listOfEventsForSelectedDay[index].periodicity))),
+              //leading:
             ),
           ),
         );
       },
     );
+  }
+
+  Widget repeatIcon(int period) {
+    if (period > 0) {
+      return Row(children: [
+        const Icon(
+          Icons.repeat,
+          size: 18,
+        ),
+        Text(repeatAmount(period)),
+      ]);
+    } else {
+      return const Text(" ");
+    }
   }
 
   /* 
@@ -286,22 +307,16 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   * @Param - integer representing an events periodicity
   * @Return - A single character in String format
   */
-  String repeatLeadingLetter(int periodicity) {
+  String repeatAmount(int periodicity) {
     switch (periodicity) {
-      case 0:
-        return " ";
       case 1:
-        return "D";
+        return "Daily";
       case 2:
-        return "W";
+        return "Weekly";
       case 3:
-        return "M";
+        return "Monthly";
       default:
         return " ";
     } // Show periodicity using Empty, D, W, M
   }
 }
-
-// IDEA: Could use Bedtime, NightStay, LightMode, Brightness icons to turn the leading- part of card
-// into a time of day indicator rather than repeat indicator
-// then do the repeat indicator differently
