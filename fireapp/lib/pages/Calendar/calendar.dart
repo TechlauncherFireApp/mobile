@@ -9,30 +9,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'calendar_logic.dart';
 import 'calendarForm.dart';
 
-//We are using the table calendar package
-/*
-SPRINT 3 -TODO: 
-* Event Adding Form Improvemennts
-  - Event Input Form has Form Validation [DONE]
-  - add "All Day toggle" which hides the time input options... [DONE]
-  - Repeat events toggle (selection in form & show on calendar) [DONE]
-  - calendar can handle cylical events [DONE]
-* Modifying Events
-  - Events now deleteable [DONE]
-  - Events now clickable... [DONE]
-  - Create a copy of the pre-existing form... - Maybe refactor into a widget... [DONE]
-  - Opens form - prefilled with the event details [DONE]
-  - Onsubmit it deletes the old one and adds a new one. [DONE]
-* VISUAL
-  - Event on day calendar - dif shade... [DONE]
-  - Center loading circle - currently it shows in top left corner [DONE]
-  - Make event cards more stylish? 
-  - Padding/Styling on input form
-
-*/
-
 /* BUGS:
-1. cards on selected day arent being built right away on addition
+1. cards on selected day arent being built right away on addition - _listOfEvent... not filled before cards first built>?
 2. bottom overflow error when too many events on a given day
 3. error message in console when removing the last event from a day [SOLVED]
 4. Overflow on form w/ keyboard open...
@@ -57,9 +35,13 @@ class MyCalendarPage extends StatefulWidget {
 class _MyCalendarPage extends State<MyCalendarPage> {
   late Future<List<EventAlbum>> _eventData;
 
+  // List of events for a selected day
+  List<EventAlbum> _listOfEventsForSelectedDay = [];
+
   @override
   void initState() {
     _eventData = eventRequest(); // API Request - See Calendar_Logic.dart
+
     super.initState();
   }
 
@@ -111,8 +93,6 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   // Selected day on Calendar - set to current date
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  // List of events for a selected day
-  List<EventAlbum> _listOfEventsForSelectedDay = [];
 
   /*
   * @Desc - gets all the events that should be on a specific day, including repeating events
@@ -126,7 +106,8 @@ class _MyCalendarPage extends State<MyCalendarPage> {
     Map<DateTime, List<EventAlbum>> map;
 
     for (var e in eList) {
-      if (e.periodicity == 1) {
+      if (e.periodicity == 1 &&
+          (day.isAfter(e.date) || day.isAtSameMomentAs(e.date))) {
         dailyList.add(e);
       } else if (e.periodicity == 2 &&
           (day.isAfter(e.date) || day.isAtSameMomentAs(e.date))) {
@@ -149,6 +130,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
 
 // Calendar Widget
   Widget buildCalendar(List<EventAlbum> eventsList) {
+    //_listOfEventsForSelectedDay = eventloading(_selectedDay, eventsList);
     return Card(
       //The card which the calendar sits ontop of
       margin: const EdgeInsets.all(8),
@@ -257,6 +239,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             await removeEvent(_listOfEventsForSelectedDay[index].eventId);
             setState(() {
               _listOfEventsForSelectedDay.removeAt(index);
+              _eventData = eventRequest(); // Is this inefficient???
             });
           },
           // THE INDIVIDUAL EVENT CARD

@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:fireapp/global/access.dart';
 
-//var user = userId.toString();
-var user = '49'; //For testing purposes
+var user = userId.toString();
+//var user = '49'; //For testing purposes
 
 class CalendarEvents {
   final String title;
