@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: fireappTheme(),
-      initialRoute: '/login',
+      initialRoute: '/nav',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart

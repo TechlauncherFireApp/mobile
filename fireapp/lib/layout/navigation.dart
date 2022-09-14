@@ -108,6 +108,7 @@ class _SupervisorRouteState extends State<SupervisorRoute> {
           NavigationDestination(
             icon: Icon(Icons.groups_outlined),
             selectedIcon: Icon(Icons.groups),
+            // Group icon vs Groups - unsure
             label: 'Volunteers',
           ),
           NavigationDestination(
