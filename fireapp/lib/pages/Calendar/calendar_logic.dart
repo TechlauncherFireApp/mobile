@@ -122,7 +122,6 @@ late Map<DateTime, List<EventAlbum>> futureEventsList = {};
 void runFutureEventsList() async {
   eventRequest().then((value) {
     futureEventsList = mapEventsToDates(value);
-    print(futureEventsList);
   }).catchError((error) => print("Failed: " + error));
 }
 

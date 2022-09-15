@@ -279,7 +279,6 @@ class _CalendarFormState extends State<CalendarForm> {
         setState(() {
           repeatDropDownValue = value!;
         }); // Assign selected value
-        //print(repeatDropDownValue);
       },
       decoration: const InputDecoration(
           labelText: "Repeat?", icon: Icon(Icons.refresh)),
