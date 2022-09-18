@@ -35,7 +35,6 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
   Widget build(BuildContext context) {
     final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
     return Scaffold(
-      // appBar: new AppBar(title: Text('Reset Password'),),
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,

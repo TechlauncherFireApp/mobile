@@ -3,6 +3,7 @@
 import 'package:fireapp/pages/reset_password/reset_email.dart';
 import 'package:fireapp/pages/reset_password/reset_password.dart';
 import 'package:fireapp/pages/reset_password/reset_with_code.dart';
+import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter/material.dart';
 import 'pages/Calendar/calendar.dart';
 import 'layout/wrapper.dart';
@@ -33,14 +34,15 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.red,
       ),
       // The current root page is login page
-      initialRoute: '/reset',
+      initialRoute: '/setting',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => MainRoute(),
         '/login': (context) => const BasicWrapper(page: LoginPage()),
-        '/reset': (context) => const BasicWrapper(page: ResetPage()),
-        '/rest_code': (context) => BasicWrapper(page: ResetCodePage(email: "",)),
-        '/reset_pass': (context) => BasicWrapper(page: ResetPasswordPage(email: "",)),
+        '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
+        '/setting': (context) => BasicWrapper(page: SettingPage(email: "julia1412@163.com")),
+        // '/rest_code': (context) => BasicWrapper(page: ResetCodePage(email: "",)),
+        // '/reset_pass': (context) => BasicWrapper(page: ResetPasswordPage(email: "",)),
       },
     );
   }
