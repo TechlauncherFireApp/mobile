@@ -1,5 +1,6 @@
+import 'package:fireapp/global/access.dart';
 import 'package:flutter/material.dart';
-import '../constants.dart' as constants;
+import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
@@ -47,12 +48,20 @@ class _LoginBoxState extends State<LoginBox> {
   final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
   late String _user, _password;
   bool _isObscure = true; // Password is obscure or not
+  final clearPassword = TextEditingController();
+  int loginCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = "";
+    _password = "";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
@@ -94,27 +103,29 @@ class _LoginBoxState extends State<LoginBox> {
 
   Widget buildPasswordTextField() {
     return TextFormField(
-        obscureText: _isObscure,
-        validator: (v) {
-          if (v!.isEmpty) {
-            return 'Password is empty!';
-          }
-          return null;
-        },
-        onSaved: (v) => _password = v!,
-        decoration: InputDecoration(
-          labelText: 'Password',
-          suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isObscure = !_isObscure;
-                });
-              },
-              icon: _isObscure ?
-              const Icon(Icons.remove_red_eye_outlined) :
-              const Icon(Icons.remove_red_eye),
-              splashRadius: 20),
-        ));
+      obscureText: _isObscure,
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Password is empty!';
+        }
+        return null;
+      },
+      onSaved: (v) => _password = v!,
+      decoration: InputDecoration(
+        labelText: 'Password',
+        suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            },
+            icon: _isObscure
+                ? const Icon(Icons.remove_red_eye_outlined)
+                : const Icon(Icons.remove_red_eye),
+            splashRadius: 20),
+      ),
+      controller: clearPassword,
+    );
   }
 
   Widget buildForgotPasswordText(BuildContext context) {
@@ -153,7 +164,7 @@ class _LoginBoxState extends State<LoginBox> {
                   barrierDismissible: false,
                   builder: (context) {
                     return NetLoadingDialog(
-                        loadingMethod: login(), operation: showToast);
+                        loadingMethod: login(), operation: loginOperation);
                   });
             }
           },
@@ -164,6 +175,7 @@ class _LoginBoxState extends State<LoginBox> {
 
   /// Http post request to ask for login
   Future<LoginResult> login() async {
+    loginCount++;
     var url = Uri.https(constants.domain, 'authentication/login');
     try {
       var response = await http.post(url,
@@ -171,6 +183,10 @@ class _LoginBoxState extends State<LoginBox> {
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "SUCCESS") {
+          userId = loginBean['id'];
+          accessToken = loginBean['access_token'];
+          role = loginBean['role'];
+          print(userId);
           return LoginResult.success;
         } else {
           return LoginResult.fail;
@@ -180,6 +196,17 @@ class _LoginBoxState extends State<LoginBox> {
       }
     } catch (_) {
       return LoginResult.timeout;
+    }
+  }
+
+  /// Operation after login
+  loginOperation(var result) {
+    showToast(result);
+    // Clear password text field and value after login
+    clearPassword.clear();
+    _password = "";
+    if (result == LoginResult.success) {
+      Navigator.pushNamed(context, '/nav');
     }
   }
 }
@@ -202,7 +229,7 @@ class RegisterText extends StatelessWidget {
             child:
                 const Text('Create an account', style: TextStyle(fontSize: 16)),
             onPressed: () {
-              // TODO Register page
+              Navigator.pushNamed(context, '/register');
             },
           )
         ],
@@ -211,9 +238,4 @@ class RegisterText extends StatelessWidget {
   }
 }
 
-enum LoginResult {
-  success,
-  fail,
-  networkError,
-  timeout
-}
+enum LoginResult { success, fail, networkError, timeout }

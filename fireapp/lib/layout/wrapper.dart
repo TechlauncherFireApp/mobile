@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'navbar.dart';
+import 'appbar.dart';
 
 /// The class is to wrap the page with navbar
 /// Generate a file generated_plugin_registrant.dart in lib
