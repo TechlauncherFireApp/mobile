@@ -1,27 +1,31 @@
+import 'package:fireapp/pages/Authentication/login.dart';
 import 'package:flutter/material.dart';
 import 'reset_password.dart';
-import '../../constants.dart' as constants;
-import '../login.dart';
+import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ResetCodePage extends StatelessWidget {
   final String email;
-  ResetCodePage({Key ? key,required this.email}) :super(key: key);
+  ResetCodePage({Key? key, required this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Column(
       children: [
-        Expanded(child: ResetCodeBox(email: email,)),
+        Expanded(
+            child: ResetCodeBox(
+          email: email,
+        )),
       ],
     );
   }
 }
+
 class ResetCodeBox extends StatefulWidget {
   final String email;
-  ResetCodeBox({Key? key,required this.email}) : super(key: key);
+  ResetCodeBox({Key? key, required this.email}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ResetCodeBoxState();
@@ -47,7 +51,6 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
             buildCodeTextField(),
             const SizedBox(height: 30),
             buildSubmitButton(context),
-
           ],
         ),
       ),
@@ -72,17 +75,17 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
         }
       },
       controller: myController,
-      onSaved: (v) => {
-        _code = v!
-      },
+      onSaved: (v) => {_code = v!},
     );
   }
+
   /// Http post request to ask for login
   Future<LoginResult> verify() async {
     var url = Uri.https(constants.domain, 'authentication/verify');
     try {
       var response = await http.post(url,
-          body: json.encode({"email":widget.email,"code": myController.text}));
+          body:
+              json.encode({"email": widget.email, "code": myController.text}));
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "CODE_CORRECT") {
@@ -97,6 +100,7 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
       return LoginResult.timeout;
     }
   }
+
   Widget buildSubmitButton(BuildContext context) {
     return Align(
       child: SizedBox(
@@ -107,18 +111,20 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
               shape: MaterialStateProperty.all(const StadiumBorder(
                   side: BorderSide(style: BorderStyle.none)))),
           child: Text('Submit',
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline6),
+              style: Theme.of(context).primaryTextTheme.headline6),
           onPressed: () {
             verify().then((value) => {
-              if(value == LoginResult.success){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResetPasswordPage(email: widget.email,)),)
-              }
-            });
+                  if (value == LoginResult.success)
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ResetPasswordPage(
+                                  email: widget.email,
+                                )),
+                      )
+                    }
+                });
           },
         ),
       ),

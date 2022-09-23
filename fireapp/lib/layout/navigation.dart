@@ -1,3 +1,4 @@
+import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
 import '../pages/Calendar/calendar.dart';
@@ -27,7 +28,7 @@ final volunteerScreens = [
   Center(child: Text('Home', style: TextStyle(fontSize: 60))),
   MyCalendarPage(),
   Center(child: Text('Training', style: TextStyle(fontSize: 60))),
-  Center(child: Text('Settings', style: TextStyle(fontSize: 60))),
+  SettingPage(email: userEmail),
 ];
 
 class _VolunteerRouteState extends State<VolunteerRoute> {

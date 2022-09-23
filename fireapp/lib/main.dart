@@ -7,9 +7,7 @@ import 'layout/navigation.dart';
 import 'package:fireapp/global/theme.dart';
 import 'package:fireapp/pages/Authentication/register.dart';
 import 'package:fireapp/pages/Authentication/login.dart';
-import 'package:fireapp/pages/reset_password/reset_email.dart';
-import 'package:fireapp/pages/reset_password/reset_password.dart';
-import 'package:fireapp/pages/reset_password/reset_with_code.dart';
+import 'package:fireapp/pages/Authentication/reset_password/reset_email.dart';
 import 'package:fireapp/pages/settings/setting.dart';
 
 // Main Function
@@ -29,7 +27,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: fireappTheme(),
       title: 'Flutter Demo',
+      initialRoute: '/login',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart
@@ -38,8 +38,6 @@ class _MyAppState extends State<MyApp> {
         '/register': (context) => const BasicWrapper(
             page: RegisterPage()), //See Authentication/register.dart
         '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
-        '/setting': (context) =>
-            BasicWrapper(page: SettingPage(email: "julia1412@163.com")),
       },
     );
   }

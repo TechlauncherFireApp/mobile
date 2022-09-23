@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart' as constants;
-import '../login.dart';
+import 'package:fireapp/global/constants.dart' as constants; //API URL
+import 'package:fireapp/pages/Authentication/login.dart';
 import 'reset_with_code.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ResetPage extends StatelessWidget {
-  const ResetPage({Key? key}) :super(key: key);
+  const ResetPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +75,16 @@ class _ResetBoxState extends State<ResetBox> {
         }
       },
       controller: myController,
-      onSaved: (v) => {
-        _email = v!
-      },
+      onSaved: (v) => {_email = v!},
     );
   }
+
   /// Http post request to ask for login
   Future<LoginResult> sendCode() async {
     var url = Uri.https(constants.domain, 'authentication/send_code');
     try {
-      var response = await http.post(url,
-          body: json.encode({"email": myController.text}));
+      var response =
+          await http.post(url, body: json.encode({"email": myController.text}));
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "SUCCESS") {
@@ -101,7 +100,6 @@ class _ResetBoxState extends State<ResetBox> {
     }
   }
 
-
   Widget buildSubmitButton(BuildContext context) {
     return Align(
       child: SizedBox(
@@ -112,23 +110,22 @@ class _ResetBoxState extends State<ResetBox> {
               shape: MaterialStateProperty.all(const StadiumBorder(
                   side: BorderSide(style: BorderStyle.none)))),
           child: Text('Submit',
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline6),
-          onPressed: ()  {
+              style: Theme.of(context).primaryTextTheme.headline6),
+          onPressed: () {
             sendCode().then((value) => {
-              if(value == LoginResult.success){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ResetCodePage(email:myController.text)),)
-              }
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => ResetCodePage()),)
-
-            });
-
+                  if (value == LoginResult.success)
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ResetCodePage(email: myController.text)),
+                      )
+                    }
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => ResetCodePage()),)
+                });
           },
         ),
       ),

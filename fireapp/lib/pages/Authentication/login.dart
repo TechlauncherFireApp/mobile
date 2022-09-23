@@ -186,7 +186,8 @@ class _LoginBoxState extends State<LoginBox> {
           userId = loginBean['id'];
           accessToken = loginBean['access_token'];
           role = loginBean['role'];
-          print(userId);
+          userEmail = _user;
+          print(userEmail);
           return LoginResult.success;
         } else {
           return LoginResult.fail;

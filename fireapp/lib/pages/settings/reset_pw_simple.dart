@@ -1,31 +1,35 @@
+import 'package:fireapp/pages/Authentication/login.dart';
 import 'package:flutter/material.dart';
-import '../login.dart';
+import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../constants.dart' as constants;
 
-class ResetPasswordPage extends StatelessWidget {
+class ResetSimplePage extends StatelessWidget {
   final String email;
-  ResetPasswordPage({Key? key, required this.email}) :super(key: key);
+  ResetSimplePage({Key? key, required this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(child: ResetPasswordBox(email: email,)),
+        Expanded(
+            child: ResetSimpleBox(
+          email: email,
+        )),
       ],
     );
   }
 }
-class ResetPasswordBox extends StatefulWidget {
+
+class ResetSimpleBox extends StatefulWidget {
   final String email;
-  ResetPasswordBox({Key? key,required this.email}) : super(key: key);
+  ResetSimpleBox({Key? key, required this.email}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ResetPasswordBoxState();
+  State<StatefulWidget> createState() => _ResetSimpleBoxState();
 }
 
-class _ResetPasswordBoxState extends State<ResetPasswordBox> {
+class _ResetSimpleBoxState extends State<ResetSimpleBox> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   String _password = "", _passwordT = "";
   bool _isObscure = true;
@@ -36,25 +40,26 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
   Widget build(BuildContext context) {
     final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
     return Scaffold(
-        // appBar: AppBar(title: Text('Reset Password'),),
+        appBar: AppBar(
+          title: const Text('Reset Your Password'),
+        ),
         body: Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          const SizedBox(height: 20), // Blank lines of a certain height
-          buildTitle(), // Reset Password
-          const SizedBox(height: 20),
-          buildPasswordTextField(),
-          const SizedBox(height: 20),
-          buildRepeatPasswordTextField(),
-          const SizedBox(height: 30),
-          buildSubmitButton(context),
-        ],
-      ),
-    )
-      );
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            children: [
+              const SizedBox(height: 20), // Blank lines of a certain height
+              buildTitle(), // Reset Password
+              const SizedBox(height: 20),
+              buildPasswordTextField(),
+              const SizedBox(height: 20),
+              buildRepeatPasswordTextField(),
+              const SizedBox(height: 30),
+              buildSubmitButton(context),
+            ],
+          ),
+        ));
   }
 
   /// Http post request to ask for login
@@ -62,7 +67,11 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
     var url = Uri.https(constants.domain, 'authentication/reset');
     try {
       var response = await http.post(url,
-          body: json.encode({"email": widget.email,"new_password":myController.text,"repeat_password":myControllerTwo.text}));
+          body: json.encode({
+            "email": widget.email,
+            "new_password": myController.text,
+            "repeat_password": myControllerTwo.text
+          }));
       if (response.statusCode == 200) {
         var loginBean = json.decode(response.body);
         if (loginBean['result'] == "SUCCESS") {
@@ -89,45 +98,40 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
 
   Widget buildPasswordTextField() {
     return TextFormField(
+      obscureText: _isObscure,
       controller: myController,
       decoration: const InputDecoration(labelText: 'New Password'),
-      obscureText: _isObscure,
       validator: (v) {
         if (v!.isEmpty) {
           return 'New Password is empty!';
         }
-        if (v.length<10){
-          return 'Enter more than 10 characters!';
+        if (v.length < 10) {
+          return 'password needs to be longer than 10 characters!';
         }
         return null;
       },
-      onSaved: (v) => {
-        _password = v!
-      },
-
+      onSaved: (v) => {_password = v!},
     );
   }
 
   Widget buildRepeatPasswordTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Set Password Again'),
+      decoration: const InputDecoration(labelText: 'New Password Again'),
       obscureText: _isObscure,
       validator: (v) {
         if (v!.isEmpty) {
           return 'Repeat Password is empty!';
         }
-        if (v.length<10){
-          return 'password needs to be longer than 10 characters!';
+        if (v.length < 10) {
+          return 'Enter more than 10 characters!!';
         }
-        if (v!=myController.text){
+        if (v != myController.text) {
           return 'Not Match';
         }
         return 'Valid password';
       },
       controller: myControllerTwo,
-      onSaved: (v) => {
-        _passwordT = v!
-      },
+      onSaved: (v) => {_passwordT = v!},
     );
   }
 
@@ -141,21 +145,14 @@ class _ResetPasswordBoxState extends State<ResetPasswordBox> {
               shape: MaterialStateProperty.all(const StadiumBorder(
                   side: BorderSide(style: BorderStyle.none)))),
           child: Text('Submit',
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline6),
+              style: Theme.of(context).primaryTextTheme.headline6),
           onPressed: () {
             Reset().then((value) => {
-              if(value == LoginResult.success){
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => LoginPage()),)
-                Navigator.pushNamed(context, '/login')
-              }
-
-            });
-
+                  if (value == LoginResult.success)
+                    {
+                      Navigator.pushNamed(context, '/setting'),
+                    }
+                });
           },
         ),
       ),
