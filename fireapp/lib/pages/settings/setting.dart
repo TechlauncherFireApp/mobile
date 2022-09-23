@@ -36,7 +36,7 @@ class _SettingsState extends State<SettingBox> {
           title: const Text('Settings'), automaticallyImplyLeading: false),
       body: SettingsList(sections: [
         SettingsSection(
-          title: Text('General'),
+          title: Text('Account Details'),
           // titleTextStyle: TextStyle(fontSize: 30),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
@@ -57,6 +57,20 @@ class _SettingsState extends State<SettingBox> {
                   // TODO: jump to Update Account Details
                 }),
             SettingsTile.navigation(
+                leading: Icon(Icons.logout),
+                title: Text('log Out'),
+                onPressed: (_) {
+                  userId = 0;
+                  Navigator.pop(
+                    context,
+                  );
+                }),
+          ],
+        ),
+        SettingsSection(
+          title: const Text('User Information'),
+          tiles: <SettingsTile>[
+            SettingsTile.navigation(
                 leading: Icon(Icons.local_dining),
                 title: Text('Dietary Requirements'),
                 onPressed: (_) {
@@ -68,20 +82,23 @@ class _SettingsState extends State<SettingBox> {
                 onPressed: (_) {
                   // TODO: Medical Details
                 }),
+          ],
+        ),
+        SettingsSection(
+          title: Text('Support'),
+          // titleTextStyle: TextStyle(fontSize: 30),
+          tiles: <SettingsTile>[
+            SettingsTile.navigation(
+                leading: Icon(Icons.quiz),
+                title: Text('FAQ'),
+                onPressed: (_) {
+                  // TODO: Contact Supervisor / Support
+                }),
             SettingsTile.navigation(
                 leading: Icon(Icons.contact_support),
                 title: Text('Contact Supervisor / Support'),
                 onPressed: (_) {
                   // TODO: Contact Supervisor / Support
-                }),
-            SettingsTile.navigation(
-                leading: Icon(Icons.logout),
-                title: Text('log Out'),
-                onPressed: (_) {
-                  userId = 0;
-                  Navigator.pop(
-                    context,
-                  );
                 }),
           ],
         ),
