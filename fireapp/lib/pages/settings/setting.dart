@@ -36,6 +36,22 @@ class _SettingsState extends State<SettingBox> {
           title: const Text('Settings'), automaticallyImplyLeading: false),
       body: SettingsList(sections: [
         SettingsSection(
+          title: Text('Application Settings'),
+          tiles: <SettingsTile>[
+            SettingsTile.navigation(
+              leading: Icon(Icons.language),
+              title: Text('Language'),
+              value: Text('English'),
+            ),
+            SettingsTile.switchTile(
+              onToggle: (value) {},
+              initialValue: false,
+              leading: Icon(Icons.format_paint),
+              title: Text('Enable dark mode'),
+            ),
+          ],
+        ),
+        SettingsSection(
           title: Text('Account Details'),
           // titleTextStyle: TextStyle(fontSize: 30),
           tiles: <SettingsTile>[
@@ -58,7 +74,7 @@ class _SettingsState extends State<SettingBox> {
                 }),
             SettingsTile.navigation(
                 leading: Icon(Icons.logout),
-                title: Text('log Out'),
+                title: Text('Sign Out'),
                 onPressed: (_) {
                   userId = 0;
                   Navigator.pop(
