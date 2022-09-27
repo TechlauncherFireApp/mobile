@@ -124,7 +124,7 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
                       )
                     }
                   else
-                    {print(value)}
+                    {print(myController.text)}
                 });
           },
         ),
