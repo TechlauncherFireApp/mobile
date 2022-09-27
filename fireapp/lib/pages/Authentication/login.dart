@@ -135,7 +135,7 @@ class _LoginBoxState extends State<LoginBox> {
         alignment: Alignment.centerRight,
         child: TextButton(
           onPressed: () {
-            //TODO Forgot password page
+            Navigator.pushNamed(context, '/reset_password');
           },
           child: const Text("Forgot Password?",
               style: TextStyle(fontSize: 14, color: Colors.grey)),
@@ -187,7 +187,6 @@ class _LoginBoxState extends State<LoginBox> {
           accessToken = loginBean['access_token'];
           role = loginBean['role'];
           userEmail = _user;
-          print(userEmail);
           return LoginResult.success;
         } else {
           return LoginResult.fail;

@@ -11,7 +11,6 @@ class ResetCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
       children: [
         Expanded(
@@ -25,7 +24,7 @@ class ResetCodePage extends StatelessWidget {
 
 class ResetCodeBox extends StatefulWidget {
   final String email;
-  ResetCodeBox({Key? key, required this.email}) : super(key: key);
+  const ResetCodeBox({Key? key, required this.email}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ResetCodeBoxState();
@@ -124,6 +123,8 @@ class _ResetCodeBoxState extends State<ResetCodeBox> {
                                 )),
                       )
                     }
+                  else
+                    {print(value)}
                 });
           },
         ),

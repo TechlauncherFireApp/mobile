@@ -70,7 +70,7 @@ class _ResetBoxState extends State<ResetBox> {
         }
         var emailReg = RegExp(
             r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-        if (!emailReg.hasMatch(v!)) {
+        if (!emailReg.hasMatch(v)) {
           return 'please input correct email account';
         }
       },
