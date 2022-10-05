@@ -1,4 +1,5 @@
 import 'package:fireapp/pages/Supervisor/volunteerManagment.dart';
+import 'package:fireapp/pages/VolunteerHome/volunteerHome.dart';
 import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
@@ -26,7 +27,7 @@ class VolunteerRoute extends StatefulWidget {
 
 // Main Navigation Screens - For Volunteer (Will show on navbar)
 final volunteerScreens = [
-  const Center(child: Text('Home', style: TextStyle(fontSize: 60))),
+  const VolunteerHome(),
   const MyCalendarPage(),
   const Center(child: Text('Training', style: TextStyle(fontSize: 60))),
   SettingPage(email: userEmail),
