@@ -8,17 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'calendar_logic.dart';
 import 'calendarForm.dart';
 
-/* BUGS:
-1. cards on selected day arent being built right away on addition - _listOfEvent... not filled before cards first built>? [SOLVED]
-2. bottom overflow error when too many events on a given day
-3. error message in console when removing the last event from a day [SOLVED]
-4. Overflow on form w/ keyboard open...
-5. Modifying form can't call a new eventRequest()  [SOLVED]
-6. Floating Action Button covers the edit button for the third event if only three events
-*/
-
 /* CONCERNS:
 1. Adjustable spacing... how will it look on bigger form factors?
+2. Floating Action Button covers the edit button for the third event if only three events
 */
 
 /* Initial Component */
@@ -60,7 +52,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return test5(snapshot.data);
+            return calendarBody(snapshot.data); // I forgot what this is?
           }
           return Container();
         },
@@ -82,7 +74,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
     );
   }
 
-  Widget test5(List<EventAlbum> l) {
+  Widget calendarBody(List<EventAlbum> l) {
     _listOfEventsForSelectedDay = eventloading(_selectedDay, l);
     return Column(
       children: [
@@ -226,62 +218,63 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   }
 
   Widget buildEventsList() {
-    return ListView.builder(
-      itemCount: _listOfEventsForSelectedDay.length,
-      shrinkWrap: true,
-      // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
-      itemBuilder: (context, index) {
-        return Dismissible(
-          // Makes the card dismissable via a swipe
-          key: ValueKey(_listOfEventsForSelectedDay[index]),
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.center,
-            child: const Text("Remove",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-          onDismissed: (direction) async {
-            await removeEvent(_listOfEventsForSelectedDay[index].eventId);
-            setState(() {
-              _listOfEventsForSelectedDay.removeAt(index);
-              _eventData = eventRequest(); // Is this inefficient???
-            });
-          },
-          // THE INDIVIDUAL EVENT CARD
-          child: Card(
-            child: ListTile(
-              // onTap: () {}
-              title: Text(_listOfEventsForSelectedDay[index].title),
-              subtitle: Row(
-                children: [
-                  Text(
-                    timeString(_listOfEventsForSelectedDay[index].start,
-                        _listOfEventsForSelectedDay[index].end),
-                  ),
-                  SizedBox(width: 25),
-                  repeatIcon(_listOfEventsForSelectedDay[index].periodicity),
-                ],
-              ),
-              trailing: IconButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ModifyEventFormRoute(
-                            event: _listOfEventsForSelectedDay[index])),
-                  );
-                  setState(() {
-                    _eventData = eventRequest();
-                  });
-                },
-                icon: const Icon(Icons.edit_note),
-              ),
-              //leading:
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _listOfEventsForSelectedDay.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Dismissible(
+            // Makes the card dismissable via a swipe
+            key: ValueKey(_listOfEventsForSelectedDay[index]),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.center,
+              child: const Text("Remove",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
-          ),
-        );
-      },
+            onDismissed: (direction) async {
+              await removeEvent(_listOfEventsForSelectedDay[index].eventId);
+              setState(() {
+                _listOfEventsForSelectedDay.removeAt(index);
+                _eventData = eventRequest(); // Is this inefficient???
+              });
+            },
+            // THE INDIVIDUAL EVENT CARD
+            child: Card(
+              child: ListTile(
+                // onTap: () {}
+                title: Text(_listOfEventsForSelectedDay[index].title),
+                subtitle: Row(
+                  children: [
+                    Text(
+                      timeString(_listOfEventsForSelectedDay[index].start,
+                          _listOfEventsForSelectedDay[index].end),
+                    ),
+                    SizedBox(width: 25),
+                    repeatIcon(_listOfEventsForSelectedDay[index].periodicity),
+                  ],
+                ),
+                trailing: IconButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ModifyEventFormRoute(
+                              event: _listOfEventsForSelectedDay[index])),
+                    );
+                    setState(() {
+                      _eventData = eventRequest();
+                    });
+                  },
+                  icon: const Icon(Icons.edit_note),
+                ),
+                //leading:
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
