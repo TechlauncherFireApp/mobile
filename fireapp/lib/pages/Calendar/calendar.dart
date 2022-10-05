@@ -222,7 +222,6 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       child: ListView.builder(
         itemCount: _listOfEventsForSelectedDay.length,
         shrinkWrap: true,
-        // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
         itemBuilder: (context, index) {
           return Dismissible(
             // Makes the card dismissable via a swipe

@@ -1,3 +1,4 @@
+import 'package:fireapp/pages/Supervisor/volunteerManagment.dart';
 import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
@@ -83,9 +84,11 @@ class SupervisorRoute extends StatefulWidget {
 // Main Navigation Screens - For SuperVisor  (Will show on navbar)
 final supervisorScreens = [
   Center(child: Text('Home', style: TextStyle(fontSize: 60))),
-  MyCalendarPage(),
-  Center(child: Text('Training', style: TextStyle(fontSize: 60))),
-  Center(child: Text('Settings', style: TextStyle(fontSize: 60))),
+  const MyCalendarPage(),
+  const VolunteerList(),
+  SettingPage(
+      email:
+          userEmail), // Later on the settings page needs to be changed for supervisor so its different from volunteer
 ];
 
 class _SupervisorRouteState extends State<SupervisorRoute> {
@@ -124,7 +127,7 @@ class _SupervisorRouteState extends State<SupervisorRoute> {
       ),
       body: IndexedStack(
         index: currentNavIndex,
-        children: volunteerScreens,
+        children: supervisorScreens,
       ),
     );
   }

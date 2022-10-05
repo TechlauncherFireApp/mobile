@@ -23,3 +23,5 @@
 
   If you want the user to be able to change email, first name, last name that will require more changes to the API
 */
+
+//API = profile/getProfile
