@@ -13,6 +13,7 @@ class CalendarFormRoute extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Add Unavailability'),
       ),
+      resizeToAvoidBottomInset: false,
       body: const CalendarForm(),
     );
   }
@@ -29,6 +30,7 @@ class ModifyEventFormRoute extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Modify Event'),
       ),
+      resizeToAvoidBottomInset: false,
       body: CalendarForm(eventBasis: event),
     );
   }
