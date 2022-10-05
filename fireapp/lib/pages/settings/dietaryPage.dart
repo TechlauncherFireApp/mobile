@@ -55,8 +55,7 @@ class _DietaryPageState extends State<DietaryPage> {
   TextEditingController allergyController = TextEditingController();
   bool changeChecked = false;
 
-  //Dietary Form
-  // @Param: String1 = Fill first field, String2 = Fill second field
+  //Allergy  TextField
   Widget dietaryForm() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -77,7 +76,7 @@ class _DietaryPageState extends State<DietaryPage> {
     );
   }
 
-  //Title Text Field
+  //Dietary TextField
   Widget buildDietaryField() {
     return TextFormField(
       controller: dietController,
@@ -145,20 +144,3 @@ class _DietaryPageState extends State<DietaryPage> {
     );
   }
 }
-
-/* LOGIC */
-// API = profile/editProfile
-// Returns result = true/false
-// Takes a JSON Object that looks like this 
-/* 
-  {
-    "id": 4,
-    "phone": 0000000000,
-    "gender": "Female",
-    "dietary": "vegetarian",
-    "allergy": "none", 
-  }
-  ID is the primary key
-  if you don't want to change an aspect then don't include it in the object
-  API also allows for the changing of phone & gender
-*/

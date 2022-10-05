@@ -1,4 +1,5 @@
 import 'package:fireapp/global/access.dart';
+import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';
 import 'package:fireapp/pages/settings/reset_pw_simple.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,12 @@ class _SettingsState extends State<SettingBox> {
             SettingsTile.navigation(
                 leading: Icon(Icons.account_circle),
                 title: Text('Update Account Details'),
-                onPressed: (_) {
-                  // TODO: jump to Update Account Details
+                onPressed: (_) async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountDetailsPage()),
+                  );
                 }),
             SettingsTile.navigation(
                 leading: const Icon(Icons.logout),
