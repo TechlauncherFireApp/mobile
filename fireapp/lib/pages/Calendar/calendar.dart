@@ -8,17 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'calendar_logic.dart';
 import 'calendarForm.dart';
 
-/* BUGS:
-1. cards on selected day arent being built right away on addition - _listOfEvent... not filled before cards first built>? [SOLVED]
-2. bottom overflow error when too many events on a given day
-3. error message in console when removing the last event from a day [SOLVED]
-4. Overflow on form w/ keyboard open...
-5. Modifying form can't call a new eventRequest()  [SOLVED]
-6. Floating Action Button covers the edit button for the third event if only three events
-*/
-
 /* CONCERNS:
 1. Adjustable spacing... how will it look on bigger form factors?
+2. Floating Action Button covers the edit button for the third event if only three events
 */
 
 /* Initial Component */
@@ -60,7 +52,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return test5(snapshot.data);
+            return calendarBody(snapshot.data); // I forgot what this is?
           }
           return Container();
         },
@@ -82,7 +74,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
     );
   }
 
-  Widget test5(List<EventAlbum> l) {
+  Widget calendarBody(List<EventAlbum> l) {
     _listOfEventsForSelectedDay = eventloading(_selectedDay, l);
     return Column(
       children: [

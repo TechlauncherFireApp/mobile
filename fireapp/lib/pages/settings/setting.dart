@@ -1,4 +1,5 @@
 import 'package:fireapp/global/access.dart';
+import 'package:fireapp/pages/settings/dietaryPage.dart';
 import 'package:fireapp/pages/settings/reset_pw_simple.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -73,8 +74,8 @@ class _SettingsState extends State<SettingBox> {
                   // TODO: jump to Update Account Details
                 }),
             SettingsTile.navigation(
-                leading: Icon(Icons.logout),
-                title: Text('Sign Out'),
+                leading: const Icon(Icons.logout),
+                title: const Text('Sign Out'),
                 onPressed: (_) {
                   userId = 0;
                   Navigator.pop(
@@ -87,14 +88,18 @@ class _SettingsState extends State<SettingBox> {
           title: const Text('User Information'),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
-                leading: Icon(Icons.local_dining),
-                title: Text('Dietary Requirements'),
-                onPressed: (_) {
-                  // TODO: jump to Dietary Requirements
+                leading: const Icon(Icons.local_dining),
+                title: const Text('Dietary Requirements'),
+                onPressed: (_) async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DietaryPage()),
+                  );
                 }),
             SettingsTile.navigation(
-                leading: Icon(Icons.health_and_safety),
-                title: Text('Medical Details'),
+                leading: const Icon(Icons.health_and_safety),
+                title: const Text('Medical Details'),
                 onPressed: (_) {
                   // TODO: Medical Details
                 }),
