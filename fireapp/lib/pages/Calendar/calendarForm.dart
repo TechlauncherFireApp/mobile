@@ -1,4 +1,6 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
+// ignore: duplicate_ignore
+// ignore: file_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, prefer_typing_uninitialized_variables, file_names
 import 'package:fireapp/pages/Calendar/calendar_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

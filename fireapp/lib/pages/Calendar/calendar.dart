@@ -226,62 +226,64 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   }
 
   Widget buildEventsList() {
-    return ListView.builder(
-      itemCount: _listOfEventsForSelectedDay.length,
-      shrinkWrap: true,
-      // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
-      itemBuilder: (context, index) {
-        return Dismissible(
-          // Makes the card dismissable via a swipe
-          key: ValueKey(_listOfEventsForSelectedDay[index]),
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.center,
-            child: const Text("Remove",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-          onDismissed: (direction) async {
-            await removeEvent(_listOfEventsForSelectedDay[index].eventId);
-            setState(() {
-              _listOfEventsForSelectedDay.removeAt(index);
-              _eventData = eventRequest(); // Is this inefficient???
-            });
-          },
-          // THE INDIVIDUAL EVENT CARD
-          child: Card(
-            child: ListTile(
-              // onTap: () {}
-              title: Text(_listOfEventsForSelectedDay[index].title),
-              subtitle: Row(
-                children: [
-                  Text(
-                    timeString(_listOfEventsForSelectedDay[index].start,
-                        _listOfEventsForSelectedDay[index].end),
-                  ),
-                  SizedBox(width: 25),
-                  repeatIcon(_listOfEventsForSelectedDay[index].periodicity),
-                ],
-              ),
-              trailing: IconButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ModifyEventFormRoute(
-                            event: _listOfEventsForSelectedDay[index])),
-                  );
-                  setState(() {
-                    _eventData = eventRequest();
-                  });
-                },
-                icon: const Icon(Icons.edit_note),
-              ),
-              //leading:
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _listOfEventsForSelectedDay.length,
+        shrinkWrap: true,
+        // Technically bad prac to have a listview inside of a col and then to shrinkwrap it, I suggest looking into an option using expanded and sizedbox instead....
+        itemBuilder: (context, index) {
+          return Dismissible(
+            // Makes the card dismissable via a swipe
+            key: ValueKey(_listOfEventsForSelectedDay[index]),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.center,
+              child: const Text("Remove",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
-          ),
-        );
-      },
+            onDismissed: (direction) async {
+              await removeEvent(_listOfEventsForSelectedDay[index].eventId);
+              setState(() {
+                _listOfEventsForSelectedDay.removeAt(index);
+                _eventData = eventRequest(); // Is this inefficient???
+              });
+            },
+            // THE INDIVIDUAL EVENT CARD
+            child: Card(
+              child: ListTile(
+                // onTap: () {}
+                title: Text(_listOfEventsForSelectedDay[index].title),
+                subtitle: Row(
+                  children: [
+                    Text(
+                      timeString(_listOfEventsForSelectedDay[index].start,
+                          _listOfEventsForSelectedDay[index].end),
+                    ),
+                    SizedBox(width: 25),
+                    repeatIcon(_listOfEventsForSelectedDay[index].periodicity),
+                  ],
+                ),
+                trailing: IconButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ModifyEventFormRoute(
+                              event: _listOfEventsForSelectedDay[index])),
+                    );
+                    setState(() {
+                      _eventData = eventRequest();
+                    });
+                  },
+                  icon: const Icon(Icons.edit_note),
+                ),
+                //leading:
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

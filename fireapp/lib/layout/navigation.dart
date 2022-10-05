@@ -25,9 +25,9 @@ class VolunteerRoute extends StatefulWidget {
 
 // Main Navigation Screens - For Volunteer (Will show on navbar)
 final volunteerScreens = [
-  Center(child: Text('Home', style: TextStyle(fontSize: 60))),
-  MyCalendarPage(),
-  Center(child: Text('Training', style: TextStyle(fontSize: 60))),
+  const Center(child: Text('Home', style: TextStyle(fontSize: 60))),
+  const MyCalendarPage(),
+  const Center(child: Text('Training', style: TextStyle(fontSize: 60))),
   SettingPage(email: userEmail),
 ];
 
