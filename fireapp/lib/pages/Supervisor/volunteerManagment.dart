@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:fireapp/pages/Supervisor/VolunteerOverview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -56,28 +57,34 @@ class _VolunteerListState extends State<VolunteerList> {
       ), 
     );
   }
+
+  Widget buildVolunteerCard(String id, String name){
+    return Card(
+      child: ListTile(
+        // onTap: () {}
+        title: Text(name), //Take NAME FROM API
+        subtitle: Row(
+          children: [
+            const Text("ID: "),
+            Text(id), // Take ID FROM API
+          ],
+        ),
+        leading: CircleAvatar(
+          backgroundColor: Colors.amber,
+          child: Text(name[0]), //Have a function to take first letter from name from API 
+        ),
+        trailing: const Icon(Icons.open_in_new),
+        onTap: () async {
+            await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => OverviewPage(passedID: id)),
+            );
+        }, //Take you to volunteers info page...
+      ),
+    );
+  }
 }
 
-Widget buildVolunteerCard(String id, String name){
-  return Card(
-    child: ListTile(
-      // onTap: () {}
-      title: Text(name), //Take NAME FROM API
-      subtitle: Row(
-        children: [
-          const Text("ID: "),
-          Text(id), // Take ID FROM API
-        ],
-      ),
-      leading: CircleAvatar(
-        backgroundColor: Colors.amber,
-        child: Text(name[0]), //Have a function to take first letter from name from API 
-      ),
-      trailing: const Icon(Icons.open_in_new),
-      onTap: () {}, //Take you to volunteers info page...
-    ),
-  );
-}
+
 
 /// LOGIC /// 
 

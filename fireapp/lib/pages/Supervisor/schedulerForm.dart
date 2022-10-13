@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
+//NOTE CURRENTLY NOT FUNCTIONAL
+
 //Default Form Page - For adding an event
 class SchedulerFormRoute extends StatelessWidget {
   @override
