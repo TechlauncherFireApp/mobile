@@ -56,3 +56,35 @@ Future<List<String>> profileRequest(String id, List<String> parameters) async {
   print(result);
   return result;
 }
+
+/*
+* @DESC - Change a profile detail (Note currently does not work with email because email linked to login)
+* @PARAM - user id, parameter: 'phone', 'gender', 'dietary', 'allergy', newParam - what you want to update the parameter with
+* @RETURN Information about the users specific parameter 
+*/
+Future<void> profileUpdate(String id, parameter, newParam) async {
+  //http.Client client
+  String apiPath =
+      'profile/editProfile'; //Specific API path for this request
+  Map<String, String> queryParameters = {
+    'userId': id,
+  }; //API Query parameters
+
+  var url = Uri.https(
+      constants.domain, apiPath, queryParameters); //Completed HTTPS URL
+
+  final response = await http.post(url,
+      body: json.encode({
+        "id" : id,
+        parameter : newParam, 
+      })); // The API request
+
+  //Check if request successful else print url + errorcode
+  if (response.statusCode == 200) {
+    print('200');
+    print(url);
+  } else {
+    print(response.statusCode);
+    print(url);
+  }
+}

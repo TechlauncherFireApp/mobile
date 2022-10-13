@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_logic.dart'; 
 
+//FUTURE BUILDER
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key});
 
@@ -9,17 +10,12 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-
   late Future<List<String>> _profileResult; 
 
   @override
   void initState() {
-    // _eventData = request; // API Request - API to download dietary and allergy info
-
-    //TEMP TO SHOW EXANPLE WORKS
-    _profileResult = profileRequest(getID(), ['email', 'mobile_number', 'gender']);
-
     super.initState();
+    _profileResult = profileRequest(getID(), ['email', 'mobile_number', 'gender']);
   }
 
   @override
@@ -35,15 +31,29 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasData) {
-            return accountForm(snapshot.data);
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            return AccountForm(autofill: snapshot.data);
           }
           return Container();
         },
       ),
    );
   }
+}
 
+//FORM ITSELF
+class AccountForm extends StatefulWidget {
+  final autofill;
+  const AccountForm({
+    super.key,
+    this.autofill,
+  });
+
+  @override
+  State<AccountForm> createState() => _AccountForm();
+}
+
+class _AccountForm extends State<AccountForm> {
   //FORM SETUP
   final _formKey = GlobalKey<FormState>();
   TextEditingController phoneController = TextEditingController();
@@ -51,11 +61,23 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   TextEditingController emailController = TextEditingController();
   bool changeChecked = false;
 
-  //
-  Widget accountForm(List<String> autofill) {
-    phoneResetValue = autofill[1];
-    emailController.text = autofill[0];
+  @override
+  void initState() {
+    super.initState();
+    phoneController.text = widget.autofill[1];
+    phoneResetValue = widget.autofill[1];[1];
+    emailController.text = widget.autofill[1];[0];
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    phoneController.dispose();
+    emailController.dispose(); 
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Form(
@@ -64,7 +86,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             buildEmailField(),
-            buildPhoneField(autofill[1]),
+            buildPhoneField(),
             Visibility(
                 visible: changeChecked, child: buildUpdateButton(context)),
             //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
@@ -74,9 +96,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  Widget buildPhoneField(String defaultValue) {
+  Widget buildPhoneField() {
     return TextFormField(
-      initialValue: defaultValue,
+      controller: phoneController,
       decoration: const InputDecoration(
         icon: Icon(Icons.phone),
         hintText: 'Phone Number',
@@ -121,11 +143,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           child: const Text('Update'),
           // SUBMIT FUNCTION
           onPressed: () async {
+            await profileUpdate(getID(), 'phone', phoneController.text); 
             setState(() {
               changeChecked = false;
             });
-            print("gotcha");
-
             // Call update api
           },
         ),
