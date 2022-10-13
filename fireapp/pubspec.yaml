@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   table_calendar: ^3.0.6
   http: ^0.13.5
-  fluttertoast: ^8.0.9
+  fluttertoast: ^8.0.6
   settings_ui: ^2.0.2
   flutter_settings_screens: ^0.2.2+1
 

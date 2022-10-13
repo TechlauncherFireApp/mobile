@@ -52,7 +52,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return calendarBody(snapshot.data); // I forgot what this is?
+            return calendarBody(snapshot.data); //Calendar
           }
           return Container();
         },
