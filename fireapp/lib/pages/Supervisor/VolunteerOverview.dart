@@ -3,6 +3,7 @@ import '../settings/profile_logic.dart';
 
 //FUTURE BUILDER
 class OverviewPage extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final passedID; 
   const OverviewPage({super.key, this.passedID});
 

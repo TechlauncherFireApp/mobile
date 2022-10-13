@@ -20,3 +20,19 @@ class BasicWrapper extends StatelessWidget {
     );
   }
 }
+
+class BasicWrapperNoLead extends StatelessWidget {
+  const BasicWrapperNoLead({Key? key, required this.page}) : super(key: key);
+
+  final Widget page;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // Add the top navbar
+      appBar: buildTopNavBarNoLead(context),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(child: page),
+    );
+  }
+}

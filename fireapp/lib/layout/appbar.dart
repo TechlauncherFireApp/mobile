@@ -9,3 +9,13 @@ AppBar buildTopNavBar(context) {
     ),
   );
 }
+
+AppBar buildTopNavBarNoLead(context) {
+  return AppBar(
+    title: Text(
+      "FIREAPP",
+      style: Theme.of(context).primaryTextTheme.headline6,
+    ),
+    automaticallyImplyLeading: false,
+  );
+}
