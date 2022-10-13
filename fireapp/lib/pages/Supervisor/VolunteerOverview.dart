@@ -51,10 +51,13 @@ class _OverviewPageState extends State<OverviewPage> {
     return Center(
       child: Column(
         children: [
-            CircleAvatar(
-              backgroundColor: Colors.amber,
-              child: Text(name[0]),  //First letter from first name
-              radius: 80,
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.amber,
+                child: Text(name[0]),  //First letter from first name
+                radius: 80,
+              ),
             ),
             Column(
               children: [
