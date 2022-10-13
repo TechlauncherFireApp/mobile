@@ -65,8 +65,8 @@ class _AccountForm extends State<AccountForm> {
   void initState() {
     super.initState();
     phoneController.text = widget.autofill[1];
-    phoneResetValue = widget.autofill[1];[1];
-    emailController.text = widget.autofill[1];[0];
+    phoneResetValue = widget.autofill[1];
+    emailController.text = widget.autofill[0];
   }
 
   @override

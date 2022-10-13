@@ -45,12 +45,19 @@ Future<List<String>> profileRequest(String id, List<String> parameters) async {
   }
 
   //Return specfic parameters
+  print(response.body);
   final tmp = Map.from(json.decode(response.body)); 
   List<String> result = []; 
   for(String parameter in parameters) {
-
-    result.add(tmp[parameter]);
+    if(tmp[parameter]!=null){
+      result.add(tmp[parameter]);
+    }
+    else {
+      result.add(" ");
+    }
   }
+
+  //if(response.body == null) 
 
   //Return the request reponse
   print(result);
