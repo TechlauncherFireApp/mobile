@@ -1,4 +1,6 @@
+import 'package:fireapp/pages/settings/profile_logic.dart';
 import 'package:flutter/material.dart';
+import 'profile_logic.dart';
 
 class DietaryPage extends StatefulWidget {
   const DietaryPage({super.key});
@@ -13,9 +15,13 @@ class _DietaryPageState extends State<DietaryPage> {
   String tempDiet =
       "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
+  late Future<dynamic> dietaryResult; 
+
   @override
   void initState() {
     // _eventData = request; // API Request - API to download dietary and allergy info
+
+    dietaryResult = profileRequest(getID(), ['email']);
 
     //TEMP TO SHOW EXANPLE WORKS
     dietController.text = tempDiet;
@@ -144,3 +150,7 @@ class _DietaryPageState extends State<DietaryPage> {
     );
   }
 }
+
+// LOGIC //
+
+

@@ -112,7 +112,6 @@ List<VolunteerAlbum> parseVolunteers(String responseBody) {
 }
 
 Future<List<VolunteerAlbum>> volunteerListRequest() async {
-  //http.Client client
   String apiPath =
       'user/getAllVolunteer'; //Specific API path for this request
 

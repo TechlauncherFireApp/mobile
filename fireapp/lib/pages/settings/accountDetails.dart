@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_logic.dart'; 
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key});
@@ -8,14 +9,15 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  String tempPN = "058595435";
+
+  late Future<List<String>> _profileResult; 
 
   @override
   void initState() {
     // _eventData = request; // API Request - API to download dietary and allergy info
 
     //TEMP TO SHOW EXANPLE WORKS
-    phoneController.text = tempPN;
+    _profileResult = profileRequest(getID(), ['email', 'mobile_number', 'gender']);
 
     super.initState();
   }
@@ -27,31 +29,33 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           title: const Text('Account Details'),
         ),
         resizeToAvoidBottomInset: false,
-        body: accountForm()
-        /*
-      FutureBuilder(
-        future: _eventData , //Data from API Request
+        body: FutureBuilder(
+        future: _profileResult , //Data from API Request
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            // return dietaryForm(snapshot.data);
-            return dietaryForm();
+            return accountForm(snapshot.data);
           }
           return Container();
         },
-      ),*/
-        );
+      ),
+   );
   }
 
   //FORM SETUP
   final _formKey = GlobalKey<FormState>();
   TextEditingController phoneController = TextEditingController();
+  late String phoneResetValue;
+  TextEditingController emailController = TextEditingController();
   bool changeChecked = false;
 
   //
-  Widget accountForm() {
+  Widget accountForm(List<String> autofill) {
+    phoneResetValue = autofill[1];
+    emailController.text = autofill[0];
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Form(
@@ -59,7 +63,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            buildPhoneField(),
+            buildEmailField(),
+            buildPhoneField(autofill[1]),
             Visibility(
                 visible: changeChecked, child: buildUpdateButton(context)),
             //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
@@ -69,9 +74,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  Widget buildPhoneField() {
+  Widget buildPhoneField(String defaultValue) {
     return TextFormField(
-      controller: phoneController,
+      initialValue: defaultValue,
       decoration: const InputDecoration(
         icon: Icon(Icons.phone),
         hintText: 'Phone Number',
@@ -81,12 +86,24 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       minLines: 1, //Normal textInputField will be displayed
       onChanged: (text) {
         setState(() {
-          if (text != tempPN) {
+          if (text != phoneResetValue) {
             // If text changed from the saved parameters then update button will show!
             changeChecked = true;
           }
         });
       },
+    );
+  }
+
+  Widget buildEmailField() {
+    return TextFormField(
+      controller: emailController,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.email),
+        labelText: 'Email',
+      ),
+      minLines: 1, //Normal textInputField will be displayed
+      readOnly: true, //Linked to login details - for now not changeable 
     );
   }
 
