@@ -1,3 +1,4 @@
+import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/pages/Supervisor/volunteerManagment.dart';
 import 'package:fireapp/pages/VolunteerHome/volunteerHome.dart';
 import 'package:fireapp/pages/settings/setting.dart';
@@ -85,11 +86,11 @@ class SupervisorRoute extends StatefulWidget {
 // Main Navigation Screens - For SuperVisor  (Will show on navbar)
 final supervisorScreens = [
   Center(child: Text('Home', style: TextStyle(fontSize: 60))),
-  const MyCalendarPage(),
+  SchedulerFormRoute(),
   const VolunteerList(),
   SettingPage(
       email:
-          userEmail), // Later on the settings page needs to be changed for supervisor so its different from volunteer
+          userEmail), // Later on the settings page needs to be changed for supervisor so its different from volunteer, to reflect the different options available to them
 ];
 
 class _SupervisorRouteState extends State<SupervisorRoute> {

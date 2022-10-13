@@ -73,6 +73,7 @@ Widget buildVolunteerCard(String id, String name){
         backgroundColor: Colors.amber,
         child: Text(name[0]), //Have a function to take first letter from name from API 
       ),
+      trailing: const Icon(Icons.open_in_new),
       onTap: () {}, //Take you to volunteers info page...
     ),
   );

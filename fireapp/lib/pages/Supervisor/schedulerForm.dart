@@ -3,20 +3,35 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
-class CalendarForm extends StatefulWidget {
-  final eventBasis;
-  const CalendarForm({
-    super.key,
-    this.eventBasis,
-  });
-
+//Default Form Page - For adding an event
+class SchedulerFormRoute extends StatelessWidget {
   @override
-  _CalendarFormState createState() {
-    return _CalendarFormState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Schduler'),
+        automaticallyImplyLeading: false,
+      ),
+      resizeToAvoidBottomInset: false,
+      body: const SchedulerForm(),
+    );
   }
 }
 
-class _CalendarFormState extends State<CalendarForm> {
+class SchedulerForm extends StatefulWidget {
+  final eventBasis;
+  const SchedulerForm({
+    super.key,
+    this.eventBasis, //allows for prefilling... See CalendarForm for an example
+  });
+
+  @override
+  _SchedulerFormState createState() {
+    return _SchedulerFormState();
+  }
+}
+
+class _SchedulerFormState extends State<SchedulerForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
@@ -33,25 +48,8 @@ class _CalendarFormState extends State<CalendarForm> {
 
   @override
   void initState() {
-    //For modifying events - prefill out form with event details
     if (widget.eventBasis != null) {
-      setDate = widget.eventBasis.date;
-      setStart = TimeOfDay(
-          hour: int.parse(widget.eventBasis.start.split(":")[0]),
-          minute: int.parse(widget.eventBasis.start.split(":")[1]));
-      setEnd = TimeOfDay(
-          hour: int.parse(widget.eventBasis.end.split(":")[0]),
-          minute: int.parse(widget.eventBasis.end.split(":")[1]));
-      repeatDropDownValue = widget.eventBasis.periodicity;
-      titleController.text = widget.eventBasis.title;
-      if (widget.eventBasis.start == "00:00" &&
-          widget.eventBasis.end == "23:59") {
-        allDayChecked = true;
-      } else {
-        startTimeController.text = widget.eventBasis.start;
-        endTimeController.text = widget.eventBasis.end;
-      }
-      inputDateController.text = DateFormat('yyyy-MM-dd').format(setDate);
+      /// See Calendar form for an example
     }
     super.initState();
   }
@@ -67,12 +65,12 @@ class _CalendarFormState extends State<CalendarForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             buildTitleField(),
-            buildDatePicker(),
+            buildAssetDropDown(),
+            buildASAPCheckbox(),
             //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
             Visibility(visible: !allDayChecked, child: buildStartTimeField()),
-            Visibility(visible: !allDayChecked, child: buildEndTimeField()),
-            buildAllDayCheckbox(),
-            buildEventDropDown(),
+            Visibility(visible: !allDayChecked, child: buildDatePicker()),
+            buildSubmitButton(context, () {}),
           ],
         ),
       ),
@@ -85,8 +83,8 @@ class _CalendarFormState extends State<CalendarForm> {
       controller: titleController,
       decoration: const InputDecoration(
         icon: Icon(Icons.title),
-        hintText: 'Enter the event Title',
-        labelText: 'Title',
+        hintText: 'Enter the schedule Title',
+        labelText: 'Name',
       ),
       validator: (v) {
         if (v!.isEmpty) {
@@ -132,9 +130,9 @@ class _CalendarFormState extends State<CalendarForm> {
   }
 
   //All Day Checkbox
-  Widget buildAllDayCheckbox() {
+  Widget buildASAPCheckbox() {
     return CheckboxListTile(
-      title: const Text("All Day?"),
+      title: const Text("ASAP?"),
       controlAffinity: ListTileControlAffinity
           .leading, //Where to place it relative to the text/label
       value: allDayChecked,
@@ -176,7 +174,7 @@ class _CalendarFormState extends State<CalendarForm> {
     );
   }
 
-  // End Time Input
+  // End Time Input - NOTE: Currently not in use
   Widget buildEndTimeField() {
     return TextFormField(
       controller: endTimeController,
@@ -206,15 +204,15 @@ class _CalendarFormState extends State<CalendarForm> {
     );
   }
 
-  //eventDropDown
-  Widget buildEventDropDown() {
+  //Asset Drop Down
+  Widget buildAssetDropDown() {
     return DropdownButtonFormField(
       value: repeatDropDownValue,
       items: const [
-        DropdownMenuItem(value: 0, child: Text('None')),
-        DropdownMenuItem(value: 1, child: Text('Daily')),
-        DropdownMenuItem(value: 2, child: Text('Weekly')),
-        DropdownMenuItem(value: 3, child: Text('Monthly')),
+        DropdownMenuItem(value: 0, child: Text('Asset 1')),
+        DropdownMenuItem(value: 1, child: Text('Asset 2')),
+        DropdownMenuItem(value: 2, child: Text('Asset 3')),
+        DropdownMenuItem(value: 3, child: Text('Asset 4')),
       ],
       onChanged: (int? value) {
         setState(() {
@@ -222,9 +220,10 @@ class _CalendarFormState extends State<CalendarForm> {
         }); // Assign selected value
       },
       decoration: const InputDecoration(
-          labelText: "Repeat?", icon: Icon(Icons.refresh)),
+          labelText: "Select Asset", icon: Icon(Icons.refresh)),
     );
   }
+  // THIS WILL HAVE TO BE DYNAMIC - TO RESPOND IN VARIABILITY OF ASSETS
 
   // Submit Button
   Widget buildSubmitButton(BuildContext context, Function fn) {
@@ -233,7 +232,7 @@ class _CalendarFormState extends State<CalendarForm> {
         padding: const EdgeInsets.only(top: 40.0),
         // ignore: unnecessary_new
         child: ElevatedButton(
-          child: const Text('Submit'),
+          child: const Text('Add Schedule'),
           // SUBMIT FUNCTION
           onPressed: () async {
             fn();
