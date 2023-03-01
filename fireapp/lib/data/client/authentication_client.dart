@@ -10,6 +10,10 @@ class AuthenticationClient {
   final RestClient restClient;
   AuthenticationClient(this.restClient);
 
+  /// Sends a login request to the API using the provided [email] and [password].
+  ///
+  /// Returns a [TokenResponse] object that contains the token received from the server.
+  /// Throws an error if the request fails or the response is invalid.
   Future<TokenResponse> login(String email, String password) async {
     return restClient.login(TokenRequest(
         email: email,
