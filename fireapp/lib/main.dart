@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
+import 'package:fireapp/global/di.dart';
 import 'package:flutter/material.dart';
 //INTERNAL
 import 'layout/wrapper.dart';
@@ -12,6 +13,7 @@ import 'package:fireapp/pages/settings/setting.dart';
 
 // Main Function
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 

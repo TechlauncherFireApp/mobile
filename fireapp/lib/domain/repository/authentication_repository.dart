@@ -10,22 +10,22 @@ import 'package:injectable/injectable.dart';
 @injectable
 class AuthenticationRepository {
 
-  final AuthenticationClient authenticationClient;
-  final AuthenticationPersistence authenticationPersistence;
+  final AuthenticationClient _authenticationClient;
+  final AuthenticationPersistence _authenticationPersistence;
 
   /// Constructs a new [AuthenticationRepository] with the given dependencies.
   ///
-  /// The [authenticationClient] is used to perform login requests, and the [authenticationPersistence] is used to
+  /// The [_authenticationClient] is used to perform login requests, and the [_authenticationPersistence] is used to
   /// store and retrieve the current session token.
-  AuthenticationRepository(this.authenticationClient,
-      this.authenticationPersistence);
+  AuthenticationRepository(this._authenticationClient,
+      this._authenticationPersistence);
 
   /// Logs in a user with the given email and password.
   ///
   /// Returns a [TokenResponse] containing the session token.
   Future<TokenResponse> login(String email, String password) async {
-    TokenResponse response = await authenticationClient.login(email, password);
-    authenticationPersistence.set(response);
+    TokenResponse response = await _authenticationClient.login(email, password);
+    _authenticationPersistence.set(response);
     return response;
   }
 
@@ -33,6 +33,6 @@ class AuthenticationRepository {
   ///
   /// Returns a [TokenResponse] containing the session token, or `null` if no session is currently active.
   Future<TokenResponse?> getCurrentSession() async {
-    return authenticationPersistence.get();
+    return _authenticationPersistence.get();
   }
 }

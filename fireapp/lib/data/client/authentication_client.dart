@@ -13,7 +13,7 @@ class AuthenticationClient {
   /// Sends a login request to the API using the provided [email] and [password].
   ///
   /// Returns a [TokenResponse] object that contains the token received from the server.
-  /// Throws an error if the request fails or the response is invalid.
+  /// Throws an error if the request fails or the response is invalid.x
   Future<TokenResponse> login(String email, String password) async {
     return restClient.login(TokenRequest(
         email: email,
