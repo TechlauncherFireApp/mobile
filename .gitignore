@@ -46,3 +46,4 @@ app.*.map.json
 
 *.g.dart
 *.freezed.dart
+fireapp/lib/global/di.config.dart
