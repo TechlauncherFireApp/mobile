@@ -14,7 +14,33 @@ class RequestStateWidget<T> extends StatelessWidget {
   final ErrorWidgetRetryCallback? retry;
   final bool shouldExpand;
 
-  const RequestStateWidget({super.key, required this.state, this.retry, this.shouldExpand = true,  required this.child});
+  const RequestStateWidget({super.key, required this.state, this.retry, this.shouldExpand = true, required this.child});
+
+  static Widget stream<T>({
+    Key? key,
+    required Stream<RequestState<T>> state,
+    required ErrorWidgetRetryCallback retry,
+    bool shouldExpand = true,
+    required RequestStateWidgetBuilder<T> child
+  }) {
+    return StreamBuilder<RequestState<T>>(
+      builder: (_,d) {
+        var state = d.data;
+        if (state == null && d.hasError) {
+          state = RequestState.exception(d.error);
+        }
+        if (state == null) return Container();
+
+        return RequestStateWidget(
+            key: key,
+            state: state,
+            retry: retry,
+            shouldExpand: shouldExpand,
+            child: child
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
