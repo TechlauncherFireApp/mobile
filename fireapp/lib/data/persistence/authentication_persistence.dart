@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 class AuthenticationPersistence {
 
   TokenResponse? _cached;
+  String? get token => _cached?.accessToken;
 
   Future<void> set(TokenResponse auth) async {
     _cached = auth;
