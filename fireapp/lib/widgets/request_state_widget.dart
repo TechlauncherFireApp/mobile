@@ -12,21 +12,37 @@ class RequestStateWidget<T> extends StatelessWidget {
   final RequestStateWidgetBuilder<T> child;
   final RequestState<T> state;
   final ErrorWidgetRetryCallback? retry;
+  final bool shouldExpand;
 
-  const RequestStateWidget({super.key, required this.child, required this.state, this.retry});
+  const RequestStateWidget({super.key, required this.state, this.retry, this.shouldExpand = true,  required this.child});
 
   @override
   Widget build(BuildContext context) {
     if (state is SuccessRequestState) {
-      return child(context, (state as SuccessRequestState).result);
+      return _wrapper(child(context, (state as SuccessRequestState).result));
     }
     if (state is ExceptionRequestState) {
-      return ErrorPresentationWidget(
+      return _wrapper(ErrorPresentationWidget(
         exception: (state as ExceptionRequestState).exception,
         retry: retry,
-      );
+      ));
     }
-    return const CircularProgressIndicator();
+    return _wrapper(const CircularProgressIndicator());
+  }
+  
+  Widget _wrapper(Widget content) {
+    if (shouldExpand) {
+      return SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Align(
+          alignment: Alignment.center,
+          child: content,
+        ),
+      );
+    } else {
+      return content;
+    }
   }
 
 }

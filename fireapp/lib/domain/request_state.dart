@@ -16,7 +16,7 @@ abstract class RequestState<T> {
   factory RequestState.success(T result) = SuccessRequestState;
 
   /// Factory constructor that creates an `ExceptionRequestState` with a given [exception].
-  factory RequestState.exception(Object exception) = ExceptionRequestState;
+  factory RequestState.exception(Object? exception) = ExceptionRequestState;
 
 }
 
@@ -45,7 +45,7 @@ class SuccessRequestState<T> extends RequestState<T> {
 class ExceptionRequestState<T> extends RequestState<T> {
 
   /// The exception that occurred during the request.
-  final Object exception;
+  final Object? exception;
 
   /// Creates an exception request state with the given [exception].
   ExceptionRequestState(this.exception): super._();
