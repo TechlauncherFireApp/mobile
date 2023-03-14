@@ -186,13 +186,13 @@ packages:
     source: hosted
     version: "2.2.4"
   dio:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dio
-      sha256: "3709d74615bba5e443eb141f6a7f4bcc4788f8fae6f743edadfb79c2a8e6287e"
+      sha256: "2644a9e0965a7aa3deb09cb8ce4081db4450c178f472818c8cd34216a3070d7b"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.2"
   dio_cookie_manager:
     dependency: "direct dev"
     description:
@@ -246,6 +246,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_material_color_picker:
     dependency: transitive
     description:
@@ -369,7 +374,7 @@ packages:
     source: hosted
     version: "2.1.4"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
@@ -809,10 +814,10 @@ packages:
     dependency: "direct main"
     description:
       name: table_calendar
-      sha256: "382f9f27c4d83240e9e70315a6e85e2136d95b4ab120926ed30c2670a0f41be6"
+      sha256: "7f1270313c0cdb245b583ed8518982c01d4a7e95869b3c30abcbae3b642c45d0"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.6"
+    version: "3.0.8"
   term_glyph:
     dependency: transitive
     description:
