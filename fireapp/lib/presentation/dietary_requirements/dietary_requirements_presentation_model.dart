@@ -8,8 +8,7 @@ part 'dietary_requirements_presentation_model.freezed.dart';
 class UserDietaryRequirements with _$UserDietaryRequirements {
 
   const factory UserDietaryRequirements({
-    required List<UserDietaryRestriction> restrictions,
-    required String? customRestrictions
+    required List<UserDietaryRestriction> restrictions
   }) = _UserDietaryRequirements;
 
 }

@@ -8,4 +8,11 @@ extension ListExtensions<T> on List<T> {
     return false;
   }
 
+  T? firstOrNull(bool Function(T) test) {
+    for (T e in this) {
+      if (test(e)) return e;
+    }
+    return null;
+  }
+
 }

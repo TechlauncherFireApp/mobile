@@ -16,7 +16,22 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
 
   final BehaviorSubject<RequestState<UserDietaryRequirements>> _requirements
     = BehaviorSubject.seeded(RequestState.initial());
-  Stream<RequestState<UserDietaryRequirements>> get requirements => _requirements.stream;
+  final BehaviorSubject<List<UserDietaryRestriction>> _changes = BehaviorSubject.seeded([]);
+  final BehaviorSubject<String?> _customRestrictions = BehaviorSubject.seeded(null);
+
+  Stream<String?> get customRestrictions => _customRestrictions.stream;
+  Stream<RequestState<UserDietaryRequirements>> get requirements
+    => Rx.combineLatest2(_requirements.stream, _changes.stream,
+      (RequestState<UserDietaryRequirements> sot, List<UserDietaryRestriction> c) {
+        if (sot is! SuccessRequestState) return sot;
+        UserDietaryRequirements v = (sot as SuccessRequestState).result;
+        return RequestState.success(
+          v.copyWith(
+            restrictions: _mergeRequirements(v.restrictions, c)
+          )
+        );
+      }
+    );
 
   DietaryRequirementsViewModel(this._dietaryRequirementsRepository);
 
@@ -34,23 +49,67 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
           )
         ).toList();
 
+        _customRestrictions.add(userData.customRestrictions);
+        _changes.add([]);
         _requirements.add(RequestState.success(
           UserDietaryRequirements(
-            restrictions: userRestrictions,
-            customRestrictions: userData.customRestrictions
+            restrictions: userRestrictions
           )
         ));
       } catch (e) {
         logger.e(e);
         _requirements.add(RequestState.exception(e));
       }
-
     }();
+  }
+
+  void updateRequirement(DietaryRestriction restriction, bool checked) {
+    _changes.add(
+      _mergeRequirements(
+        _changes.value,
+        [UserDietaryRestriction(restriction: restriction, checked: checked)]
+      )
+    );
+  }
+
+  void updateCustomRestriction(String? value) {
+    _customRestrictions.add(value);
+  }
+
+  void submit() {
+    final state = _requirements.value;
+    if (state is! SuccessRequestState) return;
+
+    var changedRestrictions = _mergeRequirements((state as SuccessRequestState).result, _changes.value);
+
+    _dietaryRequirementsRepository.updateDietaryRequirements(
+      DietaryRequirements(
+        restrictions: changedRestrictions.where((e) => e.checked).map((e) => e.restriction).toList(),
+        customRestrictions: _customRestrictions.value
+      )
+    );
+  }
+
+  List<UserDietaryRestriction> _mergeRequirements(
+    List<UserDietaryRestriction> original,
+    List<UserDietaryRestriction> novel
+  ) {
+    var c = original.map(
+      (e) {
+        var n = novel.firstOrNull((element) => element.restriction == e.restriction);
+        if (n != null) novel.remove(n);
+        return n ?? e;
+      }
+    ).toList();
+    c.addAll(novel);
+    return c;
   }
 
   @override
   Future<void> dispose() async {
     _requirements.close();
+    _changes.close();
+    _customRestrictions.close();
   }
 
 }
