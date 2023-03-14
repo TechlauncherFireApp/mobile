@@ -1,5 +1,6 @@
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
+import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -13,5 +14,8 @@ abstract class RestClient {
 
   @GET("/authentication/login")
   Future<TokenResponse> login(@Body() TokenRequest tokenRequest);
+
+  @GET("/volunteer/list")
+  Future<List<VolunteerListing>> volunteerList();
 
 }

@@ -87,7 +87,7 @@ class SupervisorRoute extends StatefulWidget {
 final supervisorScreens = [
   Center(child: Text('Home', style: TextStyle(fontSize: 60))),
   SchedulerFormRoute(),
-  const VolunteerList(),
+  const VolunteerListOld(),
   SettingPage(
       email:
           userEmail), // Later on the settings page needs to be changed for supervisor so its different from volunteer, to reflect the different options available to them

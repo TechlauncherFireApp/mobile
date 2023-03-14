@@ -10,14 +10,14 @@ import 'package:http/http.dart' as http;
 import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:fireapp/global/access.dart';
 
-class VolunteerList extends StatefulWidget {
-  const VolunteerList({super.key});
+class VolunteerListOld extends StatefulWidget {
+  const VolunteerListOld({super.key});
 
   @override
-  State<VolunteerList> createState() => _VolunteerListState();
+  State<VolunteerListOld> createState() => _VolunteerListOldState();
 }
 
-class _VolunteerListState extends State<VolunteerList> {
+class _VolunteerListOldState extends State<VolunteerListOld> {
   late Future<List<VolunteerAlbum>> _volunteerData;
 
   @override
