@@ -1,0 +1,14 @@
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "errorTitle": "Something went wrong",
+  "@errorTitle": {
+    "description": "The generic title shown on an error widget"
+  },
+  "errorActionRetry": "Retry",
+  "@errorActionRetry": {
+    "description": "The title shown on a button that retries the failed operation"
+  }
+}

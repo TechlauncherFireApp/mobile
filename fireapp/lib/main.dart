@@ -12,6 +12,8 @@ import 'package:fireapp/pages/Authentication/register.dart';
 import 'package:fireapp/pages/Authentication/login.dart';
 import 'package:fireapp/pages/Authentication/reset_password/reset_email.dart';
 import 'package:fireapp/pages/settings/setting.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Main Function
 void main() {
@@ -32,6 +34,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: fireappTheme(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+      ],
       title: 'Flutter Demo',
       initialRoute: '/volunteer_list',
       routes: {
