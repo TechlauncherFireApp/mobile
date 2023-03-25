@@ -6,6 +6,7 @@ import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/global/di.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_presentation_model.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,9 +18,8 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
   final BehaviorSubject<RequestState<UserDietaryRequirements>> _requirements
     = BehaviorSubject.seeded(RequestState.initial());
   final BehaviorSubject<List<UserDietaryRestriction>> _changes = BehaviorSubject.seeded([]);
-  final BehaviorSubject<String?> _customRestrictions = BehaviorSubject.seeded(null);
 
-  Stream<String?> get customRestrictions => _customRestrictions.stream;
+  TextEditingController customRestrictions = TextEditingController();
   Stream<RequestState<UserDietaryRequirements>> get requirements
     => Rx.combineLatest2(_requirements.stream, _changes.stream,
       (RequestState<UserDietaryRequirements> sot, List<UserDietaryRestriction> c) {
@@ -49,7 +49,7 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
           )
         ).toList();
 
-        _customRestrictions.add(userData.customRestrictions);
+        customRestrictions.text = userData.customRestrictions ?? "";
         _changes.add([]);
         _requirements.add(RequestState.success(
           UserDietaryRequirements(
@@ -73,7 +73,7 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
   }
 
   void updateCustomRestriction(String? value) {
-    _customRestrictions.add(value);
+    customRestrictions.text = value ?? "";
   }
 
   void submit() {
@@ -85,7 +85,7 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
     _dietaryRequirementsRepository.updateDietaryRequirements(
       DietaryRequirements(
         restrictions: changedRestrictions.where((e) => e.checked).map((e) => e.restriction).toList(),
-        customRestrictions: _customRestrictions.value
+        customRestrictions: customRestrictions.text
       )
     );
   }
