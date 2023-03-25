@@ -109,7 +109,6 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
   Future<void> dispose() async {
     _requirements.close();
     _changes.close();
-    _customRestrictions.close();
   }
 
 }

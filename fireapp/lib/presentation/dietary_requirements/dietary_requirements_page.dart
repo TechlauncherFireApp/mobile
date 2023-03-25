@@ -10,7 +10,7 @@ class DietaryRequirementsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const BasicWrapper(
       page: DietaryRequirementsWidget()
-    )
+    );
   }
 
 }
