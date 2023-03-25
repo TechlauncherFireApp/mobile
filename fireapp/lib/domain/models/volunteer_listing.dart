@@ -10,7 +10,6 @@ class VolunteerListing with _$VolunteerListing {
   const factory VolunteerListing({
     required String volunteerId,
     required String name,
-    required List<String> roles
   }) = _VolunteerListing;
 
   factory VolunteerListing.fromJson(Map<String, Object?> json) => _$VolunteerListingFromJson(json);

@@ -9,7 +9,7 @@ class VolunteerRepository {
   final VolunteerClient volunteerClient;
   VolunteerRepository(this.volunteerClient);
 
-  Future<List<VolunteerListing>> volunteerList() async {
+  Future<List<VolunteerListing>> volunteerList() {
     return volunteerClient.volunteerList();
   }
 }

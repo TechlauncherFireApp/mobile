@@ -15,7 +15,7 @@ abstract class RestClient {
   @GET("/authentication/login")
   Future<TokenResponse> login(@Body() TokenRequest tokenRequest);
 
-  @GET("/volunteer/list")
-  Future<List<VolunteerListing>> volunteerList();
+  @GET("/user/getAllVolunteer")
+  Future<Map<String, String>> volunteerList();
 
 }
