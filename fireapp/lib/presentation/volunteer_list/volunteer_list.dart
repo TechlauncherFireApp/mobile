@@ -39,7 +39,8 @@ class _VolunteerListState extends FireAppState<VolunteerList>
                   itemCount: volunteers.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(volunteers[index].name)
+                      title: Text(volunteers[index].name),
+                          subtitle: Text(volunteers[index].volunteerId),
                     );
                   },
                 ),
