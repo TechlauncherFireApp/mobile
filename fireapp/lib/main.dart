@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
 import 'package:fireapp/global/di.dart';
+import 'package:fireapp/pages/Supervisor/volunteerManagment.dart';
+import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:flutter/material.dart';
 //INTERNAL
 import 'layout/wrapper.dart';
@@ -51,6 +53,7 @@ class _MyAppState extends State<MyApp> {
         '/register': (context) => const BasicWrapper(
             page: RegisterPage()), //See Authentication/register.dart
         '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
+        '/volunteer_list': (context) => const VolunteerList()
       },
     );
   }
