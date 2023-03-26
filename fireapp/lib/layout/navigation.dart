@@ -2,6 +2,7 @@ import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/pages/Supervisor/volunteerManagment.dart';
 import 'package:fireapp/pages/VolunteerHome/volunteerHome.dart';
 import 'package:fireapp/pages/settings/setting.dart';
+import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
 import '../pages/Calendar/calendar.dart';
@@ -87,7 +88,7 @@ class SupervisorRoute extends StatefulWidget {
 final supervisorScreens = [
   Center(child: Text('Home', style: TextStyle(fontSize: 60))),
   SchedulerFormRoute(),
-  const VolunteerListOld(),
+  const VolunteerList(),
   SettingPage(
       email:
           userEmail), // Later on the settings page needs to be changed for supervisor so its different from volunteer, to reflect the different options available to them
