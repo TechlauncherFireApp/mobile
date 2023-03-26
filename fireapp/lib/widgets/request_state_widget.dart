@@ -1,5 +1,6 @@
 
 import 'package:fireapp/domain/request_state.dart';
+import 'package:fireapp/global/di.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,7 @@ class RequestStateWidget<T> extends StatelessWidget {
     required RequestStateWidgetBuilder<T> child
   }) {
     return StreamBuilder<RequestState<T>>(
+      stream: state,
       builder: (_,d) {
         var state = d.data;
         if (state == null && d.hasError) {
