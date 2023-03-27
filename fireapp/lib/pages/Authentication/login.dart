@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
 import 'package:fireapp/layout/loading.dart';
 
+import '../../global/di.dart';
+
 /// The login page container
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -192,7 +194,7 @@ class _LoginBoxState extends State<LoginBox> {
           userEmail = _user;
           GetIt.instance.get<AuthenticationPersistence>().set(
             TokenResponse(
-                userId: userId,
+                userId: "$userId",
                 accessToken: accessToken,
                 role: role
             )
@@ -204,7 +206,8 @@ class _LoginBoxState extends State<LoginBox> {
       } else {
         return LoginResult.networkError;
       }
-    } catch (_) {
+    } catch (e) {
+      logger.e("$e");
       return LoginResult.timeout;
     }
   }

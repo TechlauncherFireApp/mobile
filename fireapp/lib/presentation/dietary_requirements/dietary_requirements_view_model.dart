@@ -80,14 +80,24 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
     final state = _requirements.value;
     if (state is! SuccessRequestState) return;
 
-    var changedRestrictions = _mergeRequirements((state as SuccessRequestState).result, _changes.value);
+    () async {
+      _requirements.add(RequestState.loading());
 
-    _dietaryRequirementsRepository.updateDietaryRequirements(
-      DietaryRequirements(
-        restrictions: changedRestrictions.where((e) => e.checked).map((e) => e.restriction).toList(),
-        customRestrictions: customRestrictions.text
-      )
-    );
+      var changedRestrictions = _mergeRequirements((state as SuccessRequestState<UserDietaryRequirements>).result.restrictions, _changes.value);
+
+      try {
+        await _dietaryRequirementsRepository.updateDietaryRequirements(
+            DietaryRequirements(
+                restrictions: changedRestrictions.where((e) => e.checked).map((e) => e.restriction).toList(),
+                customRestrictions: customRestrictions.text
+            )
+        );
+        _requirements.add(RequestState.success(state.result));
+      } catch(e) {
+        logger.e("$e");
+        _requirements.add(RequestState.exception(e));
+      }
+    }();
   }
 
   List<UserDietaryRestriction> _mergeRequirements(

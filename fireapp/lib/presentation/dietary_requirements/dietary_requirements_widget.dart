@@ -43,7 +43,7 @@ class _DietaryRequirementsWidgetState extends FireAppState<DietaryRequirementsWi
               children: restrictions.restrictions
                   .map((e) => _restriction(e))
                   .toList()
-                  .spacedBy(8),
+                  .spacedBy(0),
             ),
             Column(
               children: [
@@ -57,6 +57,13 @@ class _DietaryRequirementsWidgetState extends FireAppState<DietaryRequirementsWi
                   controller: viewModel.customRestrictions,
                 )
               ].spacedBy(8),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50)
+              ),
+              onPressed: () => viewModel.submit(),
+              child: const Text("Submit"),
             )
           ].spacedBy(16),
         );
