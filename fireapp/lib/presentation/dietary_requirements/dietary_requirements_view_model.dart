@@ -19,6 +19,10 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
     = BehaviorSubject.seeded(RequestState.initial());
   final BehaviorSubject<List<UserDietaryRestriction>> _changes = BehaviorSubject.seeded([]);
 
+  final BehaviorSubject<RequestState<void>> _submissionState
+    = BehaviorSubject.seeded(RequestState.success(null));
+  Stream<RequestState<void>> get submissionState => _submissionState.stream;
+
   TextEditingController customRestrictions = TextEditingController();
   Stream<RequestState<UserDietaryRequirements>> get requirements
     => Rx.combineLatest2(_requirements.stream, _changes.stream,
@@ -81,7 +85,7 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
     if (state is! SuccessRequestState) return;
 
     () async {
-      _requirements.add(RequestState.loading());
+      _submissionState.add(RequestState.loading());
 
       var changedRestrictions = _mergeRequirements((state as SuccessRequestState<UserDietaryRequirements>).result.restrictions, _changes.value);
 
@@ -92,10 +96,10 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
                 customRestrictions: customRestrictions.text
             )
         );
-        _requirements.add(RequestState.success(state.result));
+        _submissionState.add(RequestState.success(null));
       } catch(e) {
         logger.e("$e");
-        _requirements.add(RequestState.exception(e));
+        _submissionState.add(RequestState.exception(e));
       }
     }();
   }
