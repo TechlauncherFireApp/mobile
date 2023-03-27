@@ -11,7 +11,7 @@
   "@errorActionRetry": {
     "description": "The title shown on a button that retries the failed operation"
   },
-  "dietaryRequirementsCustomTitle": "Other dietary requirements",
+  "dietaryRequirementsCustomTitle": "Other dietary requirements:",
   "@dietaryRequirementsCustomTitle": {
     "description": "Shown above the custom dietary requirements text box"
   }

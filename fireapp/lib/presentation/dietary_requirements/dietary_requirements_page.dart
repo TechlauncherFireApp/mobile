@@ -9,7 +9,10 @@ class DietaryRequirementsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const BasicWrapper(
-      page: DietaryRequirementsWidget()
+      page: Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: DietaryRequirementsWidget(),
+      )
     );
   }
 
