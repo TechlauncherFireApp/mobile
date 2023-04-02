@@ -36,6 +36,19 @@ class _VolunteerListState extends FireAppState<VolunteerList>
           child: (_,volunteers) {
             return Column(
               children: [
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextField(
+                    controller: viewModel.searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: volunteers.length,
