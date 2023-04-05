@@ -1,3 +1,4 @@
+import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
@@ -17,5 +18,8 @@ abstract class RestClient {
 
   @GET("/user/getAllVolunteer")
   Future<Map<String, String>> volunteerList();
+
+  @GET("/reference/qualifications")
+  Future<List<Qualification>> getQualifications();
 
 }
