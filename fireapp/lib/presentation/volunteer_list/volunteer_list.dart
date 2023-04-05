@@ -7,6 +7,7 @@ import 'package:fireapp/widgets/request_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VolunteerList extends StatefulWidget {
   const VolunteerList({super.key});
@@ -41,7 +42,8 @@ class _VolunteerListState extends FireAppState<VolunteerList>
                   child: TextField(
                     controller: viewModel.searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search',
+                      hintText: AppLocalizations.of(context)?.
+                      volunteerListSearchHint,
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
