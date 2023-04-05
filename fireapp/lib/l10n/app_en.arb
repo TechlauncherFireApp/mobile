@@ -14,5 +14,9 @@
   "dietaryRequirementsCustomTitle": "Other dietary requirements",
   "@dietaryRequirementsCustomTitle": {
     "description": "Shown above the custom dietary requirements text box"
+  },
+  "volunteerListSearchHint": "Search",
+  "@volunteerListSearchHint": {
+    "description": "The hint text shown in the volunteer list search box"
   }
 }
