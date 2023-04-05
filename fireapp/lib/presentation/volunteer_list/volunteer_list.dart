@@ -7,6 +7,7 @@ import 'package:fireapp/widgets/request_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VolunteerList extends StatefulWidget {
   const VolunteerList({super.key});
@@ -36,6 +37,20 @@ class _VolunteerListState extends FireAppState<VolunteerList>
           child: (_,volunteers) {
             return Column(
               children: [
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextField(
+                    controller: viewModel.searchController,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)?.
+                      volunteerListSearchHint,
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: volunteers.length,
