@@ -4,6 +4,8 @@ import 'package:fireapp/data/persistence/authentication_persistence.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:injectable/injectable.dart';
 
+import '../models/register_request.dart';
+
 /// A repository for handling user authentication.
 ///
 /// This class provides a way to log in and retrieve the current session for a user.
@@ -25,6 +27,20 @@ class AuthenticationRepository {
   /// Returns a [TokenResponse] containing the session token.
   Future<TokenResponse> login(String email, String password) async {
     TokenResponse response = await _authenticationClient.login(email, password);
+    _authenticationPersistence.set(response);
+    return response;
+  }
+
+  Future<TokenResponse> register(
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      Gender gender,
+      String? phoneNumber
+  ) async {
+    TokenResponse response = await _authenticationClient
+        .register(email, password, firstName, lastName, gender, phoneNumber);
     _authenticationPersistence.set(response);
     return response;
   }

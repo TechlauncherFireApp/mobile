@@ -1,5 +1,7 @@
+import 'package:fireapp/data/persistence/authentication_persistence.dart';
 import 'package:flutter/material.dart';
 import 'package:fireapp/global/constants.dart' as constants; //API URL
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fireapp/layout/dialog.dart';
@@ -44,6 +46,10 @@ class RegisterBox extends StatefulWidget {
 /// which makes the structure clearer,
 /// and the method name represents the purpose of the component
 class _RegisterBoxState extends State<RegisterBox> {
+  // This violates the whole layered thing, but I don't want to rewrite the compat
+  final AuthenticationPersistence _authenticationPersistence =
+      GetIt.instance.get();
+
   final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
   late String _user, _password, _givenName, _lastName, _phone;
   bool _isObscure = true; // Password is obscure or not
