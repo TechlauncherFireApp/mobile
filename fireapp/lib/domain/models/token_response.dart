@@ -9,11 +9,11 @@ class TokenResponse with _$TokenResponse {
 
   const factory TokenResponse({
     @JsonKey(name: "id")
-    required String userId,
-    @JsonKey(name: "token")
+    required int userId,
+    @JsonKey(name: "access_token")
     required String accessToken,
     @JsonKey(name: "role")
-    required String role,
+    required String? role,
   }) = _TokenResponse;
 
   factory TokenResponse.fromJson(Map<String, Object?> json) => _$TokenResponseFromJson(json);

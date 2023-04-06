@@ -12,7 +12,7 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET("/authentication/login")
+  @POST("/authentication/login")
   Future<TokenResponse> login(@Body() TokenRequest tokenRequest);
 
   @GET("/user/getAllVolunteer")
