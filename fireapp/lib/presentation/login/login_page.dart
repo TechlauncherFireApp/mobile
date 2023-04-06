@@ -48,6 +48,36 @@ class _LoginState
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(child: buildLogin()),
+        buildRegisterText(),
+      ],
+    );
+  }
+
+  Widget buildRegisterText() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        children: <Widget>[
+          const Text('----------New to FireApp?----------',
+              style: TextStyle(fontSize: 16, color: Colors.black45)),
+          const SizedBox(height: 16),
+          MaterialButton(
+            color: Colors.grey,
+            child:
+            const Text('Create an account', style: TextStyle(fontSize: 16)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/register');
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildLogin() {
     return Form(
       key: _formKey,
       child: ListView(
