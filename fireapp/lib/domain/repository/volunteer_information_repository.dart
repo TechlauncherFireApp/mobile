@@ -14,12 +14,13 @@ class VolunteerInformationRepository {
   final VolunteerInformationClient _client;
   VolunteerInformationRepository(this._client, this._reference);
 
-  Future<VolunteerInformation> getVolunteerInformation(String volunteerId) async {
-    VolunteerInformationDto volunteerInformation = await _client.getVolunteerInformation(volunteerId);
+  Future<VolunteerInformation> getVolunteerInformation(String ID) async {
+    VolunteerInformationDto volunteerInformation = await _client.getVolunteerInformation(ID);
     List<Qualification> qualifications = await _reference.getQualifications();
     return VolunteerInformation(
-      volunteerId: volunteerInformation.volunteerId,
-      name: volunteerInformation.name,
+      ID: volunteerInformation.ID,
+      firstName: volunteerInformation.firstName,
+      lastName: volunteerInformation.lastName,
       email: volunteerInformation.email,
       mobileNo: volunteerInformation.mobileNo,
       prefHours: volunteerInformation.prefHours,
@@ -27,13 +28,13 @@ class VolunteerInformationRepository {
       qualifications: volunteerInformation.qualifications.map((e) =>
           qualifications.firstWhere((element) => "${element.id}" == e)).toList(),
       availabilities: AvailabilityField(
-        monday: volunteerInformation.availabilities.monday,
-        tuesday: volunteerInformation.availabilities.tuesday,
-        wednesday: volunteerInformation.availabilities.wednesday,
-        thursday: volunteerInformation.availabilities.thursday,
-        friday: volunteerInformation.availabilities.friday,
-        saturday: volunteerInformation.availabilities.saturday,
-        sunday: volunteerInformation.availabilities.sunday,
+        Monday: volunteerInformation.availabilities.Monday,
+        Tuesday: volunteerInformation.availabilities.Tuesday,
+        Wednesday: volunteerInformation.availabilities.Wednesday,
+        Thursday: volunteerInformation.availabilities.Thursday,
+        Friday: volunteerInformation.availabilities.Friday,
+        Saturday: volunteerInformation.availabilities.Saturday,
+        Sunday: volunteerInformation.availabilities.Sunday,
       ),
       possibleRoles: volunteerInformation.possibleRoles,
     );

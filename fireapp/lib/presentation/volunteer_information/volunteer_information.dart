@@ -42,27 +42,8 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name: ${volunteerInformation.name}'),
-                Text('Email: ${volunteerInformation.email}'),
-                Text('Mobile No: ${volunteerInformation.mobileNo}'),
-                Text('Preferred Hours: ${volunteerInformation.prefHours}'),
-                Text('Experience Years: ${volunteerInformation.expYears}'),
-                Text('Qualifications: ${volunteerInformation.qualifications.join(", ")}'),
-                Text('Availabilities:'),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Monday: ${volunteerInformation.availabilities.monday.join(", ")}'),
-                    Text('Tuesday: ${volunteerInformation.availabilities.tuesday.join(", ")}'),
-                    Text('Wednesday: ${volunteerInformation.availabilities.wednesday.join(", ")}'),
-                    Text('Thursday: ${volunteerInformation.availabilities.thursday.join(", ")}'),
-                    Text('Friday: ${volunteerInformation.availabilities.friday.join(", ")}'),
-                    Text('Saturday: ${volunteerInformation.availabilities.saturday.join(", ")}'),
-                    Text('Sunday: ${volunteerInformation.availabilities.sunday.join(", ")}'),
-                  ],
-                ),
-                Text('Possible Roles: ${volunteerInformation.possibleRoles.join(", ")}'),
-              ],
+                Text('First Name: ${volunteerInformation.firstName}'),
+                ],
           );
         }
       )

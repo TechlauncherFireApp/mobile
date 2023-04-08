@@ -9,8 +9,9 @@ part 'volunteer_information.g.dart';
 class VolunteerInformation with _$VolunteerInformation{
 
   const factory VolunteerInformation({
-    required String volunteerId,
-    required String name,
+    required String ID,
+    required String firstName,
+    required String lastName,
     required String email,
     required String mobileNo,
     required int prefHours,
@@ -27,13 +28,13 @@ class VolunteerInformation with _$VolunteerInformation{
 class AvailabilityField with _$AvailabilityField{
 
   const factory AvailabilityField({
-    required List<List<int>> monday,
-    required List<List<int>> tuesday,
-    required List<List<int>> wednesday,
-    required List<List<int>> thursday,
-    required List<List<int>> friday,
-    required List<List<int>> saturday,
-    required List<List<int>> sunday,
+    List<List<int>>? Monday,
+    List<List<int>>? Tuesday,
+    List<List<int>>? Wednesday,
+    List<List<int>>? Thursday,
+    List<List<int>>? Friday,
+    List<List<int>>? Saturday,
+    List<List<int>>? Sunday,
   }) = _AvailabilityField;
 
   factory AvailabilityField.fromJson(Map<String, Object?> json) => _$AvailabilityFieldFromJson(json);

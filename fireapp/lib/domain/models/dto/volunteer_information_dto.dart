@@ -8,8 +8,9 @@ part 'volunteer_information_dto.g.dart';
 class VolunteerInformationDto with _$VolunteerInformationDto{
 
   const factory VolunteerInformationDto({
-    required String volunteerId,
-    required String name,
+    required String ID,
+    required String firstName,
+    required String lastName,
     required String email,
     required String mobileNo,
     required int prefHours,
@@ -26,13 +27,13 @@ class VolunteerInformationDto with _$VolunteerInformationDto{
 class AvailabilityFieldDto with _$AvailabilityFieldDto{
 
   const factory AvailabilityFieldDto({
-    required List<List<int>> monday,
-    required List<List<int>> tuesday,
-    required List<List<int>> wednesday,
-    required List<List<int>> thursday,
-    required List<List<int>> friday,
-    required List<List<int>> saturday,
-    required List<List<int>> sunday,
+    required List<List<int>> Monday,
+    required List<List<int>> Tuesday,
+    required List<List<int>> Wednesday,
+    required List<List<int>> Thursday,
+    required List<List<int>> Friday,
+    required List<List<int>> Saturday,
+    required List<List<int>> Sunday,
   }) = _AvailabilityFieldDto;
 
   factory AvailabilityFieldDto.fromJson(Map<String, Object?> json) => _$AvailabilityFieldDtoFromJson(json);
