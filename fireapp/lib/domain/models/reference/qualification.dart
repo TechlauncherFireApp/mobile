@@ -13,8 +13,7 @@ class Qualification with _$Qualification {
     required int id,
     required String name,
     required DateTime updated,
-    required DateTime created,
-    required bool deleted
+    required DateTime created
   }) = _Qualification;
 
   factory Qualification.fromJson(Map<String, Object?> json) => _$QualificationFromJson(json);

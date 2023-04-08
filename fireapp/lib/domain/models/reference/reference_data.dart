@@ -6,7 +6,6 @@ abstract class ReferenceData extends Identifiable<int> {
   String get name;
   DateTime get updated;
   DateTime get created;
-  bool get deleted;
 
 }
 
