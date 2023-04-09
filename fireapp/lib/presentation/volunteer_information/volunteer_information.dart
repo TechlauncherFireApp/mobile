@@ -309,9 +309,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                         AppLocalizations.of(context)?.volunteer_availability_monday(
                             volunteerInformation.availabilities.monday.isEmpty
                                 ? 'Unavailable'
-                                : volunteerInformation.availabilities.monday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')
+                                : volunteerInformation.availabilities.monday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')
                             ??
                             'Volunteer Availability Monday',
                         style: Theme
@@ -338,9 +339,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_tuesday(
                             volunteerInformation.availabilities.tuesday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.tuesday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')??
+                                : volunteerInformation.availabilities.tuesday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')??
                             'Volunteer Availability Tuesday',
                         style: Theme
                             .of(context)
@@ -366,9 +368,11 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_wednesday(
                             volunteerInformation.availabilities.wednesday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.wednesday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')??
+                                : volunteerInformation.availabilities.wednesday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')
+                            ??
                             'Volunteer Availability Wednesday',
                         style: Theme
                             .of(context)
@@ -394,9 +398,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_thursday(
                             volunteerInformation.availabilities.thursday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.thursday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')??
+                                : volunteerInformation.availabilities.thursday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')??
                             'Volunteer Availability Thursday',
                         style: Theme
                             .of(context)
@@ -422,9 +427,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_friday(
                             volunteerInformation.availabilities.friday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.friday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')
+                                : volunteerInformation.availabilities.friday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')
                             ??
                             'Volunteer Availability Friday',
                         style: Theme
@@ -451,9 +457,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_saturday(
                             volunteerInformation.availabilities.saturday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.saturday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')??
+                                : volunteerInformation.availabilities.saturday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')??
                             'Volunteer Availability Saturday',
                         style: Theme
                             .of(context)
@@ -479,9 +486,10 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                       child: Text(
                         AppLocalizations.of(context)?.volunteer_availability_sunday(
                             volunteerInformation.availabilities.sunday.isEmpty ? 'Unavailable'
-                                : volunteerInformation.availabilities.sunday)
-                            .replaceFirst('[', '')
-                            .replaceFirst(']]', ']')??
+                                : volunteerInformation.availabilities.sunday.join(' and '))
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(',', ' to')??
                             'Volunteer Availability Sunday',
                         style: Theme
                             .of(context)
