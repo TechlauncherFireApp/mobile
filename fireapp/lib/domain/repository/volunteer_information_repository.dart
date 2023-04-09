@@ -28,13 +28,13 @@ class VolunteerInformationRepository {
       qualifications: volunteerInformation.qualifications.map((e) =>
           qualifications.firstWhere((element) => "${element.id}" == e)).toList(),
       availabilities: AvailabilityField(
-        Monday: volunteerInformation.availabilities.Monday,
-        Tuesday: volunteerInformation.availabilities.Tuesday,
-        Wednesday: volunteerInformation.availabilities.Wednesday,
-        Thursday: volunteerInformation.availabilities.Thursday,
-        Friday: volunteerInformation.availabilities.Friday,
-        Saturday: volunteerInformation.availabilities.Saturday,
-        Sunday: volunteerInformation.availabilities.Sunday,
+        monday: volunteerInformation.availabilities.monday,
+        tuesday: volunteerInformation.availabilities.tuesday,
+        wednesday: volunteerInformation.availabilities.wednesday,
+        thursday: volunteerInformation.availabilities.thursday,
+        friday: volunteerInformation.availabilities.friday,
+        saturday: volunteerInformation.availabilities.saturday,
+        sunday: volunteerInformation.availabilities.sunday,
       ),
       possibleRoles: volunteerInformation.possibleRoles,
     );

@@ -38,167 +38,101 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
       page: RequestStateWidget.stream<VolunteerInformation>(
         state: viewModel.volunteerInformation,
         retry: () => viewModel.getVolunteerInformation(widget.volunteerId),
-        child: (_, volunteerInformation){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                SizedBox(height: 12.0),
-                Text(
-                  'Volunteer Information',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                SizedBox(height: 12.0),
+        child: (_, volunteerInformation) {
+          return Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Volunteer ID: ${volunteerInformation.ID}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_id(volunteerInformation.ID) ??
+                          'Volunteer ID',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Name: ${volunteerInformation.firstName} ${volunteerInformation.lastName}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_first_name(volunteerInformation.firstName) ??
+                          'Volunteer First Name',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Email: ${volunteerInformation.email}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_last_name(volunteerInformation.lastName) ??
+                          'Volunteer Last Name',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Mobile No: ${volunteerInformation.mobileNo}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_email(volunteerInformation.email) ??
+                          'Volunteer Email',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Preferred Hours: ${volunteerInformation.prefHours}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_phone(volunteerInformation.mobileNo) ??
+                          'Volunteer Phone',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Experience Years: ${volunteerInformation.expYears}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_prefHours(volunteerInformation.prefHours) ??
+                          'Volunteer Preferred Hours',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
-                    Text('Volunteer Possible Roles: ${volunteerInformation.possibleRoles.join(", ")}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Qualifications: ${volunteerInformation.qualifications.join(", ")}',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_expYears(volunteerInformation.expYears) ??
+                          'Volunteer Experience Years',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
                     Text(
-                      'Volunteer Availabilities:',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
+                      AppLocalizations.of(context)?.volunteer_qualifications(
+                        volunteerInformation.qualifications.map((q) =>
+                          q.name
+                        ).toList().join(', ')
+                      ) ?? 'Volunteer Qualifications',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(height: 12.0),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: volunteerInformation.possibleRoles
+                          .map((role) => Text(AppLocalizations.of(context)?.volunteer_possibleRoles(role) ?? role,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                           ))
+                          .toList(),
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Monday: ${volunteerInformation.availabilities.Monday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_monday(volunteerInformation.availabilities.monday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Tuesday: ${volunteerInformation.availabilities.Tuesday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_tuesday(volunteerInformation.availabilities.tuesday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Wednesday: ${volunteerInformation.availabilities.Wednesday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_wednesday(volunteerInformation.availabilities.wednesday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Thursday: ${volunteerInformation.availabilities.Thursday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_thursday(volunteerInformation.availabilities.thursday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Friday: ${volunteerInformation.availabilities.Friday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_friday(volunteerInformation.availabilities.friday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Saturday: ${volunteerInformation.availabilities.Saturday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_saturday(volunteerInformation.availabilities.saturday) ?? 'Volunteer Availabilities',
                         ),
-                        SizedBox(height: 12.0),
                         Text(
-                          'Sunday: ${volunteerInformation.availabilities.Sunday?.join(", ")}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,),
+                          AppLocalizations.of(context)?.volunteer_availability_sunday(volunteerInformation.availabilities.sunday) ?? 'Volunteer Availabilities',
                         ),
                       ],
                     ),
-          ],
-          ),]);
-        }
-      )
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
+
 }

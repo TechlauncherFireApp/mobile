@@ -18,5 +18,75 @@
   "volunteerListSearchHint": "Search",
   "@volunteerListSearchHint": {
     "description": "The hint text shown in the volunteer list search box"
-  }
+  },
+  "volunteer_id": "Volunteer ID: {ID}",
+    "@volunteer_id": {
+        "description": "The volunteer ID label shown on the volunteer details page"
+  },
+  "volunteer_first_name": "Name: {first_name}",
+    "@volunteer_name": {
+        "description": "The volunteer name label shown on the volunteer details page"
+  },
+  "volunteer_last_name": "Last Name: {last_name}",
+    "@volunteer_last_name": {
+        "description": "The volunteer last name label shown on the volunteer details page"
+  },
+   "volunteer_email": "Email: {email}",
+        "@volunteer_email": {
+            "description": "The volunteer email label shown on the volunteer details page"
+   },
+   "volunteer_phone": "Phone: {phone}",
+        "@volunteer_phone": {
+            "description": "The volunteer phone label shown on the volunteer details page"
+   },
+   "volunteer_prefHours": "Preferred Hours: {prefHours}",
+        "@volunteer_prefHours": {
+            "description": "The volunteer preferred hours label shown on the volunteer details page"
+   },
+   "volunteer_expYears": "Years of Experience: {expYears}",
+        "@volunteer_expYears": {
+            "description": "The volunteer years of experience label shown on the volunteer details page"
+   },
+   "volunteer_qualifications": "Qualifications: {qualifications}",
+        "@volunteer_qualifications": {
+            "description": "The volunteer qualifications label shown on the volunteer details page"
+   },
+   "volunteer_possibleRoles": "Possible Roles: {possibleRoles}",
+        "@volunteer_possibleRoles": {
+            "description": "The volunteer possible roles label shown on the volunteer details page"
+   },
+   "volunteer_availability_monday": "Monday: {availability_monday}",
+   "@volunteer_availability_monday": {
+       "description": "The volunteer availability monday label shown on the volunteer details page"
+   },
+   "volunteer_availability_tuesday": "Tuesday: {availability_tuesday}",
+   "@volunteer_availability_tuesday": {
+       "description": "The volunteer availability tuesday label shown on the volunteer details page"
+   },
+   "volunteer_availability_wednesday": "Wednesday: {availability_wednesday}",
+   "@volunteer_availability_wednesday": {
+       "description": "The volunteer availability wednesday label shown on the volunteer details page"
+   },
+   "volunteer_availability_thursday": "Thursday: {availability_thursday}",
+   "@volunteer_availability_thursday": {
+       "description": "The volunteer availability thursday label shown on the volunteer details page"
+   },
+   "volunteer_availability_friday": "Friday: {availability_friday}",
+   "@volunteer_availability_friday": {
+       "description": "The volunteer availability friday label shown on the volunteer details page"
+   },
+   "volunteer_availability_saturday": "Saturday: {availability_saturday}",
+   "@volunteer_availability_saturday": {
+       "description": "The volunteer availability saturday label shown on the volunteer details page"
+   },
+   "volunteer_availability_sunday": "Sunday: {availability_sunday}",
+   "@volunteer_availability_sunday": {
+       "description": "The volunteer availability sunday label shown on the volunteer details page"
+   },
+   "unavailable": "Unavailable",
+   "@unavailable": {
+       "description": "The text to show when availability is not provided or empty"
+   }
+
+
 }

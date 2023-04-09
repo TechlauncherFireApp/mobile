@@ -1,6 +1,7 @@
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'volunteer_information.freezed.dart';
 part 'volunteer_information.g.dart';
@@ -28,13 +29,13 @@ class VolunteerInformation with _$VolunteerInformation{
 class AvailabilityField with _$AvailabilityField{
 
   const factory AvailabilityField({
-    List<List<int>>? Monday,
-    List<List<int>>? Tuesday,
-    List<List<int>>? Wednesday,
-    List<List<int>>? Thursday,
-    List<List<int>>? Friday,
-    List<List<int>>? Saturday,
-    List<List<int>>? Sunday,
+    required List<List<int>> monday,
+    required List<List<int>> tuesday,
+    required List<List<int>> wednesday,
+    required List<List<int>> thursday,
+    required List<List<int>> friday,
+    required List<List<int>> saturday,
+    required List<List<int>> sunday,
   }) = _AvailabilityField;
 
   factory AvailabilityField.fromJson(Map<String, Object?> json) => _$AvailabilityFieldFromJson(json);
