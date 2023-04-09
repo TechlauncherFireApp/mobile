@@ -44,86 +44,451 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_id(volunteerInformation.ID) ??
-                          'Volunteer ID',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      "Volunteer ID:",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_id(
+                        volunteerInformation.ID) ??
+                        'Volunteer ID',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_first_name(volunteerInformation.firstName) ??
-                          'Volunteer First Name',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      "Volunteer First Name:",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_first_name(
+                            volunteerInformation.firstName) ??
+                            'Volunteer First Name',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_last_name(volunteerInformation.lastName) ??
-                          'Volunteer Last Name',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      "Volunteer Last Name:",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_last_name(
+                            volunteerInformation.lastName) ??
+                            'Volunteer Last Name',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_email(volunteerInformation.email) ??
-                          'Volunteer Email',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      "Volunteer Email:",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_email(
+                            volunteerInformation.email) ??
+                            'Volunteer Email',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_phone(volunteerInformation.mobileNo) ??
-                          'Volunteer Phone',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      'Volunteer Phone:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_phone(
+                            volunteerInformation.mobileNo) ??
+                            'Volunteer Phone',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      AppLocalizations.of(context)?.volunteer_prefHours(volunteerInformation.prefHours) ??
-                          'Volunteer Preferred Hours',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      'Volunteer Preference Hour:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
                     ),
-                    Text(
-                      AppLocalizations.of(context)?.volunteer_expYears(volunteerInformation.expYears) ??
-                          'Volunteer Experience Years',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_prefHours(
+                            volunteerInformation.prefHours) ??
+                            'Volunteer Address',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
                     ),
-                    Text(
-                      AppLocalizations.of(context)?.volunteer_qualifications(
-                        volunteerInformation.qualifications.map((q) =>
-                          q.name
-                        ).toList().join(', ')
-                      ) ?? 'Volunteer Qualifications',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: volunteerInformation.possibleRoles
-                          .map((role) => Text(AppLocalizations.of(context)?.volunteer_possibleRoles(role) ?? role,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                           ))
-                          .toList(),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  ],
+                ),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.of(context)?.volunteer_availability_monday(volunteerInformation.availabilities.monday) ?? 'Volunteer Availabilities',
+                          'Volunteer Experience:',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium,
+                          textAlign: TextAlign.left,
                         ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_tuesday(volunteerInformation.availabilities.tuesday) ?? 'Volunteer Availabilities',
-                        ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_wednesday(volunteerInformation.availabilities.wednesday) ?? 'Volunteer Availabilities',
-                        ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_thursday(volunteerInformation.availabilities.thursday) ?? 'Volunteer Availabilities',
-                        ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_friday(volunteerInformation.availabilities.friday) ?? 'Volunteer Availabilities',
-                        ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_saturday(volunteerInformation.availabilities.saturday) ?? 'Volunteer Availabilities',
-                        ),
-                        Text(
-                          AppLocalizations.of(context)?.volunteer_availability_sunday(volunteerInformation.availabilities.sunday) ?? 'Volunteer Availabilities',
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)?.volunteer_expYears(
+                                volunteerInformation.expYears) ??
+                                'Volunteer Experience',
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyMedium,
+                            textAlign: TextAlign.right,
+                          ),
                         ),
                       ],
+                    ),
+
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Volunteer Possible Roles:',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.left,
+                      ),
+                      Expanded(
+                        child: Text(
+                          (AppLocalizations.of(context)?.volunteer_possibleRoles
+                            (volunteerInformation.possibleRoles)
+                              ?? 'Volunteer Possible Roles')
+                              .toString()
+                              .replaceAll('[', '')
+                              .replaceAll(',', '\n')
+                              .replaceAll(']', ''),
+
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Volunteer Qualifications:',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.left,
+                      ),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)?.volunteer_qualifications(
+                              volunteerInformation.qualifications.map((q) =>
+                              q.name
+                              )
+                                  .toList()
+                                  .toString()
+                                  .replaceAll('[', '')
+                                  .replaceAll(',', '\n')
+                                  .replaceAll(']', '')
+                          ) ?? 'Volunteer Qualifications',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Monday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_monday(
+                            volunteerInformation.availabilities.monday.isEmpty
+                                ? 'Unavailable'
+                                : volunteerInformation.availabilities.monday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')
+                            ??
+                            'Volunteer Availability Monday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Tuesday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_tuesday(
+                            volunteerInformation.availabilities.tuesday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.tuesday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')??
+                            'Volunteer Availability Tuesday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Wednesday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_wednesday(
+                            volunteerInformation.availabilities.wednesday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.wednesday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')??
+                            'Volunteer Availability Wednesday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Thursday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_thursday(
+                            volunteerInformation.availabilities.thursday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.thursday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')??
+                            'Volunteer Availability Thursday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Friday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_friday(
+                            volunteerInformation.availabilities.friday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.friday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')
+                            ??
+                            'Volunteer Availability Friday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Saturday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_saturday(
+                            volunteerInformation.availabilities.saturday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.saturday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')??
+                            'Volunteer Availability Saturday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Sunday:',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)?.volunteer_availability_sunday(
+                            volunteerInformation.availabilities.sunday.isEmpty ? 'Unavailable'
+                                : volunteerInformation.availabilities.sunday)
+                            .replaceFirst('[', '')
+                            .replaceFirst(']]', ']')??
+                            'Volunteer Availability Sunday',
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyMedium,
+                        textAlign: TextAlign.right,
+                      ),
                     ),
                   ],
                 ),
@@ -135,4 +500,5 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
     );
   }
 
-}
+
+    }
