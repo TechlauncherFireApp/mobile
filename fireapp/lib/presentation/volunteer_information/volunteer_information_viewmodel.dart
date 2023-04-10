@@ -31,6 +31,22 @@ class VolunteerInformationViewModel extends FireAppViewModel{
     }();
   }
 
+  String formatHours(List<List<int>> hours) {
+    return hours.map((hourRange) => '${formatHour(hourRange[0])} to ${formatHour(hourRange[1])}').join(', ');
+  }
+
+  String formatHour(int hour) {
+    if (hour == 0) {
+      return '12am';
+    } else if (hour < 12) {
+      return '$hour' + 'am';
+    } else if (hour == 12) {
+      return '12pm';
+    } else {
+      return '${hour - 12}' + 'pm';
+    }
+  }
+
   @override
   Future<void> dispose() async {
     _volunteerInformation.close();
