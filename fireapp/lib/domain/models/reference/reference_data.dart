@@ -1,6 +1,10 @@
 
 import 'package:fireapp/domain/models/base/identifiable.dart';
 
+enum ReferenceDataType {
+  qualification
+}
+
 abstract class ReferenceData extends Identifiable<int> {
 
   String get name;
