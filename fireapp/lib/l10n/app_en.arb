@@ -27,13 +27,9 @@
   "@volunteer_id": {
     "description": "The volunteer ID label shown on the volunteer details page"
   },
-  "volunteer_first_name": "First Name",
+  "volunteer_name": "Name",
   "@volunteer_name": {
     "description": "The volunteer name label shown on the volunteer details page"
-  },
-  "volunteer_last_name": "Last Name",
-  "@volunteer_last_name": {
-    "description": "The volunteer last name label shown on the volunteer details page"
   },
   "volunteer_email": "Email",
   "@volunteer_email": {

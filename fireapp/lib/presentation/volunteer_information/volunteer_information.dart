@@ -70,153 +70,110 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
             state: viewModel.volunteerInformation,
             retry: () => viewModel.getVolunteerInformation(widget.volunteerId),
             child: (_, volunteerInformation) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
+              return Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_id ?? 'ID',
+                            content: volunteerInformation.ID,
+                          )
                         ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_id ?? 'ID',
-                          content: volunteerInformation.ID,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_name ?? 'Name',
+                            content: "${volunteerInformation.firstName} ${volunteerInformation.lastName}",
+                          )
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_email ?? 'Email',
+                            content: volunteerInformation.email,
+                          )
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_first_name ?? 'First Name',
-                              content: volunteerInformation.firstName,
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_last_name ?? 'Last Name',
-                              content: volunteerInformation.lastName,
-                            ),
-                          ],
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_phone ?? 'Phone',
+                            content: volunteerInformation.mobileNo,
+                          )
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_prefHours ??
+                                'Preferred Hours',
+                            content: volunteerInformation.prefHours.toString(),
+                          )
                         ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_email ?? 'Email',
-                          content: volunteerInformation.email,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_expYears ??
+                                'Experience Years',
+                            content: volunteerInformation.expYears.toString(),
+                          )
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_qualifications ??
+                                'Qualifications',
+                            content: volunteerInformation.qualifications.map((qualification) => qualification.name)
+                                .join('\n'),
+                          )
                         ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_phone ?? 'Phone',
-                          content: volunteerInformation.mobileNo,
+                        _buildContainer(
+                          VolunteerInformationWidget(
+                            title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
+                                'Possible Roles',
+                            content: volunteerInformation.possibleRoles.map((role) => role)
+                                .join('\n'),
+                          )
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_prefHours ??
-                              'Preferred Hours',
-                          content: volunteerInformation.prefHours.toString(),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_expYears ??
-                              'Experience Years',
-                          content: volunteerInformation.expYears.toString(),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_qualifications ??
-                              'Qualifications',
-                          content: volunteerInformation.qualifications.map((qualification) => qualification.name)
-                              .join('\n'),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: VolunteerInformationWidget(
-                          title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
-                              'Possible Roles',
-                          content: volunteerInformation.possibleRoles.map((role) => role)
-                              .join('\n'),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)?.volunteer_availability ?? 'Availability',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_monday ?? 'Monday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.monday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_tuesday ?? 'Tuesday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.tuesday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_wednesday ?? 'Wednesday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.wednesday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_thursday ?? 'Thursday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.thursday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_friday ?? 'Friday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.friday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_saturday ?? 'Saturday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.saturday),
-                            ),
-                            VolunteerInformationWidget(
-                              title: AppLocalizations.of(context)?.volunteer_availability_sunday ?? 'Sunday',
-                              content: getAvailabilityMessage(context, volunteerInformation.availabilities.sunday),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    ].spacedBy(16),
+                        _buildContainer(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)?.volunteer_availability ?? 'Availability',
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.normal
+                                ),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_monday ?? 'Monday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.monday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_tuesday ?? 'Tuesday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.tuesday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_wednesday ?? 'Wednesday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.wednesday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_thursday ?? 'Thursday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.thursday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_friday ?? 'Friday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.friday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_saturday ?? 'Saturday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.saturday),
+                              ),
+                              VolunteerInformationWidget(
+                                title: AppLocalizations.of(context)?.volunteer_availability_sunday ?? 'Sunday',
+                                content: getAvailabilityMessage(context, volunteerInformation.availabilities.sunday),
+                              ),
+                            ],
+                          )
+                        )
+                      ].spacedBy(8),
+                    ),
                   ),
                 ),
               );
@@ -224,5 +181,16 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
         ),
     );
   }
+
+  Widget _buildContainer(Widget child) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: child,
+    );
+  }
+
 }
 

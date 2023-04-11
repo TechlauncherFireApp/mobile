@@ -22,15 +22,17 @@ class VolunteerInformationWidget extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title ?? '',
               style: Theme
                   .of(context)
                   .textTheme
-                  .bodyLarge,
+                  .titleMedium,
               textAlign: TextAlign.left,
             ),
+            const SizedBox(width: 24,),
             Expanded(
               child: Text(
                 content ?? '',
