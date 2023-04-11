@@ -21,4 +21,12 @@ class AuthenticationPersistence {
     return _cached;
   }
 
+  Future<void> logout() async {
+    _cached = null;
+    accessToken = null;
+    userId = null;
+    role = null;
+    userEmail = null;
+  }
+
 }

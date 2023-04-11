@@ -55,4 +55,9 @@ class AuthenticationRepository {
   Future<TokenResponse?> getCurrentSession() async {
     return _authenticationPersistence.get();
   }
+
+  Future<void> logout() async {
+    _authenticationPersistence.logout();
+  }
+
 }

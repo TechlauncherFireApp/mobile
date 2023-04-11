@@ -165,7 +165,10 @@ class _RegisterPageState
   @override
   void handleNavigationEvent(RegisterNavigation event) {
     event.when(
-      home: () { Navigator.of(context).popAndPushNamed("/nav"); }
+      home: () {
+        Navigator.of(context).popUntil((route) => true);
+        Navigator.of(context).pushNamed("/nav");
+      }
     );
   }
 
