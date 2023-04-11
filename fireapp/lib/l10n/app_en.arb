@@ -18,5 +18,26 @@
   "volunteerListSearchHint": "Search",
   "@volunteerListSearchHint": {
     "description": "The hint text shown in the volunteer list search box"
-  }
+  },
+  "formFieldEmpty": "{field} is empty",
+  "formFieldNotEmail": "{field} must be an email",
+  "formFieldOptional": "{title} (optional)",
+  "@formFieldOptional": {
+    "description": "Wraps a form field title when the form field is optional",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "loginPassword": "Password",
+  "registerTitle": "Register",
+  "registerUsername": "Email",
+  "registerPassword": "Password",
+  "registerFirstName": "First name",
+  "registerLastName": "Last name",
+  "registerPhoneNumber": "Phone number",
+  "registerGender": "Gender",
+  "registerSubmit": "Submit",
+  "registerGenderSelect": "Select your gender"
 }

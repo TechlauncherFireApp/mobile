@@ -7,9 +7,11 @@ import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/login/login_navigation.dart';
 import 'package:fireapp/presentation/login/login_view_model.dart';
+import 'package:fireapp/widgets/form/password_form_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,13 +60,14 @@ class _LoginState
 
   Widget buildRegisterText() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: <Widget>[
           const Text('----------New to FireApp?----------',
               style: TextStyle(fontSize: 16, color: Colors.black45)),
           const SizedBox(height: 16),
           MaterialButton(
+            minWidth: double.infinity,
             color: Colors.grey,
             child:
             const Text('Create an account', style: TextStyle(fontSize: 16)),
@@ -99,7 +102,7 @@ class _LoginState
 
   Widget buildTitle() {
     return const Padding(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.symmetric(vertical: 8),
         child: Text(
           'Login',
           style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
@@ -120,28 +123,17 @@ class _LoginState
   }
 
   Widget buildPasswordTextField() {
-    return TextFormField(
-      controller: viewModel.password,
-      obscureText: viewModel.obscureText,
+    return PasswordFormField(
+      password: viewModel.password,
+      label: AppLocalizations.of(context)?.loginPassword ?? "",
       validator: (v) {
         if (v!.isEmpty) {
-          return 'Password is empty!';
+          return AppLocalizations.of(context)?.formFieldEmpty(
+            AppLocalizations.of(context)?.loginPassword ?? ""
+          );
         }
         return null;
       },
-      decoration: InputDecoration(
-        labelText: 'Password',
-        suffixIcon: IconButton(
-            onPressed: () {
-              setState(() {
-                viewModel.toggleObscureText();
-              });
-            },
-            icon: viewModel.obscureText
-                ? const Icon(Icons.remove_red_eye_outlined)
-                : const Icon(Icons.remove_red_eye),
-            splashRadius: 20),
-      )
     );
   }
 
@@ -172,39 +164,27 @@ class _LoginState
             viewModel.login();
           }
         } : null;
-        return Align(
-          child: SizedBox(
-            height: 45,
-            width: 270,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  const StadiumBorder(
-                    side: BorderSide(style: BorderStyle.none)
-                  )
-                )
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
+          ),
+          onPressed: onPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                  'Sign In',
+                  style: Theme.of(context).primaryTextTheme.headline6
               ),
-              onPressed: onPressed,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                        'Sign In',
-                        style: Theme.of(context).primaryTextTheme.headline6
-                    ),
-                    if (data is LoadingRequestState) SizedBox(
-                      height: 8,
-                      width: 8,
-                      child: CircularProgressIndicator(
-                        color: (Theme.of(context).primaryTextTheme.headline6?.color ?? Colors.white)
-                      ),
-                    )
-                  ].spacedBy(8),
+              if (data is LoadingRequestState) SizedBox(
+                height: 8,
+                width: 8,
+                child: CircularProgressIndicator(
+                    color: (Theme.of(context).primaryTextTheme.headline6?.color ?? Colors.white)
                 ),
               )
-            ),
-          ),
+            ].spacedBy(8),
+          )
         );
       },
     );

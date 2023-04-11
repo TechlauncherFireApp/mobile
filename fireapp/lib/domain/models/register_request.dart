@@ -1,17 +1,9 @@
+import 'package:fireapp/domain/models/reference/gender.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'register_request.freezed.dart';
 part 'register_request.g.dart';
-
-enum Gender {
-  @JsonValue("Male")
-  male,
-  @JsonValue("Female")
-  female,
-  @JsonValue("Other")
-  other
-}
 
 @freezed
 class RegisterRequest with _$RegisterRequest {

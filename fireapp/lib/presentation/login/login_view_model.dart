@@ -37,7 +37,6 @@ class LoginViewModel
     () async {
       try {
         await _authenticationRepository.login(email.text, password.text);
-        userEmail = email.text; // Legacy :(
         _navigate.add(LoginNavigation.home());
         _state.add(RequestState.success(null));
       } catch (e, stacktrace) {

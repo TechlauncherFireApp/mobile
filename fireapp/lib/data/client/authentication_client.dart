@@ -4,6 +4,7 @@ import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/models/reference/gender.dart';
 import '../../domain/models/register_request.dart';
 
 @injectable
