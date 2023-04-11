@@ -9,11 +9,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/models/reference/qualification.dart';
 
-class volunteer_information_widget extends StatelessWidget {
+class VolunteerInformationWidget extends StatelessWidget {
   final String? title;
   final String? content;
 
-  const volunteer_information_widget({super.key, this.title, this.content});
+  const VolunteerInformationWidget({super.key, this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class volunteer_information_widget extends StatelessWidget {
               style: Theme
                   .of(context)
                   .textTheme
-                  .bodyMedium,
+                  .bodyLarge,
               textAlign: TextAlign.left,
             ),
             Expanded(
@@ -37,13 +37,12 @@ class volunteer_information_widget extends StatelessWidget {
                 style: Theme
                     .of(context)
                     .textTheme
-                    .bodyMedium,
+                    .bodyLarge,
                 textAlign: TextAlign.right,
               ),
             ),
           ],
         ),
-        SizedBox(height: 16.0),
        ],
      );
   }
