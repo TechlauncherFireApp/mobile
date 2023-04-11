@@ -1,6 +1,8 @@
+import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
+import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -17,5 +19,13 @@ abstract class RestClient {
 
   @GET("/user/getAllVolunteer")
   Future<Map<String, String>> volunteerList();
+
+  @GET("/reference/qualifications")
+  Future<List<Qualification>> getQualifications();
+
+  @GET("/volunteer")
+  Future<VolunteerInformationDto> getVolunteerInformation(
+      @Query("volunteerID") String volunteerId
+  );
 
 }
