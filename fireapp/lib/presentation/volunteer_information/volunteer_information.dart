@@ -25,6 +25,21 @@ class VolunteerInformationPage extends StatefulWidget {
 }
 
 class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
+  String formatHours(List<List<int>> hours) {
+    return hours.map((hourRange) => '${formatHour(hourRange[0])} to ${formatHour(hourRange[1])}').join(', ');
+  }
+
+  String formatHour(int hour) {
+    if (hour == 0) {
+      return '12am';
+    } else if (hour < 12) {
+      return '$hour' + 'am';
+    } else if (hour == 12) {
+      return '12pm';
+    } else {
+      return '${hour - 12}' + 'pm';
+    }
+  }
 
   @override
   VolunteerInformationViewModel viewModel = GetIt.instance.get();
@@ -52,16 +67,107 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     volunteer_information_widget(
-                      id: volunteerInformation.ID,
-                      firstName: volunteerInformation.firstName,
-                      lastName: volunteerInformation.lastName,
-                      email: volunteerInformation.email,
-                      phoneNumber: volunteerInformation.mobileNo,
-                      prefHours: volunteerInformation.prefHours,
-                      expYears: volunteerInformation.expYears,
-                      possibleRoles: volunteerInformation.possibleRoles,
-                      qualifications: volunteerInformation.qualifications,
-                      availabilities: volunteerInformation.availabilities,
+                      title: AppLocalizations.of(context)?.volunteer_id ??
+                          'ID',
+                      content: volunteerInformation.ID,
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_first_name ??
+                          'First Name',
+                      content: volunteerInformation.firstName,
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_last_name ??
+                          'Last Name',
+                      content: volunteerInformation.lastName,
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_email ??
+                          'Email',
+                      content: volunteerInformation.email,
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_phone ??
+                          'Phone',
+                      content: volunteerInformation.mobileNo,
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_prefHours ??
+                          'Preferred Hours',
+                      content: volunteerInformation.prefHours.toString(),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_expYears ??
+                          'Experience Years',
+                      content: volunteerInformation.expYears.toString(),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_qualifications ??
+                          'Qualifications',
+                      content: volunteerInformation.qualifications.map((qualification) => qualification.name)
+                                    .join('\n'),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
+                          'Possible Roles',
+                      content: volunteerInformation.possibleRoles.map((role) => role)
+                                    .join('\n'),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_monday ??
+                          'Availability Monday',
+                      content: volunteerInformation.availabilities.monday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.monday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_tuesday ??
+                          'Availability Tuesday',
+                      content: volunteerInformation.availabilities.tuesday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.tuesday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_wednesday ??
+                          'Availability Wednesday',
+                      content: volunteerInformation.availabilities.wednesday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.wednesday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_thursday ??
+                          'Availability Thursday',
+                      content: volunteerInformation.availabilities.thursday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.thursday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_friday ??
+                          'Availability Friday',
+                      content: volunteerInformation.availabilities.friday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.friday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_saturday ??
+                          'Availability Saturday',
+                      content: volunteerInformation.availabilities.saturday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.saturday),
+                    ),
+                    volunteer_information_widget(
+                      title: AppLocalizations.of(context)?.volunteer_availability_sunday ??
+                          'Availability Sunday',
+                      content: volunteerInformation.availabilities.sunday.isEmpty
+                          ? AppLocalizations.of(context)?.unavailable ??
+                              'Unavailable'
+                          : formatHours(volunteerInformation.availabilities.sunday),
                     ),
                    ],
                 ),
@@ -75,3 +181,4 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
 
 
     }
+
