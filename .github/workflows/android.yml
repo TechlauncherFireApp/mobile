@@ -39,14 +39,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: true
-          release_name: Prerelease ${{date +'%Y-%m-%d'}}.${{github.run_number}}
-          tag_name: pre/v${{date +'%Y-%m-%d'}}-${{github.run_number}}
+          release_name: Prerelease ${{ steps.date.outputs.date }}.${{github.run_number}}
+          tag_name: pre/v${{ steps.date.outputs.date }}-${{github.run_number}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
