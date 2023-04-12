@@ -24,7 +24,12 @@ jobs:
       with:
         flutter-version: '3.7.7'
     - run: flutter pub get
+      working-directory: ./fireapp
     - run: flutter pub run build_runner build
+      working-directory: ./fireapp
     - run: flutter gen-l10n
+      working-directory: ./fireapp
     - run: flutter test
+      working-directory: ./fireapp
     - run: flutter build apk
+      working-directory: ./fireapp
