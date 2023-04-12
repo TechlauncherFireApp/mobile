@@ -70,20 +70,3 @@ jobs:
           asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
           asset_name: app-debug.apk
           asset_content_type: application/vnd.android.package-archive
-  publish-pr:
-    needs: build
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: ${{github.run_number}}-apk
-          path: ./fireapp/build/app/outputs/flutter-apk/
-      - name: Pull request artifacts
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo-token: ${{ github.token }}
-          artifacts-branch: artifacts
-          artifacts: |
-            ./fireapp/build/app/outputs/flutter-apk/app-release.apk

@@ -4,10 +4,13 @@ import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 
-class MockAuthenticationClient extends Mock implements AuthenticationClient {}
-
-class MockAuthenticationPersistence extends Mock implements AuthenticationPersistence {}
+@GenerateNiceMocks([
+  MockSpec<AuthenticationClient>(),
+  MockSpec<AuthenticationPersistence>(),
+])
+import 'authentication_repository_test.mocks.dart';
 
 void main() {
   late AuthenticationRepository authenticationRepository;
