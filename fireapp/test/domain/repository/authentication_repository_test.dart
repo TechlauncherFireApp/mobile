@@ -30,7 +30,7 @@ void main() {
       const password = 'test_password';
       const tokenResponse = TokenResponse(
         accessToken: 'test_token',
-        userId: "test_user",
+        userId: 1,
         role: "role"
       );
       when(authenticationClient.login(email, password)).thenAnswer((_) async => tokenResponse);
@@ -47,7 +47,7 @@ void main() {
       // Arrange
       const tokenResponse = TokenResponse(
         accessToken: 'test_token',
-        userId: "test_user",
+        userId: 1,
         role: "role"
       );
       when(authenticationPersistence.get()).thenAnswer((_) async => tokenResponse);
