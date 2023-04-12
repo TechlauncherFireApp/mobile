@@ -1,5 +1,6 @@
 
 import 'package:fireapp/base/list_extensions.dart';
+import 'package:fireapp/base/mutex_extension.dart';
 import 'package:fireapp/domain/models/dietary_requirements.dart';
 import 'package:fireapp/domain/repository/dietary_requirements_repository.dart';
 import 'package:fireapp/domain/request_state.dart';
@@ -9,6 +10,7 @@ import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:mutex/mutex.dart';
 
 @injectable
 class DietaryRequirementsViewModel extends FireAppViewModel {
@@ -17,21 +19,16 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
 
   final BehaviorSubject<RequestState<UserDietaryRequirements>> _requirements
     = BehaviorSubject.seeded(RequestState.initial());
-  final BehaviorSubject<List<UserDietaryRestriction>> _changes = BehaviorSubject.seeded([]);
+  Stream<RequestState<UserDietaryRequirements>> get requirements
+    => _requirements;
+
+  final BehaviorSubject<RequestState<void>> _submissionState
+    = BehaviorSubject.seeded(RequestState.success(null));
+  Stream<RequestState<void>> get submissionState => _submissionState.stream;
 
   TextEditingController customRestrictions = TextEditingController();
-  Stream<RequestState<UserDietaryRequirements>> get requirements
-    => Rx.combineLatest2(_requirements.stream, _changes.stream,
-      (RequestState<UserDietaryRequirements> sot, List<UserDietaryRestriction> c) {
-        if (sot is! SuccessRequestState) return sot;
-        UserDietaryRequirements v = (sot as SuccessRequestState).result;
-        return RequestState.success(
-          v.copyWith(
-            restrictions: _mergeRequirements(v.restrictions, c)
-          )
-        );
-      }
-    );
+
+  final _changeMutex = Mutex();
 
   DietaryRequirementsViewModel(this._dietaryRequirementsRepository);
 
@@ -50,7 +47,6 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
         ).toList();
 
         customRestrictions.text = userData.customRestrictions ?? "";
-        _changes.add([]);
         _requirements.add(RequestState.success(
           UserDietaryRequirements(
             restrictions: userRestrictions
@@ -64,12 +60,20 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
   }
 
   void updateRequirement(DietaryRestriction restriction, bool checked) {
-    _changes.add(
-      _mergeRequirements(
-        _changes.value,
-        [UserDietaryRestriction(restriction: restriction, checked: checked)]
-      )
-    );
+    () async {
+      _changeMutex.withLock(
+          () async {
+            var state = _requirements.value;
+            if (state is! SuccessRequestState<UserDietaryRequirements>) return;
+            var restrictions = List<UserDietaryRestriction>.from(state.result.restrictions, growable: false);
+            var index = restrictions.indexWhere((element) => element.restriction == restriction);
+            restrictions[index] = UserDietaryRestriction(restriction: restriction, checked: checked);
+            _requirements.add(RequestState.success(state.result.copyWith(
+              restrictions: restrictions
+            )));
+          }
+      );
+    }();
   }
 
   void updateCustomRestriction(String? value) {
@@ -80,35 +84,30 @@ class DietaryRequirementsViewModel extends FireAppViewModel {
     final state = _requirements.value;
     if (state is! SuccessRequestState) return;
 
-    var changedRestrictions = _mergeRequirements((state as SuccessRequestState).result, _changes.value);
+    () async {
+      _submissionState.add(RequestState.loading());
 
-    _dietaryRequirementsRepository.updateDietaryRequirements(
-      DietaryRequirements(
-        restrictions: changedRestrictions.where((e) => e.checked).map((e) => e.restriction).toList(),
-        customRestrictions: customRestrictions.text
-      )
-    );
-  }
-
-  List<UserDietaryRestriction> _mergeRequirements(
-    List<UserDietaryRestriction> original,
-    List<UserDietaryRestriction> novel
-  ) {
-    var c = original.map(
-      (e) {
-        var n = novel.firstOrNull((element) => element.restriction == e.restriction);
-        if (n != null) novel.remove(n);
-        return n ?? e;
+      try {
+        await _dietaryRequirementsRepository.updateDietaryRequirements(
+            DietaryRequirements(
+                restrictions: (state as SuccessRequestState<UserDietaryRequirements>)
+                    .result
+                    .restrictions
+                    .where((e) => e.checked).map((e) => e.restriction).toList(),
+                customRestrictions: customRestrictions.text
+            )
+        );
+        _submissionState.add(RequestState.success(null));
+      } catch(e) {
+        logger.e("$e");
+        _submissionState.add(RequestState.exception(e));
       }
-    ).toList();
-    c.addAll(novel);
-    return c;
+    }();
   }
 
   @override
   Future<void> dispose() async {
     _requirements.close();
-    _changes.close();
   }
 
 }

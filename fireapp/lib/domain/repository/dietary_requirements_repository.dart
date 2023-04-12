@@ -6,7 +6,10 @@ import 'package:injectable/injectable.dart';
 class DietaryRequirementsRepository {
 
   final _options = [
-    const DietaryRestriction(key: "peanut", displayName: "Peanuts")
+    const DietaryRestriction(key: "peanut", displayName: "Peanuts"),
+    const DietaryRestriction(key: "fish", displayName: "Fish"),
+    const DietaryRestriction(key: "vegetarian", displayName: "Vegetarian"),
+    const DietaryRestriction(key: "vegan", displayName: "Vegan"),
   ];
 
   Future<List<DietaryRestriction>> getOptions() async {
@@ -15,7 +18,7 @@ class DietaryRequirementsRepository {
 
   Future<DietaryRequirements> getDietaryRequirements() async {
     return DietaryRequirements(
-      restrictions: _options,
+      restrictions: _options.sublist(2),
       customRestrictions: null
     );
   }

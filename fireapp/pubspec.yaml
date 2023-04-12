@@ -55,6 +55,7 @@ dependencies:
   floor: ^1.4.1
   json_serializable: '>4.8.0'
   sqflite: ^2.2.6
+  mutex: ^3.0.1
 
 dev_dependencies:
   flutter_test:
