@@ -31,22 +31,43 @@ jobs:
       working-directory: ./fireapp
     - run: flutter build apk
       working-directory: ./fireapp
-    - name: release
-      uses: actions/create-release@v1
-      id: create_release
-      with:
-        draft: false
-        prerelease: true
-        release_name: Prerelease $(date +'%Y-%m-%d').${{github.run_number}}
-        tag_name: pre/v$(date +'%Y-%m-%d')-${{github.run_number}}
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-    - name: upload artifact
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
-        asset_name: app-debug.apk
-        asset_content_type: application/vnd.android.package-archive
+      
+      
+  publish:
+    needs: build
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: true
+          release_name: Prerelease ${{date +'%Y-%m-%d'}}.${{github.run_number}}
+          tag_name: pre/v${{date +'%Y-%m-%d'}}-${{github.run_number}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-debug.apk
+          asset_content_type: application/vnd.android.package-archive
+  publish-pr:
+    needs: build
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull request artifacts
+        uses: gavv/pull-request-artifacts@v1.0.0
+        with:
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ github.token }}
+          artifacts-branch: artifacts
+          artifacts: |
+            ./fireapp/build/app/outputs/flutter-apk/app-release.apk
