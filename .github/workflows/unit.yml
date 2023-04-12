@@ -34,13 +34,9 @@ jobs:
     - uses: actions-ecosystem/action-add-labels@v1
       with:
         labels: unit tests passing
-  failure:
-    needs: test
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          labels: unit tests passing
+    - uses: actions-ecosystem/action-remove-labels@v1
+      if: ${{ failure() }}
+      with:
+        labels: unit tests passing    
+    
       
