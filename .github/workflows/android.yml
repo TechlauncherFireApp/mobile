@@ -39,10 +39,9 @@ jobs:
       id: create_release
       with:
         draft: false
-        prerelease: false
+        prerelease: true
         release_name: ${{ steps.version.outputs.version }}
         tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: upload windows artifact
@@ -51,5 +50,5 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/app/outputs/apk/debug/app-debug.apk
+        asset_path: ./fireapp/build/app/outputs/apk/debug/app-debug.apk
         asset_content_type: application/vnd.android.package-archive
