@@ -8,8 +8,18 @@ class DietaryRequirementsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const BasicWrapper(
-      page: DietaryRequirementsWidget()
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Dietary Requirements",
+          style: Theme.of(context).primaryTextTheme.headline6,
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      body: const Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: DietaryRequirementsWidget(),
+      ),
     );
   }
 
