@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "release" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "release" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -59,49 +59,6 @@ jobs:
           prerelease: true
           release_name: Prerelease ${{ steps.date.outputs.date }}.${{github.run_number}}
           tag_name: pre/v${{ steps.date.outputs.date }}-${{github.run_number}}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
-          asset_name: app-debug.apk
-          asset_content_type: application/vnd.android.package-archive
-  publish-release:
-    needs: build
-    if: ${{ github.ref == 'refs/heads/release' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - uses: actions/download-artifact@master
-        with:
-          name: ${{github.run_number}}-apk
-          path: ./fireapp/build/app/outputs/flutter-apk/
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.6
-        with:
-          versionSpec: '5.x'
-      - name: Use GitVersion
-        id: gitversion # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v0.9.6
-        with:
-          useConfigFile: true
-          showConfig: true
-          configFilePath: ./GitVersion.yml
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: Release ${{ steps.gitversion.outputs.semVer }}
-          tag_name: v${{ steps.gitversion.outputs.semVer }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
