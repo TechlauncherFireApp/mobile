@@ -31,6 +31,13 @@ jobs:
       working-directory: ./fireapp
     - run: flutter build apk
       working-directory: ./fireapp
+    - name: Cache apk
+      id: cache-apk
+      uses: actions/cache@v3
+      with:
+        path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+        key: ${{ runner.os }}-apk
+
       
       
   publish:
@@ -42,6 +49,13 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Restore cached Primes
+        id: cache-apk-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          key: ${{ runner.os }}-apk
       - name: release
         uses: actions/create-release@v1
         id: create_release
@@ -66,6 +80,13 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Restore cached Primes
+        id: cache-apk-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          key: ${{ runner.os }}-apk
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
