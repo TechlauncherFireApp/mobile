@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
 import 'package:fireapp/global/di.dart';
+import 'package:fireapp/presentation/volunteer_information/volunteer_information.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,8 @@ class _MyAppState extends State<MyApp> {
             page: RegisterPage()), //See Authentication/register.dart
         '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
         '/volunteer_list': (context) => const VolunteerList(),
-        '/dietary_requirements/update': (context) => const DietaryRequirementsPage()
+        '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
+
 
       },
     );
