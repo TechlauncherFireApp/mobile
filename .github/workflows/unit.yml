@@ -36,6 +36,7 @@ jobs:
     - run: flutter test
       working-directory: ./fireapp
     - uses: actions-ecosystem/action-add-labels@v1
+      if: ${{github.event_name == 'pull_request'}}
       with:
         labels: unit tests passing  
     
