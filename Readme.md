@@ -1,4 +1,8 @@
-# SETUP
+# FireApp Flutter
+[![Unit test](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml)
+[![Android CI](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml)
+
+## SETUP
 
 You have two options for setting up the development environment; you can set it up in a container or do a local install.
 
@@ -8,7 +12,7 @@ Local - This is the standard method of installation, this project has no depende
 
 Note: Either way you will have to install an emulator on your machine. 
 
-## CONTAINER INSTALL
+### CONTAINER INSTALL
 1. Install Docker Desktop
     * Instructions: https://docs.docker.com/get-docker/
     * Docker is free but you may need to register an account to download the software
@@ -74,13 +78,13 @@ Connect a physcial Android Device:
 
 Steps to setup WiFi/USB sync with Android Devicehttps://blog.codemagic.io/how-to-dockerize-flutter-apps/
 
-### Troubleshooting
+#### Troubleshooting
 For Docker to work & for the Android emulator to work, Virtualisation MUST BE ENABLED. 
 * https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-11-pcs-c5578302-6e43-4b4b-a449-8ced115f58e1 
 * Needs to be enabled in your bios
 * If Docker works but the Android emulator gives the error "Hyper-V must be disabled" - do not disable Hyper-V instead on the windows search bar search for "Windows features" or 'Turn windows features on or off" and ensure that Virtual Machine Platform & Windows Hypervisor Platform are turned on. 
 
-## Local Install 
+### Local Install 
 > To emulate iOS you will have to install Flutter locally on a MacOS Machine. 
 > ARM-based Macs (models released 2021 and after) at this point in time (2022) can't emulate android
 
