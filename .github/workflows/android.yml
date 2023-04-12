@@ -40,7 +40,7 @@ jobs:
       
   publish-pre:
     needs: build
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -83,14 +83,25 @@ jobs:
         with:
           name: ${{github.run_number}}-apk
           path: ./fireapp/build/app/outputs/flutter-apk/
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.6
+        with:
+          versionSpec: '5.x'
+      - name: Use GitVersion
+        id: gitversion # step id used as reference for output values
+        uses: gittools/actions/gitversion/execute@v0.9.6
+        with:
+          useConfigFile: true
+          showConfig: true
+          configFilePath: ./GitVersion.yml
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
-          prerelease: true
-          release_name: Release ${{ steps.date.outputs.date }}.${{github.run_number}}
-          tag_name: v${{ steps.date.outputs.date }}-${{github.run_number}}
+          prerelease: false
+          release_name: Release ${{ steps.gitversion.outputs.semVer }}
+          tag_name: v${{ steps.gitversion.outputs.semVer }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
