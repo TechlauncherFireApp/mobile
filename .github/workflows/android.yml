@@ -38,7 +38,7 @@ jobs:
         draft: false
         prerelease: true
         release_name: Prerelease $(date +'%Y-%m-%d').${{github.run_number}}
-        tag_name: pre/v$(date +'%Y-%m-%d').${{github.run_number}}
+        tag_name: pre/v$(date +'%Y-%m-%d')-${{github.run_number}}
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: upload artifact
