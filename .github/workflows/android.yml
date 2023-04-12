@@ -33,7 +33,7 @@ jobs:
       working-directory: ./fireapp
     - uses: actions/upload-artifact@master
       with:
-        name: ${{github.run_number}}.apk
+        name: ${{github.run_number}}-apk
         path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
 
       
@@ -49,8 +49,8 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: actions/download-artifact@master
         with:
-          name: ${{github.run_number}}.apk
-          path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          name: ${{github.run_number}}-apk
+          path: ./fireapp/build/app/outputs/flutter-apk/
       - name: release
         uses: actions/create-release@v1
         id: create_release
@@ -77,8 +77,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@master
         with:
-          name: ${{github.run_number}}.apk
-          path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          name: ${{github.run_number}}-apk
+          path: ./fireapp/build/app/outputs/flutter-apk/
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
