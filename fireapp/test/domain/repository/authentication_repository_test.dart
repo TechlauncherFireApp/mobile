@@ -10,7 +10,7 @@ import 'package:mockito/annotations.dart';
   MockSpec<AuthenticationClient>(),
   MockSpec<AuthenticationPersistence>(),
 ])
-import 'authentication_repository.mocks.dart';
+import 'authentication_repository_test.mocks.dart';
 
 void main() {
   late AuthenticationRepository authenticationRepository;
