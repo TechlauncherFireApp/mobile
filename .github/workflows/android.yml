@@ -1,0 +1,72 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.7'
+    - run: flutter pub get
+      working-directory: ./fireapp
+    - run: flutter pub run build_runner build
+      working-directory: ./fireapp
+    - run: flutter gen-l10n
+      working-directory: ./fireapp
+    - run: flutter build apk
+      working-directory: ./fireapp
+    - uses: actions/upload-artifact@master
+      with:
+        name: ${{github.run_number}}-apk
+        path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+
+      
+      
+  publish:
+    needs: build
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: actions/download-artifact@master
+        with:
+          name: ${{github.run_number}}-apk
+          path: ./fireapp/build/app/outputs/flutter-apk/
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: true
+          release_name: Prerelease ${{ steps.date.outputs.date }}.${{github.run_number}}
+          tag_name: pre/v${{ steps.date.outputs.date }}-${{github.run_number}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-debug.apk
+          asset_content_type: application/vnd.android.package-archive
