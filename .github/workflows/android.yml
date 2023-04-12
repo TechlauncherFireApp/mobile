@@ -31,20 +31,17 @@ jobs:
       working-directory: ./fireapp
     - run: flutter build apk
       working-directory: ./fireapp
-    - name: version
-      run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
-      id: version
     - name: release
       uses: actions/create-release@v1
       id: create_release
       with:
         draft: false
         prerelease: true
-        release_name: ${{ steps.version.outputs.version }}
+        release_name: DEVELOP-${{github.run_number}}
         tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: upload windows artifact
+    - name: upload artifact
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
