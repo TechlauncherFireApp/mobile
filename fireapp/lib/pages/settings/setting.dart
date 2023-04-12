@@ -96,10 +96,9 @@ class _SettingsState extends State<SettingBox> {
                 leading: const Icon(Icons.local_dining),
                 title: const Text('Dietary Requirements'),
                 onPressed: (_) async {
-                  await Navigator.push(
+                  await Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const DietaryPage()),
+                    '/dietary_requirements/update',
                   );
                 }),
             SettingsTile.navigation(

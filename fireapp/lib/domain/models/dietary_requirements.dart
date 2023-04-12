@@ -9,6 +9,7 @@ class DietaryRequirements with _$DietaryRequirements {
 
   const factory DietaryRequirements({
     required List<DietaryRestriction> restrictions,
+    @JsonKey(name: "custom_restrictions")
     required String? customRestrictions
   }) = _DietaryRequirements;
 
@@ -21,6 +22,7 @@ class DietaryRestriction with _$DietaryRestriction {
 
   const factory DietaryRestriction({
     required String key,
+    @JsonKey(name: "display_name")
     required String displayName
   }) = _DietaryRestriction;
 
