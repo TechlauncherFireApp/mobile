@@ -100,5 +100,27 @@ void main() {
       verify(volunteerInformationRepository.getVolunteerInformation("1"))
           .called(1);
     });
+
+    test('exception during get information of a volunteer', () {
+      final exception = Exception();
+
+      // Arrange
+      when(volunteerInformationRepository.getVolunteerInformation("1"))
+          .thenThrow(exception);
+
+      // Assert
+      expectLater(viewModel.volunteerInformation, emitsInOrder([
+        emits(const TypeMatcher<
+            InitialRequestState<VolunteerInformation>>()),
+        emits(const TypeMatcher<
+            LoadingRequestState<VolunteerInformation>>()),
+        emits(RequestStateHasExceptionMatcher(exception))
+      ]));
+
+      // Act
+      viewModel.getVolunteerInformation("1");
+      verify(volunteerInformationRepository.getVolunteerInformation("1"))
+          .called(1);
+    });
   });
 }

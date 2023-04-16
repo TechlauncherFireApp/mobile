@@ -27,7 +27,7 @@ class VolunteerInformationViewModel extends FireAppViewModel{
       } catch (e) {
         logger.e(e);
         _volunteerInformation.add(RequestState.exception(e));
-    }
+      }
     }();
   }
 
