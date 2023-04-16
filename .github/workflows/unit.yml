@@ -40,13 +40,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
     steps:
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.7'
     - uses: actions/download-artifact@master
       with:
         name: lcov
-        path: ./fireapp/coverage/lcov.info
+        path: ./coverage/lcov.info
     - run: flutter pub global activate remove_from_coverage
     - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
-      working-directory: ./fireapp
     - name: Setup LCOV
       uses: hrishikesh-kadam/setup-lcov@v1
     - name: Report code coverage
@@ -56,7 +64,6 @@ jobs:
         minimum-coverage: 90
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ./fireapp/
         update-comment: true
     
       
