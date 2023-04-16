@@ -36,8 +36,8 @@ class ReferenceDataRepository {
   ) async {
     var current = await _persistence.getLastUpdated(ReferenceDataType.qualification);
     if (
-    current != null &&
-        current.millisecondsSinceEpoch < (DateTime.now().millisecondsSinceEpoch + lifetime)
+        current != null &&
+        current.millisecondsSinceEpoch + lifetime > DateTime.now().millisecondsSinceEpoch
     ) {
       return (await _persistence.getReferenceData(ReferenceDataType.qualification)).map((e) => map(e)).toList();
     }

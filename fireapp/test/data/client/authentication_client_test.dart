@@ -26,7 +26,7 @@ void main() {
     final password = 'password';
     final token = 'abc123';
     final tokenResponse = TokenResponse(
-      userId: "1",
+      userId: 1,
       accessToken: token,
       role: ""
     );

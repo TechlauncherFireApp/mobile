@@ -16,7 +16,7 @@ void main() {
 
     test('set() and get() work correctly', () async {
       const tokenResponse = TokenResponse(
-        userId: "",
+        userId: 1,
         accessToken: 'test_token',
         role: ""
       );
