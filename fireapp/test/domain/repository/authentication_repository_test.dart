@@ -1,5 +1,6 @@
 import 'package:fireapp/data/client/authentication_client.dart';
 import 'package:fireapp/data/persistence/authentication_persistence.dart';
+import 'package:fireapp/domain/models/reference/gender.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,6 +42,51 @@ void main() {
       // Assert
       expect(result, tokenResponse);
       verify(authenticationPersistence.set(tokenResponse)).called(1);
+    });
+
+    test('register should return token response', () async {
+      // Arrange
+      const email = 'test@example.com';
+      const password = 'test_password';
+      const firstName = 'name';
+      const lastName = 'name';
+      const gender = Gender.other;
+      const phoneNumber = "0212321123";
+      const tokenResponse = TokenResponse(
+          accessToken: 'test_token',
+          userId: 1,
+          role: "role"
+      );
+      when(authenticationClient.register(
+        email,
+        password,
+        firstName,
+        lastName,
+        gender,
+        phoneNumber
+      )).thenAnswer((_) async => tokenResponse);
+
+      // Act
+      final result = await authenticationRepository.register(
+          email,
+          password,
+          firstName,
+          lastName,
+          gender,
+          phoneNumber
+      );
+
+      // Assert
+      expect(result, tokenResponse);
+      verify(authenticationPersistence.set(tokenResponse)).called(1);
+    });
+
+    test('logout should clear stored token', () async {
+      // Act
+      await authenticationRepository.logout();
+
+      // Assert
+      verify(authenticationPersistence.logout()).called(1);
     });
 
     test('getCurrentSession should return token response', () async {
