@@ -53,15 +53,16 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: lcov
-        path: ./coverage
+        path: ./fireapp/coverage
     - run: flutter pub global activate remove_from_coverage
     - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
+      working-directory: ./fireapp
     - name: Setup LCOV
       uses: hrishikesh-kadam/setup-lcov@v1
     - name: Report code coverage
       uses: zgosalvez/github-actions-report-lcov@v3
       with:
-        coverage-files: coverage/lcov.info
+        coverage-files: ./fireapp/coverage/lcov.info
         minimum-coverage: 90
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
