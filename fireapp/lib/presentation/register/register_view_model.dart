@@ -6,38 +6,53 @@ import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/global/di.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
-import 'package:fireapp/presentation/login/login_navigation.dart';
+import 'package:fireapp/presentation/register/register_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/models/reference/gender.dart';
+
 @injectable
-class LoginViewModel
+class RegisterViewModel
     extends FireAppViewModel
-    implements NavigationViewModel<LoginNavigation> {
+    implements NavigationViewModel<RegisterNavigation> {
 
   final AuthenticationRepository _authenticationRepository;
 
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
+  final TextEditingController firstName = TextEditingController();
+  final TextEditingController lastName = TextEditingController();
+  final TextEditingController phoneNumber = TextEditingController();
+
+  final BehaviorSubject<GenderOption?> _gender = BehaviorSubject();
+  Stream<GenderOption?> get gender => _gender.stream;
 
   final BehaviorSubject<RequestState<void>> _state = BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<void>> get state => _state.stream;
 
   bool obscureText = true;
 
-  final BehaviorSubject<LoginNavigation> _navigate = BehaviorSubject();
+  final BehaviorSubject<RegisterNavigation> _navigate = BehaviorSubject();
   @override
-  Stream<LoginNavigation> get navigate => _navigate.stream;
+  Stream<RegisterNavigation> get navigate => _navigate.stream;
 
-  LoginViewModel(this._authenticationRepository);
+  RegisterViewModel(this._authenticationRepository);
 
-  void login() {
+  void register() {
     _state.add(RequestState.loading());
     () async {
       try {
-        await _authenticationRepository.login(email.text, password.text);
-        _navigate.add(LoginNavigation.home());
+        await _authenticationRepository.register(
+          email.text,
+          password.text,
+          firstName.text,
+          lastName.text,
+          _gender.value?.gender ?? Gender.other,
+          phoneNumber.text
+        );
+        _navigate.add(const RegisterNavigation.home());
         _state.add(RequestState.success(null));
       } catch (e, stacktrace) {
         logger.e("$e $stacktrace");
@@ -47,14 +62,7 @@ class LoginViewModel
   }
 
   void toggleObscureText() => obscureText = !obscureText;
-
-  void navigateToRegister() {
-    _navigate.add(RegisterLoginNavigation());
-  }
-
-  void navigateToForgotPassword() {
-    _navigate.add(ForgotPasswordLoginNavigation());
-  }
+  void setGender(GenderOption? option) => _gender.add(option);
 
   @override
   Future<void> dispose() async {
@@ -62,6 +70,10 @@ class LoginViewModel
     _state.close();
     email.dispose();
     password.dispose();
+    firstName.dispose();
+    lastName.dispose();
+    _gender.close();
+    phoneNumber.dispose();
   }
 
 }

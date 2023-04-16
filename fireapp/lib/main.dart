@@ -2,6 +2,8 @@
 // EXTERNAL
 import 'package:fireapp/global/di.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information.dart';
+import 'package:fireapp/presentation/login/login_page.dart';
+import 'package:fireapp/presentation/register/register_page.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'layout/wrapper.dart';
 import 'layout/navigation.dart';
 import 'package:fireapp/global/theme.dart';
-import 'package:fireapp/pages/Authentication/register.dart';
-import 'package:fireapp/pages/Authentication/login.dart';
 import 'package:fireapp/pages/Authentication/reset_password/reset_email.dart';
 import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Main Function
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   runApp(const MyApp());
 }

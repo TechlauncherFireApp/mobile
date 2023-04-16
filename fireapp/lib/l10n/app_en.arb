@@ -34,61 +34,82 @@
   "volunteer_email": "Email",
   "@volunteer_email": {
     "description": "The volunteer email label shown on the volunteer details page"
-   },
-   "volunteer_phone": "Phone",
-   "@volunteer_phone": {
-     "description": "The volunteer phone label shown on the volunteer details page"
-   },
-   "volunteer_prefHours": "Preferred Hours",
-   "@volunteer_prefHours": {
-     "description": "The volunteer preferred hours label shown on the volunteer details page"
-   },
-   "volunteer_expYears": "Years of Experience",
-   "@volunteer_expYears": {
-     "description": "The volunteer years of experience label shown on the volunteer details page"
-   },
-   "volunteer_qualifications": "Qualifications",
-   "@volunteer_qualifications": {
-     "description": "The volunteer qualifications label shown on the volunteer details page"
-   },
-   "volunteer_possibleRoles": "Possible Roles",
-   "@volunteer_possibleRoles": {
-     "description": "The volunteer possible roles label shown on the volunteer details page"
-   },
-   "volunteer_availability_monday": "Monday",
-   "@volunteer_availability_monday": {
-     "description": "The volunteer availability monday label shown on the volunteer details page"
-   },
-   "volunteer_availability_tuesday": "Tuesday",
-   "@volunteer_availability_tuesday": {
-     "description": "The volunteer availability tuesday label shown on the volunteer details page"
-   },
-   "volunteer_availability_wednesday": "Wednesday",
-   "@volunteer_availability_wednesday": {
-     "description": "The volunteer availability wednesday label shown on the volunteer details page"
-   },
-   "volunteer_availability_thursday": "Thursday",
-   "@volunteer_availability_thursday": {
-     "description": "The volunteer availability thursday label shown on the volunteer details page"
-   },
-   "volunteer_availability_friday": "Friday",
-   "@volunteer_availability_friday": {
-     "description": "The volunteer availability friday label shown on the volunteer details page"
-   },
-   "volunteer_availability_saturday": "Saturday",
-   "@volunteer_availability_saturday": {
-     "description": "The volunteer availability saturday label shown on the volunteer details page"
-   },
-   "volunteer_availability_sunday": "Sunday",
-   "@volunteer_availability_sunday": {
-     "description": "The volunteer availability sunday label shown on the volunteer details page"
-   },
-   "unavailable": "Unavailable",
-   "@unavailable": {
-     "description": "The text to show when availability is not provided or empty"
-   },
-   "volunteer_availability": "Availabilities",
-   "@volunteer_availability": {
-     "description": "The volunteer availability label shown on the volunteer details page"
-   }
+  },
+  "volunteer_phone": "Phone",
+  "@volunteer_phone": {
+    "description": "The volunteer phone label shown on the volunteer details page"
+  },
+  "volunteer_prefHours": "Preferred Hours",
+  "@volunteer_prefHours": {
+    "description": "The volunteer preferred hours label shown on the volunteer details page"
+  },
+  "volunteer_expYears": "Years of Experience",
+  "@volunteer_expYears": {
+    "description": "The volunteer years of experience label shown on the volunteer details page"
+  },
+  "volunteer_qualifications": "Qualifications",
+  "@volunteer_qualifications": {
+    "description": "The volunteer qualifications label shown on the volunteer details page"
+  },
+  "volunteer_possibleRoles": "Possible Roles",
+  "@volunteer_possibleRoles": {
+    "description": "The volunteer possible roles label shown on the volunteer details page"
+  },
+  "volunteer_availability_monday": "Monday",
+  "@volunteer_availability_monday": {
+    "description": "The volunteer availability monday label shown on the volunteer details page"
+  },
+  "volunteer_availability_tuesday": "Tuesday",
+  "@volunteer_availability_tuesday": {
+    "description": "The volunteer availability tuesday label shown on the volunteer details page"
+  },
+  "volunteer_availability_wednesday": "Wednesday",
+  "@volunteer_availability_wednesday": {
+    "description": "The volunteer availability wednesday label shown on the volunteer details page"
+  },
+  "volunteer_availability_thursday": "Thursday",
+  "@volunteer_availability_thursday": {
+    "description": "The volunteer availability thursday label shown on the volunteer details page"
+  },
+  "volunteer_availability_friday": "Friday",
+  "@volunteer_availability_friday": {
+    "description": "The volunteer availability friday label shown on the volunteer details page"
+  },
+  "volunteer_availability_saturday": "Saturday",
+  "@volunteer_availability_saturday": {
+    "description": "The volunteer availability saturday label shown on the volunteer details page"
+  },
+  "volunteer_availability_sunday": "Sunday",
+  "@volunteer_availability_sunday": {
+    "description": "The volunteer availability sunday label shown on the volunteer details page"
+  },
+  "unavailable": "Unavailable",
+  "@unavailable": {
+    "description": "The text to show when availability is not provided or empty"
+  },
+  "volunteer_availability": "Availabilities",
+  "@volunteer_availability": {
+    "description": "The volunteer availability label shown on the volunteer details page"
+  },
+  "formFieldEmpty": "{field} is empty",
+  "formFieldNotEmail": "{field} must be an email",
+  "formFieldOptional": "{title} (optional)",
+  "@formFieldOptional": {
+    "description": "Wraps a form field title when the form field is optional",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "loginPassword": "Password",
+  "registerTitle": "Register",
+  "registerUsername": "Email",
+  "registerPassword": "Password",
+  "registerFirstName": "First name",
+  "registerLastName": "Last name",
+  "registerPhoneNumber": "Phone number",
+  "registerGender": "Gender",
+  "registerSubmit": "Submit",
+  "registerGenderSelect": "Select your gender"
 }

@@ -4,6 +4,9 @@ import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/models/reference/gender.dart';
+import '../../domain/models/register_request.dart';
+
 @injectable
 class AuthenticationClient {
 
@@ -18,6 +21,24 @@ class AuthenticationClient {
     return restClient.login(TokenRequest(
         email: email,
         password: password
+    ));
+  }
+
+  Future<TokenResponse> register(
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      Gender gender,
+      String? phoneNumber
+  ) async {
+    return restClient.register(RegisterRequest(
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      phoneNumber: phoneNumber
     ));
   }
 
