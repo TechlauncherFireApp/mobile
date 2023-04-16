@@ -36,8 +36,9 @@ jobs:
         name: lcov
         path: ./fireapp/coverage/lcov.info
   report:
+    needs: test
     runs-on: ubuntu-latest
-    if: ${{ github.event == 'pull_request' || github.event == 'pull_request_target' }}
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
     steps:
     - uses: actions/download-artifact@master
       with:
