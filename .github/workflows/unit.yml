@@ -64,6 +64,8 @@ jobs:
       with:
         coverage-files: ./fireapp/coverage/lcov.info
         minimum-coverage: 90
+        working-directory: ./fireapp
+        artifact-name: test-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
         update-comment: true
     
