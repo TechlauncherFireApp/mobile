@@ -27,5 +27,24 @@ void main() {
       expect(cachedToken, equals(tokenResponse));
       expect(authenticationPersistence.token, equals('test_token'));
     });
+
+    test('logout works', () async {
+      const tokenResponse = TokenResponse(
+          userId: 1,
+          accessToken: 'test_token',
+          role: ""
+      );
+      await authenticationPersistence.set(tokenResponse);
+
+      final validToken = await authenticationPersistence.get();
+
+      expect(validToken, equals(validToken));
+
+      await authenticationPersistence.logout();
+
+      final logoutToken = await authenticationPersistence.get();
+
+      expect(logoutToken, isNull);
+    });
   });
 }
