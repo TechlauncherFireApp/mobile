@@ -54,6 +54,10 @@ jobs:
       with:
         name: lcov
         path: ./fireapp/coverage
+    - run: flutter pub run build_runner build
+      working-directory: ./fireapp
+    - run: flutter gen-l10n
+      working-directory: ./fireapp
     - run: flutter pub global activate remove_from_coverage
     - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
       working-directory: ./fireapp
