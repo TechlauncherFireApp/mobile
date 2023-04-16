@@ -27,7 +27,7 @@ class InitialRequestState<T> extends RequestState<T> {
 
 /// Represents a loading request state, indicating that the request is being processed.
 class LoadingRequestState<T> extends RequestState<T> {
-  LoadingRequestState(): super._();
+  LoadingRequestState() : super._();
 }
 
 /// Represents a successful request state, containing the [result] of the request.

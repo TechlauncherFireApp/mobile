@@ -1,4 +1,5 @@
 import 'package:fireapp/domain/models/token_response.dart';
+import 'package:fireapp/global/access.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
@@ -9,10 +10,23 @@ class AuthenticationPersistence {
 
   Future<void> set(TokenResponse auth) async {
     _cached = auth;
+
+    // LEGACY
+    accessToken = auth.accessToken;
+    userId = auth.userId;
+    role = auth.role;
   }
 
   Future<TokenResponse?> get() async {
     return _cached;
+  }
+
+  Future<void> logout() async {
+    _cached = null;
+    accessToken = null;
+    userId = null;
+    role = null;
+    userEmail = null;
   }
 
 }

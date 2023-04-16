@@ -1,8 +1,10 @@
+import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';
 import 'package:fireapp/pages/settings/reset_pw_simple.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatelessWidget {
@@ -31,6 +33,11 @@ class SettingBox extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingBox> {
+
+  // Add modern concept to legacy stuff
+  final AuthenticationRepository _authenticationRepository =
+    GetIt.instance.get();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,14 +86,14 @@ class _SettingsState extends State<SettingBox> {
                   );
                 }),
             SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                title: const Text('Sign Out'),
-                onPressed: (_) {
-                  userId = 0;
-                  Navigator.pop(
-                    context,
-                  );
-                }),
+              leading: const Icon(Icons.logout),
+              title: const Text('Sign Out'),
+              onPressed: (_) {
+                _authenticationRepository.logout();
+                Navigator.popUntil(context, (route) => true);
+                Navigator.pushNamed(context, "/login");
+              }
+            ),
           ],
         ),
         SettingsSection(
