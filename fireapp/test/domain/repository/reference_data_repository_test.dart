@@ -8,7 +8,7 @@ import 'package:mockito/annotations.dart';
 @GenerateNiceMocks([
   MockSpec<ReferenceDataClient>()
 ])
-import 'reference_data_client_test.mocks.dart';
+import 'reference_data_repository_test.mocks.dart';
 
 void main() {
   group('ReferenceDataRepository', () {
