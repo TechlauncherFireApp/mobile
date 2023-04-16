@@ -48,6 +48,7 @@ app.*.map.json
 *.freezed.dart
 *.mocks.dart
 fireapp/lib/global/di.config.dart
+/fireapp/coverage
 
 *.cc
 
