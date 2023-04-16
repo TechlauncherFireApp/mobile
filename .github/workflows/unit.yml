@@ -31,6 +31,18 @@ jobs:
       working-directory: ./fireapp
     - run: flutter test --coverage
       working-directory: ./fireapp
+    - uses: actions/upload-artifact@master
+      with:
+        name: lcov
+        path: ./fireapp/coverage/lcov.info
+  report:
+    runs-on: ubuntu-latest
+    if: ${{ github.event == 'pull_request' || github.event == 'pull_request_target' }}
+    steps:
+    - uses: actions/download-artifact@master
+      with:
+        name: lcov
+        path: ./fireapp/coverage/lcov.info
     - run: flutter pub global activate remove_from_coverage
     - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
       working-directory: ./fireapp
