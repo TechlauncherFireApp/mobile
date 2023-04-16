@@ -70,75 +70,74 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
             state: viewModel.volunteerInformation,
             retry: () => viewModel.getVolunteerInformation(widget.volunteerId),
             child: (_, volunteerInformation) {
-              return Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildContainer(
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_id ?? 'ID',
                             content: volunteerInformation.ID,
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_name ?? 'Name',
                             content: "${volunteerInformation.firstName} ${volunteerInformation.lastName}",
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_email ?? 'Email',
                             content: volunteerInformation.email,
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_phone ?? 'Phone',
                             content: volunteerInformation.mobileNo,
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_prefHours ??
                                 'Preferred Hours',
                             content: volunteerInformation.prefHours.toString(),
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_expYears ??
                                 'Experience Years',
                             content: volunteerInformation.expYears.toString(),
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_qualifications ??
                                 'Qualifications',
                             content: volunteerInformation.qualifications.map((qualification) => qualification.name)
                                 .join('\n'),
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
                                 'Possible Roles',
                             content: volunteerInformation.possibleRoles.map((role) => role)
                                 .join('\n'),
                           )
-                        ),
-                        _buildContainer(
+                      ),
+                      _buildContainer(
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 AppLocalizations.of(context)?.volunteer_availability ?? 'Availability',
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.normal
+                                    fontWeight: FontWeight.normal
                                 ),
                               ),
                               VolunteerInformationWidget(
@@ -171,9 +170,8 @@ class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
                               ),
                             ],
                           )
-                        )
-                      ].spacedBy(8),
-                    ),
+                      )
+                    ].spacedBy(8),
                   ),
                 ),
               );

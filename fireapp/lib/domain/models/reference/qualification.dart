@@ -6,7 +6,9 @@ part 'qualification.freezed.dart';
 part 'qualification.g.dart';
 
 @freezed
-class Qualification with _$Qualification {
+class Qualification
+    with _$Qualification
+    implements ReferenceData {
 
   @Implements<ReferenceData>()
   const factory Qualification({
