@@ -53,7 +53,7 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: lcov
-        path: ./coverage/lcov.info
+        path: ./coverage
     - run: flutter pub global activate remove_from_coverage
     - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
     - name: Setup LCOV
