@@ -35,6 +35,11 @@ jobs:
       with:
         name: lcov
         path: ./fireapp/coverage/lcov.info
+    - uses: actions/upload-artifact@master
+      if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
+      with:
+        name: build
+        path: ./fireapp
   report:
     needs: test
     runs-on: ubuntu-latest
@@ -52,8 +57,8 @@ jobs:
         flutter-version: '3.7.7'
     - uses: actions/download-artifact@master
       with:
-        name: lcov
-        path: ./fireapp/coverage
+        name: build
+        path: ./fireapp
     - run: flutter pub get
       working-directory: ./fireapp
     - run: flutter pub run build_runner build
@@ -63,7 +68,7 @@ jobs:
     - run: flutter gen-l10n
       working-directory: ./fireapp
     - run: flutter pub global activate remove_from_coverage
-    - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$"
+    - run: flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r "\.g\.dart$" -r "\.freezed\.dart$" -r "\.config\.dart$" -r "di\.dart$" -r "test"
       working-directory: ./fireapp
     - name: Setup LCOV
       uses: hrishikesh-kadam/setup-lcov@v1
