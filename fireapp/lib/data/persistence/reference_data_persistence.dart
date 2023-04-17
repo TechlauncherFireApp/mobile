@@ -14,6 +14,7 @@ class ReferenceDataPersistence {
   late ReferenceDataDbMetadataDao _dataDbMetadataDao;
   late Future<void> isSetup;
 
+  // coverage:ignore-start
   // This should be done through DI (hence .di), but asynchronous constructors are wack
   @factoryMethod
   ReferenceDataPersistence() {
@@ -22,6 +23,8 @@ class ReferenceDataPersistence {
       _dataDbMetadataDao = await GetIt.instance.getAsync();
     }();
   }
+  // coverage:ignore-end
+
   ReferenceDataPersistence.di(this._dataDbDao, this._dataDbMetadataDao) {
     isSetup = Future.value(null);
   }
