@@ -93,5 +93,9 @@ void main() {
       // Assert
       expect(afterToggleObscureText, !initialObscureText);
     });
+
+    test('dispose throws nothing', () {
+      viewModel.dispose();
+    });
   });
 }
