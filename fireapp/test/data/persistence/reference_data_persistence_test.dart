@@ -21,7 +21,7 @@ void main() {
   setUp(() {
     dataDbDao = MockReferenceDataDbDao();
     dataDbMetadataDao = MockReferenceDataDbMetadataDao();
-    persistence = ReferenceDataPersistence(dataDbDao, dataDbMetadataDao);
+    persistence = ReferenceDataPersistence.di(dataDbDao, dataDbMetadataDao);
   });
 
   group('ReferenceDataPersistence', () {

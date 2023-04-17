@@ -26,7 +26,9 @@ class VolunteerInformationPage extends StatefulWidget {
   State createState() => _VolunteerInformationState();
 }
 
-class _VolunteerInformationState extends FireAppState<VolunteerInformationPage>{
+class _VolunteerInformationState
+    extends FireAppState<VolunteerInformationPage>
+    implements ViewModelHolder<VolunteerInformationViewModel> {
   String getAvailabilityMessage(BuildContext context, List<List<int>> availability) {
     if (availability.isEmpty) {
       return AppLocalizations.of(context)?.unavailable ?? 'Unavailable';

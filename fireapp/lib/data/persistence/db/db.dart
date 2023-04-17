@@ -23,12 +23,12 @@ abstract class DBDependencyInjection {
   }
 
   @singleton
-  ReferenceDataDbDao createReferenceDataDbDao(AppDatabase db) {
+  Future<ReferenceDataDbDao> createReferenceDataDbDao(AppDatabase db) async {
     return db.referenceDataDbDao;
   }
 
   @singleton
-  ReferenceDataDbMetadataDao createReferenceDataDbMetadataDao(AppDatabase db) {
+  Future<ReferenceDataDbMetadataDao> createReferenceDataDbMetadataDao(AppDatabase db) async {
     return db.referenceDataDbMetadataDao;
   }
 
