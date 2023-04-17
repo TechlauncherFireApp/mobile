@@ -107,11 +107,6 @@ void main() {
           restrictions: restrictions,
           customRestrictions: custom
       );
-      final userData = UserDietaryRequirements(
-        restrictions: options.map((e) =>
-            UserDietaryRestriction(restriction: e, checked: restrictions.contains(e))
-        ).toList(),
-      );
 
       when(repository.getOptions()).thenAnswer((_) async => options);
       when(repository.getDietaryRequirements()).thenAnswer((_) async => dietaryRequirements);
@@ -123,9 +118,42 @@ void main() {
 
       // Act
       viewModel.load();
-      viewModel.updateCustomRestriction("Test");
-      viewModel.updateRequirement(restrictions[0], false);
-      viewModel.submit();
+      viewModel.submissionState.firstWhere((element) => element is SuccessRequestState).then((value) {
+        viewModel.updateCustomRestriction("Test");
+        viewModel.updateRequirement(restrictions[0], false);
+        viewModel.submit();
+      });
+    });
+
+    test('should emit exception when updating a restriction fails', () async {
+      const custom = "No peanuts";
+      final restrictions = [
+        options[0],
+        options[1],
+      ];
+      final dietaryRequirements = DietaryRequirements(
+          restrictions: restrictions,
+          customRestrictions: custom
+      );
+
+      when(repository.getOptions()).thenAnswer((_) async => options);
+      when(repository.getDietaryRequirements()).thenAnswer((_) async => dietaryRequirements);
+      when(repository.updateDietaryRequirements(any)).thenThrow(Exception());
+
+      // Assert
+      expectLater(viewModel.submissionState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<LoadingRequestState<void>>()),
+        emits(const TypeMatcher<ExceptionRequestState<void>>())
+      ]));
+
+      // Act
+      viewModel.load();
+      viewModel.submissionState.firstWhere((element) => element is SuccessRequestState).then((value) {
+        viewModel.updateCustomRestriction("Test");
+        viewModel.updateRequirement(restrictions[0], false);
+        viewModel.submit();
+      });
     });
   });
 }
