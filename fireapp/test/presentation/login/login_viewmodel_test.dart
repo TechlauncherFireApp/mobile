@@ -94,6 +94,26 @@ void main() {
       expect(afterToggleObscureText, !initialObscureText);
     });
 
+    test('navigateToRegister should emit register navigation event', () {
+      // Assert
+      expectLater(viewModel.navigate, emitsInOrder([
+        emits(const TypeMatcher<RegisterLoginNavigation>()),
+      ]));
+
+      // Act
+      viewModel.navigateToRegister();
+    });
+
+    test('navigateToForgotPassword should emit register navigation event', () {
+      // Assert
+      expectLater(viewModel.navigate, emitsInOrder([
+        emits(const TypeMatcher<ForgotPasswordLoginNavigation>()),
+      ]));
+
+      // Act
+      viewModel.navigateToForgotPassword();
+    });
+
     test('dispose throws nothing', () {
       viewModel.dispose();
     });
