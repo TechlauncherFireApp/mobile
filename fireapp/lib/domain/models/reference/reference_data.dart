@@ -2,7 +2,7 @@
 import 'package:fireapp/domain/models/base/identifiable.dart';
 
 enum ReferenceDataType {
-  qualification
+  qualification, role
 }
 
 abstract class ReferenceData extends Identifiable<int> {

@@ -57,8 +57,6 @@ class _MyAppState extends State<MyApp> {
         '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
-
-
       },
     );
   }

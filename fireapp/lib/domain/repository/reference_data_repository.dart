@@ -2,6 +2,7 @@ import 'package:fireapp/data/client/reference_data_client.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/reference_data.dart';
 import 'package:fireapp/domain/models/reference/reference_data_db.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../data/persistence/reference_data_persistence.dart';
@@ -26,6 +27,20 @@ class ReferenceDataRepository {
           created: DateTime.fromMillisecondsSinceEpoch(e.created)
       ),
       () => _client.getQualifications()
+    );
+  }
+
+  Future<List<VolunteerRole>> getRoles() async {
+    return _fetch<VolunteerRole>(
+        ReferenceDataType.role,
+        (e) => VolunteerRole(
+          id: e.id,
+          name: e.name,
+          updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
+          created: DateTime.fromMillisecondsSinceEpoch(e.created),
+          code: e.code!
+      ),
+      () => _client.getRoles()
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:fireapp/domain/models/reference/qualification.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
@@ -27,9 +28,16 @@ abstract class RestClient {
   @GET("/reference/qualifications")
   Future<List<Qualification>> getQualifications();
 
+  @GET("/reference/roles")
+  Future<List<VolunteerRole>> getRoles();
+
   @GET("/volunteer")
   Future<VolunteerInformationDto> getVolunteerInformation(
       @Query("volunteerID") String volunteerId
   );
-
+  @POST("/user-role")
+  Future<void> updateVolunteerRoles(
+      @Query("volunteerID") String volunteerId,
+      @Body() List<String> roles
+  );
 }
