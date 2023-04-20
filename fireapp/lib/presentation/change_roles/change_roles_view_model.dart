@@ -17,9 +17,9 @@ class ChangeRolesViewModel extends FireAppViewModel {
   late String _volunteerId;
   late List<String> _roles;
 
-  final BehaviorSubject<RequestState<List<String>>> _roles
+  final BehaviorSubject<RequestState<List<UserRole>>> _userRoles
     = BehaviorSubject.seeded(RequestState.initial());
-  Stream<RequestState<List<String>>> get roles => _roles;
+  Stream<RequestState<List<UserRole>>> get userRoles => _userRoles;
 
   final BehaviorSubject<RequestState<void>> _submissionState
     = BehaviorSubject.seeded(RequestState.success(null));
@@ -30,47 +30,54 @@ class ChangeRolesViewModel extends FireAppViewModel {
   ChangeRolesViewModel(this._referenceDataRepository);
 
   void load() {
-    _roles.add(RequestState.loading());
+    _userRoles.add(RequestState.loading());
     () async {
       try {
         final options = await _referenceDataRepository.getRoles();
-        final userData = await _;
 
         final userRoles = options.map((o) =>
-            UserRole(restriction: o, checked: checked)
+            UserRole(
+                role: o,
+                checked: _roles.has((p0) => p0 == o.id)
+            )
         ).toList();
 
-        customRestrictions.text = userData.customRestrictions ?? "";
-        _roles.add(RequestState.success(
-            UserDietaryRequirements(
-                restrictions: userRestrictions
-            )
-        ));
       } catch (e) {
         logger.e(e);
-        _roles.add(RequestState.exception(e));
+        _userRoles.add(RequestState.exception(e));
       }
     }();
   }
 
   void init(String volunteerId, List<String> roles){
+    _volunteerId = volunteerId;
+    _roles = roles;
+    load();
+  }
 
+  void updateRole(UserRole role) async {
+    await _changeMutex.protect(() async {
+      final state = _userRoles.value;
+      if (state is! SuccessRequestState) return;
+
+      final roles = (state as SuccessRequestState<List<UserRole>>).result;
+      final index = roles.indexOf(role);
+      roles[index] = role.copyWith(checked: !role.checked);
+      _userRoles.add(RequestState.success(roles));
+    });
   }
 
   void submit() {
-    _changeMutex.protect(() async {
-      _submissionState.add(RequestState.loading());
-      try {
-        await Future.delayed(Duration(seconds: 1));
-        _submissionState.add(RequestState.success(null));
-      } catch (e) {
-        logger.e(e);
-        _submissionState.add(RequestState.exception(e));
-      }
-    });
+    final state = _userRoles.value;
+    if (state is! SuccessRequestState) return;
+
+    final roles = (state as SuccessRequestState<List<UserRole>>).result;
+    final checkedRoles = roles.where((r) => r.checked).map((r) => r.role.id).toList();
+    _referenceDataRepository.updateRoles(_volunteerId, checkedRoles);
   }
+
   @override
   Future<void> dispose() async {
-    _roles.close();
+    _userRoles.close();
   }
 }

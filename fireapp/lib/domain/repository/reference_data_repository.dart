@@ -44,6 +44,10 @@ class ReferenceDataRepository {
     );
   }
 
+  void updateRoles(String volunteerId, List<String> roles) async{
+    return _client.updateRoles(volunteerId, roles);
+  }
+
   Future<List<T>> _fetch<T extends ReferenceData>(
     ReferenceDataType type,
     T Function(ReferenceDataDb) map,
@@ -72,5 +76,6 @@ class ReferenceDataRepository {
 
     return data;
   }
+
 
 }

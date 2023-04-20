@@ -17,8 +17,8 @@ class UserRoles with _$UserRoles {
 class UserRole with _$UserRole {
 
   const factory UserRole({
-    required UserRole restriction,
-    required bool checked
+    required VolunteerRole role,
+    required bool checked,
   }) = _UserRole;
 
 }
