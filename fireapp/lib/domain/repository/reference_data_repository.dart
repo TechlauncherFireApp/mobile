@@ -44,7 +44,7 @@ class ReferenceDataRepository {
     );
   }
 
-  void updateRoles(String volunteerId, List<String> roles) async{
+  Future<void> updateRoles(String volunteerId, List<String> roles) async{
     return _client.updateRoles(volunteerId, roles);
   }
 

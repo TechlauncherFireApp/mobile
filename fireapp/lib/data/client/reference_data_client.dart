@@ -17,4 +17,8 @@ class ReferenceDataClient {
   Future<List<VolunteerRole>> getRoles() {
     return restClient.getRoles();
   }
+
+  Future<void> updateRoles(String volunteerId, List<String> roles) {
+    return restClient.updateVolunteerRoles(volunteerId, roles);
+  }
 }
