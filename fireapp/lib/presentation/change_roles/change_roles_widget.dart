@@ -12,8 +12,8 @@ import 'change_roles_view_model.dart';
 
 class ChangeRolesWidget extends StatefulWidget {
   final String volunteerId;
-
-  const ChangeRolesWidget({super.key, required this.volunteerId});
+  final List<String> roles;
+  const ChangeRolesWidget({super.key, required this.volunteerId, required this.roles});
 
   @override
   State createState() => _ChangeRolesWidgetState();
@@ -29,7 +29,13 @@ class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>
   @override
   void initState() {
     super.initState();
-    viewModel.init(widget., roles);
+    viewModel.init(widget.volunteerId, widget.roles);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    viewModel.init(widget.volunteerId, widget.roles);
   }
 
   @override
@@ -45,20 +51,10 @@ class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>
                 return Column(
                   children: [
                     Column(
-                      children: viewModel.userRoles
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)?.dietaryRequirementsCustomTitle ?? "",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          controller: viewModel.customRestrictions,
-                        )
-                      ].spacedBy(8),
+                      children: roles
+                          .map((e) => _role(e))
+                          .toList()
+                          .spacedBy(0),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -72,6 +68,17 @@ class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>
               }
           );
         }
+    );
+  }
+
+  Widget _role(UserRole role) {
+    return Row(
+      children: [
+        Checkbox(
+            value: role.checked,
+            onChanged: (v) => viewModel.updateRole(role)
+        ),
+      ].spacedBy(8),
     );
   }
 }

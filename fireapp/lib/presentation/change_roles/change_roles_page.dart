@@ -42,7 +42,7 @@ implements ViewModelHolder<ChangeRolesViewModel> {
       resizeToAvoidBottomInset: false,
       body: const Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: ChangeRolesWidget(),
+        child: ChangeRolesWidget(volunteerId: '',roles: [],),
       ),
     );
   }
