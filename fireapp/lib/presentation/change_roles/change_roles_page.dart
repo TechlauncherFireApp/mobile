@@ -40,9 +40,9 @@ implements ViewModelHolder<ChangeRolesViewModel> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: const Padding(
+      body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: ChangeRolesWidget(volunteerId: '',roles: [],),
+        child: ChangeRolesWidget(volunteerId: widget.volunteerId,roles: widget.roles),
       ),
     );
   }

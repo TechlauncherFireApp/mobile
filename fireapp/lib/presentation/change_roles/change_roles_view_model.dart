@@ -60,11 +60,11 @@ class ChangeRolesViewModel extends FireAppViewModel {
 
   void updateRole(UserRole role) async {
     await _changeMutex.protect(() async {
-      final state = _userRoles.value;
+      var state = _userRoles.value;
       if (state is! SuccessRequestState) return;
 
-      final roles = (state as SuccessRequestState<List<UserRole>>).result;
-      final index = roles.indexOf(role);
+      var roles = (state as SuccessRequestState<List<UserRole>>).result;
+      var index = roles.indexOf(role);
       roles[index] = role.copyWith(checked: !role.checked);
       _userRoles.add(RequestState.success(roles));
     });

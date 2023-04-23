@@ -38,7 +38,7 @@ class ReferenceDataRepository {
           name: e.name,
           updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
           created: DateTime.fromMillisecondsSinceEpoch(e.created),
-          code: e.code!
+          code: e.code,
       ),
       () => _client.getRoles()
     );
