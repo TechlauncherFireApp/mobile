@@ -78,6 +78,7 @@ class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>
             value: role.checked,
             onChanged: (v) => viewModel.updateRole(role)
         ),
+        Text(role.role.name)
       ].spacedBy(8),
     );
   }

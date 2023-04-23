@@ -44,6 +44,9 @@ class ChangeRolesViewModel extends FireAppViewModel {
                 checked: _roles.has((p0) => p0 == o.id)
             )
         ).toList();
+        _userRoles.add(RequestState.success(
+            (userRoles)
+        ));
 
       } catch (e) {
         logger.e(e);
