@@ -10,10 +10,13 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mutex/mutex.dart';
 
+import '../../domain/repository/volunteer_information_repository.dart';
+
 @injectable
 class ChangeRolesViewModel extends FireAppViewModel {
 
   final ReferenceDataRepository _referenceDataRepository;
+  final VolunteerInformationRepository _volunteerInformationRepository;
   late String _volunteerId;
   late List<String> _roles;
 
@@ -27,7 +30,7 @@ class ChangeRolesViewModel extends FireAppViewModel {
 
   final _changeMutex = Mutex();
 
-  ChangeRolesViewModel(this._referenceDataRepository);
+  ChangeRolesViewModel(this._referenceDataRepository, this._volunteerInformationRepository);
 
   void load() {
     _userRoles.add(RequestState.loading());
@@ -75,9 +78,9 @@ class ChangeRolesViewModel extends FireAppViewModel {
       _submissionState.add(RequestState.loading());
 
       try {
-        await _referenceDataRepository.updateRoles(
-          _volunteerId,_roles
-        );
+        final roles = (state as SuccessRequestState<List<UserRole>>).result;
+        final selectedRoles = roles.where((r) => r.checked).map((r) => r.role.id).toList();
+        await _volunteerInformationRepository.updateRoles(_volunteerId, selectedRoles);
         _submissionState.add(RequestState.success(null));
       } catch(e) {
         logger.e("$e");

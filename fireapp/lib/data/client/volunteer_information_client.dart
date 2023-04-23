@@ -11,4 +11,8 @@ class VolunteerInformationClient{
   Future<VolunteerInformationDto> getVolunteerInformation(String volunteerId) {
     return restClient.getVolunteerInformation(volunteerId);
   }
+
+  Future<void> updateRoles(String id, List<String> roles) async{
+    return restClient.updateVolunteerRoles(id, roles);
+  }
 }
