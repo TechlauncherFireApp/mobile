@@ -1,24 +1,36 @@
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/presentation/change_roles/change_roles_option_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../base/widget.dart';
 import '../../widgets/request_state_widget.dart';
 import '../fireapp_page.dart';
 import 'change_roles_view_model.dart';
 
 class ChangeRolesWidget extends StatefulWidget {
+  final String volunteerId;
 
-  const ChangeRolesWidget({super.key});
+  const ChangeRolesWidget({super.key, required this.volunteerId});
 
   @override
   State createState() => _ChangeRolesWidgetState();
 
 }
 
-class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>{
+class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>
+  implements ViewModelHolder<ChangeRolesViewModel> {
 
   @override
   ChangeRolesViewModel viewModel = GetIt.instance.get();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel.init(widget., roles);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +45,7 @@ class _ChangeRolesWidgetState extends FireAppState<ChangeRolesWidget>{
                 return Column(
                   children: [
                     Column(
-                      children: restrictions.restrictions
-                          .map((e) => _restriction(e))
-                          .toList()
-                          .spacedBy(0),
+                      children: viewModel.userRoles
                     ),
                     Column(
                       children: [

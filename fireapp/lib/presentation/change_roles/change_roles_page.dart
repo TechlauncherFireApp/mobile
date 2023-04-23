@@ -1,4 +1,5 @@
 import 'package:fireapp/presentation/change_roles/change_roles_view_model.dart';
+import 'package:fireapp/presentation/change_roles/change_roles_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -41,7 +42,7 @@ implements ViewModelHolder<ChangeRolesViewModel> {
       resizeToAvoidBottomInset: false,
       body: const Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: ,
+        child: ChangeRolesWidget(),
       ),
     );
   }

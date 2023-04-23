@@ -8,7 +8,7 @@ part 'change_roles_option_model.freezed.dart';
 class UserRoles with _$UserRoles {
 
   const factory UserRoles({
-    required List<UserRole> roles
+    required List<UserRole> volunteerRoles
   }) = _UserRoles;
 
 }
