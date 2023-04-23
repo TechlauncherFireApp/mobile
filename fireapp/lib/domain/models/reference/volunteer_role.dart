@@ -9,12 +9,11 @@ part 'volunteer_role.g.dart';
 @freezed
 class VolunteerRole
     with _$VolunteerRole
-    implements CodeableReferenceData {
+    implements ReferenceData {
 
-  @Implements<CodeableReferenceData>()
+  @Implements<ReferenceData>()
   const factory VolunteerRole({
     required int id,
-    required String code,
     required String name,
     required DateTime updated,
     required DateTime created
