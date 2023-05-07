@@ -13,6 +13,6 @@ class VolunteerInformationClient{
   }
 
   Future<void> updateRoles(String id, List<String> roles) async{
-    return restClient.updateVolunteerRoles(id, roles);
+    return restClient.updateVolunteerRoles(id, roles.join(","));
   }
 }

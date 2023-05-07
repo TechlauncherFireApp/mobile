@@ -18,7 +18,4 @@ class ReferenceDataClient {
     return restClient.getRoles();
   }
 
-  Future<void> updateRoles(String volunteerId, List<String> roles) {
-    return restClient.updateVolunteerRoles(volunteerId, roles);
-  }
 }

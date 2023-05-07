@@ -37,9 +37,13 @@ abstract class RestClient {
   );
   @POST("/user-role")
   Future<void> updateVolunteerRoles(
-      @Query("volunteerID") String volunteerId,
-      @Body() List<String> roles
+      @Query("volunteerId") String volunteerId,
+      @Query("roleId") String roleId
   );
-
+  @PATCH("/user-role")
+  Future<void> updateVolunteerRolesPatch(
+      @Query("volunteerId") String volunteerId,
+      @Query("roleId") String roleId
+  );
 
 }
