@@ -45,7 +45,7 @@ class VolunteerInformationRepository {
   }
 
   Future<void> updateRoles(List<VolunteerRole> roles) async {
-    var inactiveRoles = await _reference.getRoles().then((value) => value.where((element) => !roles.contains(element)).toList());
+    var inactiveRoles = (await _reference.getRoles()).where((element) => !roles.any((role) => role.id == element.id)).toList();
     var userID = (await _authentication.getCurrentSession())?.userId;
 
     // Check if userId is null and throw an exception if it is

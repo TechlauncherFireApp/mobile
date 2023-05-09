@@ -164,9 +164,11 @@ void main() {
       verify(volunteerInformationRepository.updateRoles(selectedRoles)).called(
           1);
 
-      final submissionState = viewModel.submissionState as BehaviorSubject<
-          RequestState<void>>;
-      expect(submissionState.value, isA<SuccessRequestState<void>>());
+      expectLater(viewModel.submissionState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<LoadingRequestState<void>>()),
+        emits(const TypeMatcher<ExceptionRequestState<void>>())
+      ]));
     });
   });
 }
