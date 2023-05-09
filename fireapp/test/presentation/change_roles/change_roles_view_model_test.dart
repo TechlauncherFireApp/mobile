@@ -144,6 +144,12 @@ void main() {
 
       when(referenceDataRepository.getRoles()).thenAnswer((_) async => roles);
 
+      expectLater(viewModel.submissionState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<LoadingRequestState<void>>()),
+        emits(const TypeMatcher<SuccessRequestState<void>>())
+      ]));
+
       viewModel.init('volunteerId', ['2']);
       await Future.delayed(
           Duration(milliseconds: 100)); // Give time for async code to execute
@@ -161,14 +167,7 @@ void main() {
           .map((r) => r.role)
           .toList();
 
-      verify(volunteerInformationRepository.updateRoles(selectedRoles)).called(
-          1);
-
-      expectLater(viewModel.submissionState, emitsInOrder([
-        emits(const TypeMatcher<SuccessRequestState<void>>()),
-        emits(const TypeMatcher<LoadingRequestState<void>>()),
-        emits(const TypeMatcher<ExceptionRequestState<void>>())
-      ]));
+      verify(volunteerInformationRepository.updateRoles(selectedRoles)).called(1);
     });
   });
 }
