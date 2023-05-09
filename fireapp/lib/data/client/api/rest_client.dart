@@ -1,5 +1,7 @@
 import 'package:fireapp/domain/models/reference/qualification.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
+import 'package:fireapp/domain/models/role_response.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
@@ -8,6 +10,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../domain/models/role_request.dart';
 
 part 'rest_client.g.dart';
 
@@ -27,9 +31,32 @@ abstract class RestClient {
   @GET("/reference/qualifications")
   Future<List<Qualification>> getQualifications();
 
+  @GET("/v2/reference/roles")
+  Future<List<VolunteerRole>> getRoles();
+
   @GET("/volunteer")
   Future<VolunteerInformationDto> getVolunteerInformation(
       @Query("volunteerID") String volunteerId
+  );
+
+  @POST("/user-role")
+  Future<void> updateVolunteerRoles(
+      @Body() RoleRequest roleRequest
+  );
+  @PATCH("/user-role")
+  Future<void> patchVolunteerRoles(
+      @Body() RoleRequest roleRequest
+  );
+
+  @POST("/user-qualification")
+  Future<void> updateVolunteerQualifications(
+      @Query("volunteerId") String volunteerId,
+      @Query("qualificationId") String qualificationId
+  );
+  @PATCH("/user-qualification")
+  Future<void> updateVolunteerQualificationsPatch(
+      @Query("volunteerId") String volunteerId,
+      @Query("qualificationId") String qualificationId
   );
 
 }

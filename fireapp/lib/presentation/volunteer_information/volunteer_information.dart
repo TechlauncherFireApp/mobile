@@ -4,6 +4,7 @@ import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/domain/models/volunteer_information.dart';
 import 'package:fireapp/layout/wrapper.dart';
+import 'package:fireapp/presentation/change_roles/change_roles_page.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information_viewmodel.dart';
 import 'package:fireapp/presentation/volunteer_information/VolunteerInformationWidget.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/volunteer_information/VolunteerInformationWidget.dart';
+
+import '../change_qualification/change_qualification_page.dart';
 
 class VolunteerInformationPage extends StatefulWidget {
   final String volunteerId;
@@ -117,20 +120,37 @@ class _VolunteerInformationState
                           )
                       ),
                       _buildContainer(
-                          VolunteerInformationWidget(
+                          GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => ChangeQualificationsPage(
+                                  volunteerId: widget.volunteerId,
+                                  qualifications: volunteerInformation.qualifications,
+                              )
+                          )),
+                          child: VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_qualifications ??
                                 'Qualifications',
                             content: volunteerInformation.qualifications.map((qualification) => qualification.name)
                                 .join('\n'),
                           )
+                          )
                       ),
                       _buildContainer(
-                          VolunteerInformationWidget(
-                            title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
-                                'Possible Roles',
-                            content: volunteerInformation.possibleRoles.map((role) => role)
-                                .join('\n'),
+                          GestureDetector(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ChangeRolesPage(
+                                volunteerId: widget.volunteerId,
+                                roles: volunteerInformation.possibleRoles,
+                              )
+                            )),
+                            child: VolunteerInformationWidget(
+                              title: AppLocalizations.of(context)?.volunteer_possibleRoles ??
+                                  'Possible Roles',
+                              content: volunteerInformation.possibleRoles.map((role) => role)
+                                  .join('\n'),
+                            ),
                           )
+
                       ),
                       _buildContainer(
                           Column(

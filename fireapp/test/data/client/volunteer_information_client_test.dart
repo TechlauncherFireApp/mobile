@@ -1,6 +1,9 @@
 import 'package:fireapp/data/client/api/rest_client.dart';
 import 'package:fireapp/data/client/volunteer_information_client.dart';
 import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
+import 'package:fireapp/domain/models/role_request.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
@@ -54,5 +57,37 @@ void main() {
       expect(result, equals(expectedDto));
       verify(mockRestClient.getVolunteerInformation(volunteerId)).called(1);
     });
+
+    test('updateRoles should call restClient.updateVolunteerRoles and restClient.patchVolunteerRoles', () async {
+      const userId = 1;
+      final activeRoles = [
+        VolunteerRole(
+          id: 1,
+          name: "Role 1",
+          updated: DateTime.now(),
+          created: DateTime.now()
+        ),
+        VolunteerRole(
+          id: 2,
+          name: "Role 2",
+          updated: DateTime.now(),
+          created: DateTime.now()
+        )
+      ];
+      final inactiveRoles = [
+        VolunteerRole(
+          id: 3,
+          name: "Role 3",
+          updated: DateTime.now(),
+          created: DateTime.now()
+        )
+      ];
+
+      await volunteerInformationClient.updateRoles(userId, activeRoles, inactiveRoles);
+      verify(mockRestClient.updateVolunteerRoles(RoleRequest(userId: userId, roleId: 1))).called(1);
+      verify(mockRestClient.updateVolunteerRoles(RoleRequest(userId: userId, roleId: 2))).called(1);
+      verify(mockRestClient.patchVolunteerRoles(RoleRequest(userId: userId, roleId: 3))).called(1);
+    });
+
   });
 }

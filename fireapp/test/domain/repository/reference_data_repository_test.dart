@@ -1,6 +1,7 @@
 import 'package:fireapp/data/client/reference_data_client.dart';
 import 'package:fireapp/data/persistence/reference_data_persistence.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/reference/reference_data.dart';
 import 'package:fireapp/domain/models/reference/reference_data_db.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
@@ -110,6 +111,95 @@ void main() {
       verifyNever(persistence.getReferenceData(ReferenceDataType.qualification));
       verify(client.getQualifications()).called(1);
       expect(result, containsAll([qualification1, qualification2]));
+    });
+  });
+  group('getRoles', () {
+    setUp(() {
+      client = MockReferenceDataClient();
+      persistence = MockReferenceDataPersistence();
+      repository = ReferenceDataRepository(client, persistence);
+    });
+
+    final currentTime = DateTime.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch
+    );
+    final role1 = VolunteerRole(
+      id: 1,
+      name: 'Role 1',
+      created: currentTime,
+      updated: currentTime,
+    );
+    final role2 = VolunteerRole(
+      id: 2,
+      name: 'Role 2',
+      created: currentTime,
+      updated: currentTime,
+    );
+
+    test('returns data from persistence if not expired', () async {
+      // Arrange
+      final lastUpdated = DateTime.now();
+      final dbData = [
+        ReferenceDataDb(
+          pk: 'role_1',
+          type: 'role',
+          id: 1,
+          name: 'Role 1',
+          code: null,
+          created: currentTime.millisecondsSinceEpoch,
+          updated: currentTime.millisecondsSinceEpoch,
+        ),
+        ReferenceDataDb(
+          pk: 'role_2',
+          type: 'role',
+          id: 2,
+          name: 'Role 2',
+          code: null,
+          created: currentTime.millisecondsSinceEpoch,
+          updated: currentTime.millisecondsSinceEpoch,
+        ),
+      ];
+      when(persistence.getLastUpdated(ReferenceDataType.role)).thenAnswer((_) async => lastUpdated);
+      when(persistence.getReferenceData(ReferenceDataType.role)).thenAnswer((_) async => dbData);
+      when(client.getRoles()).thenAnswer((_) async => []);
+
+      // Act
+      final result = await repository.getRoles();
+
+      // Assert
+      verifyNever(client.getRoles());
+      expect(result, containsAll([role1, role2]));
+    });
+
+    test('fetches data from client if expired', () async {
+      // Arrange
+      final currentTime = DateTime.now().millisecondsSinceEpoch;
+      final dbData = [
+        ReferenceDataDb(
+          pk: 'role_1',
+          type: 'role',
+          id: 1,
+          name: 'Role 1',
+          code: null,
+          created: currentTime,
+          updated: currentTime,
+        ),
+      ];
+      when(persistence.getLastUpdated(ReferenceDataType.role))
+          .thenAnswer((_) async => DateTime.fromMillisecondsSinceEpoch(
+          currentTime - ReferenceDataRepository.lifetime - 50000
+      )
+      );
+      when(client.getRoles())
+          .thenAnswer((_) async => [role1, role2]);
+
+      // Act
+      final result = await repository.getRoles();
+
+      // Assert
+      verifyNever(persistence.getReferenceData(ReferenceDataType.role));
+      verify(client.getRoles()).called(1);
+      expect(result, containsAll([role1, role2]));
     });
   });
 }
