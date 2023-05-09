@@ -43,4 +43,8 @@ class VolunteerInformationRepository {
   Future<void> updateRoles(String ID, List<String> roles) async {
     await _client.updateRoles(ID, roles);
   }
+
+  Future<void> updateQualifications(String ID, List<Qualification> qualifications) async {
+    await _client.updateQualifications(ID, qualifications);
+  }
 }

@@ -28,7 +28,7 @@ abstract class RestClient {
   @GET("/reference/qualifications")
   Future<List<Qualification>> getQualifications();
 
-  @GET("/reference/roles")
+  @GET("/v2/reference/roles")
   Future<List<VolunteerRole>> getRoles();
 
   @GET("/volunteer")
@@ -44,6 +44,16 @@ abstract class RestClient {
   Future<void> updateVolunteerRolesPatch(
       @Query("volunteerId") String volunteerId,
       @Query("roleId") String roleId
+  );
+  @POST("/user-qualification")
+  Future<void> updateVolunteerQualifications(
+      @Query("volunteerId") String volunteerId,
+      @Query("qualificationId") String qualificationId
+  );
+  @PATCH("/user-qualification")
+  Future<void> updateVolunteerQualificationsPatch(
+      @Query("volunteerId") String volunteerId,
+      @Query("qualificationId") String qualificationId
   );
 
 }

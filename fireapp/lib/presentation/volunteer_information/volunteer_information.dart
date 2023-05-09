@@ -15,6 +15,8 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/volunteer_information/VolunteerInformationWidget.dart';
 
+import '../change_qualification/change_qualification_page.dart';
+
 class VolunteerInformationPage extends StatefulWidget {
   final String volunteerId;
 
@@ -118,11 +120,19 @@ class _VolunteerInformationState
                           )
                       ),
                       _buildContainer(
-                          VolunteerInformationWidget(
+                          GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => ChangeQualificationsPage(
+                                  volunteerId: widget.volunteerId,
+                                  qualifications: volunteerInformation.qualifications,
+                              )
+                          )),
+                          child: VolunteerInformationWidget(
                             title: AppLocalizations.of(context)?.volunteer_qualifications ??
                                 'Qualifications',
                             content: volunteerInformation.qualifications.map((qualification) => qualification.name)
                                 .join('\n'),
+                          )
                           )
                       ),
                       _buildContainer(

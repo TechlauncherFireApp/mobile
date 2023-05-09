@@ -19,45 +19,45 @@ class ReferenceDataRepository {
   // TODO, persist to local DB
   Future<List<Qualification>> getQualifications() async {
     return _fetch<Qualification>(
-      ReferenceDataType.qualification,
-      (e) => Qualification(
-          id: e.id,
-          name: e.name,
-          updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
-          created: DateTime.fromMillisecondsSinceEpoch(e.created)
-      ),
-      () => _client.getQualifications()
+        ReferenceDataType.qualification,
+            (e) => Qualification(
+            id: e.id,
+            name: e.name,
+            updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
+            created: DateTime.fromMillisecondsSinceEpoch(e.created)
+        ),
+            () => _client.getQualifications()
     );
   }
 
   Future<List<VolunteerRole>> getRoles() async {
     return _fetch<VolunteerRole>(
         ReferenceDataType.role,
-        (e) => VolunteerRole(
-          id: e.id,
-          name: e.name,
-          updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
-          created: DateTime.fromMillisecondsSinceEpoch(e.created),
-      ),
-      () => _client.getRoles()
+            (e) => VolunteerRole(
+            id: e.id,
+            name: e.name,
+            updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
+            created: DateTime.fromMillisecondsSinceEpoch(e.created),
+        ),
+            () => _client.getRoles()
     );
   }
 
   Future<List<T>> _fetch<T extends ReferenceData>(
-    ReferenceDataType type,
-    T Function(ReferenceDataDb) map,
-    Future<List<T>> Function() get,
-  ) async {
-    var current = await _persistence.getLastUpdated(ReferenceDataType.qualification);
-    if (
+      ReferenceDataType type,
+      T Function(ReferenceDataDb) map,
+      Future<List<T>> Function() get,
+      ) async {
+        var current = await _persistence.getLastUpdated(type);
+        if (
         current != null &&
-        current.millisecondsSinceEpoch + lifetime > DateTime.now().millisecondsSinceEpoch
-    ) {
-      return (await _persistence.getReferenceData(ReferenceDataType.qualification)).map((e) => map(e)).toList();
-    }
-    var data = await get();
+            current.millisecondsSinceEpoch + lifetime > DateTime.now().millisecondsSinceEpoch
+        ) {
+          return (await _persistence.getReferenceData(type)).map((e) => map(e)).toList();
+        }
+        var data = await get();
 
-    _persistence.save(ReferenceDataType.qualification, data.map((e) {
+    _persistence.save(type, data.map((e) {
       return ReferenceDataDb(
           pk: "${type.name}_${e.id}",
           type: type.name,
