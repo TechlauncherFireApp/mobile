@@ -35,16 +35,18 @@ abstract class RestClient {
   Future<VolunteerInformationDto> getVolunteerInformation(
       @Query("volunteerID") String volunteerId
   );
+
   @POST("/user-role")
   Future<void> updateVolunteerRoles(
-      @Query("volunteerId") String volunteerId,
+      @Query("userId") String volunteerId,
       @Query("roleId") String roleId
   );
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
-      @Query("volunteerId") String volunteerId,
+      @Query("userId") String volunteerId,
       @Query("roleId") String roleId
   );
+
   @POST("/user-qualification")
   Future<void> updateVolunteerQualifications(
       @Query("volunteerId") String volunteerId,

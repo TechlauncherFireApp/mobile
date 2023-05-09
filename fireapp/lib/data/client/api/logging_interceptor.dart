@@ -8,13 +8,13 @@ class HttpLoggingInterceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.d("$response");
+    logger.d("Response: $response");
     super.onResponse(response, handler);
   }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    logger.d("$options");
+    logger.d("Request: ${options.uri}\n${options.data}");
     super.onRequest(options, handler);
   }
 
