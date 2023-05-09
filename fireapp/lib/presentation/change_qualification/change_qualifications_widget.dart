@@ -62,7 +62,7 @@ class _ChangeQualificationsWidgetState extends FireAppState<ChangeQualifications
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50)
                       ),
-                      onPressed: () => viewModel.load(),
+                      onPressed: () => viewModel.submit(),
                       child: const Text("Submit"),
                     )
                   ].spacedBy(16),

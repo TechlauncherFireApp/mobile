@@ -43,7 +43,7 @@ class ChangeQualificationsViewModel extends FireAppViewModel {
         final userQualifications = options.map((o) =>
             UserQualification(
                 qualification: o,
-                checked: _qualifications.has((p0) => p0 == o.id)
+                checked: _qualifications.has((p0) => p0.id == o.id)
             )
         ).toList();
         _userQualifications.add(RequestState.success(
@@ -75,23 +75,23 @@ class ChangeQualificationsViewModel extends FireAppViewModel {
     });
   }
 
-  // void submit() {
-  //   final state = _userQualifications.value;
-  //   if (state is! SuccessRequestState) return;
-  //
-  //   () async {
-  //     _submissionState.add(RequestState.loading());
-  //
-  //     try {
-  //       final qualifications = (state as SuccessRequestState<List<UserQualification>>).result;
-  //       await _volunteerInformationRepository.updateQualifications(_volunteerId, qualifications.where((q) => q.checked).map((q) => q.qualification).toList());
-  //       _submissionState.add(RequestState.success(null));
-  //     } catch (e) {
-  //       logger.e(e);
-  //       _submissionState.add(RequestState.exception(e));
-  //     }
-  //   }();
-  // }
+  void submit() {
+    final state = _userQualifications.value;
+    if (state is! SuccessRequestState) return;
+
+    () async {
+      _submissionState.add(RequestState.loading());
+
+      try {
+        final qualifications = (state as SuccessRequestState<List<UserQualification>>).result;
+        //await _volunteerInformationRepository.updateQualifications(_volunteerId, qualifications.where((q) => q.checked).map((q) => q.qualification).toList());
+        _submissionState.add(RequestState.success(null));
+      } catch (e) {
+        logger.e(e);
+        _submissionState.add(RequestState.exception(e));
+      }
+    }();
+  }
 
   @override
   Future<void> dispose() async {

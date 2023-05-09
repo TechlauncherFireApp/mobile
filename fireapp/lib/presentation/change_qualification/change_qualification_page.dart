@@ -9,7 +9,7 @@ import '../../base/widget.dart';
 import '../fireapp_page.dart';
 import 'change_qualifications_widget.dart';
 
-class ChangeQualificationsPage extends StatefulWidget{
+class ChangeQualificationsPage extends StatelessWidget {
   final String volunteerId;
   final List<Qualification> qualifications;
 
@@ -18,19 +18,6 @@ class ChangeQualificationsPage extends StatefulWidget{
     required this.volunteerId,
     required this.qualifications,
   });
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ChangeQualificationState();
-  }
-
-}
-
-class _ChangeQualificationState extends FireAppState<ChangeQualificationsPage>
-implements ViewModelHolder<ChangeRolesViewModel> {
-
-  @override
-  ChangeRolesViewModel viewModel = GetIt.instance.get();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +31,11 @@ implements ViewModelHolder<ChangeRolesViewModel> {
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: ChangeQualificationsWidget(volunteerId: widget.volunteerId,qualifications: widget.qualifications),
+        child: ChangeQualificationsWidget(volunteerId: volunteerId,qualifications: qualifications),
       ),
     );
   }
+
+
+
 }
