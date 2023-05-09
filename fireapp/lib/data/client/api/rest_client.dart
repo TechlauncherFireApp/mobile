@@ -1,6 +1,7 @@
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
+import 'package:fireapp/domain/models/role_response.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
@@ -9,6 +10,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../domain/models/role_request.dart';
 
 part 'rest_client.g.dart';
 
@@ -38,13 +41,11 @@ abstract class RestClient {
 
   @POST("/user-role")
   Future<void> updateVolunteerRoles(
-      @Query("userId") String volunteerId,
-      @Query("roleId") String roleId
+      @Body() RoleRequest roleRequest
   );
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
-      @Query("userId") String volunteerId,
-      @Query("roleId") String roleId
+      @Body() RoleRequest roleRequest
   );
 
   @POST("/user-qualification")
