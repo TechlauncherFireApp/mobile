@@ -41,7 +41,7 @@ abstract class RestClient {
       @Query("roleId") String roleId
   );
   @PATCH("/user-role")
-  Future<void> updateVolunteerRolesPatch(
+  Future<void> patchVolunteerRoles(
       @Query("volunteerId") String volunteerId,
       @Query("roleId") String roleId
   );

@@ -83,7 +83,8 @@ class ChangeRolesViewModel extends FireAppViewModel {
       try {
         final roles = (state as SuccessRequestState<List<UserRole>>).result;
         final selectedRoles = roles.where((r) => r.checked).map((r) => r.role.id.toString()).toList();
-        await _volunteerInformationRepository.updateRoles(_volunteerId, selectedRoles);
+        final activeRoles = roles.where((r) => r.checked).map((r) => r.role).toList();
+        await _volunteerInformationRepository.updateRoles(activeRoles);
         _submissionState.add(RequestState.success(null));
       } catch(e) {
         logger.e("$e");

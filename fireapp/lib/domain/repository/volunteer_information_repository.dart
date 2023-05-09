@@ -1,18 +1,22 @@
 import 'package:fireapp/data/client/volunteer_information_client.dart';
 import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
 import 'package:fireapp/domain/models/reference/reference_data.dart';
+import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/volunteer_information.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../global/access.dart';
 import '../models/reference/qualification.dart';
+import 'authentication_repository.dart';
 
 @injectable
 class VolunteerInformationRepository {
 
   final ReferenceDataRepository _reference;
+  final AuthenticationRepository _authentication;
   final VolunteerInformationClient _client;
-  VolunteerInformationRepository(this._client, this._reference);
+  VolunteerInformationRepository(this._client, this._reference, this._authentication);
 
   Future<VolunteerInformation> getVolunteerInformation(String ID) async {
     VolunteerInformationDto volunteerInformation = await _client.getVolunteerInformation(ID);
@@ -40,11 +44,16 @@ class VolunteerInformationRepository {
     );
   }
 
-  Future<void> updateRoles(String ID, List<String> roles) async {
-    await _client.updateRoles(ID, roles);
+  Future<void> updateRoles(List<VolunteerRole> roles) async {
+    var inactiveRoles = await _reference.getRoles().then((value) => value.where((element) => !roles.contains(element)).toList());
+    var userID = (await _authentication.getCurrentSession())?.userId;
+
+    // Check if userId is null and throw an exception if it is
+    if (userID == null) {
+      throw Exception('User ID is null. Cannot update roles without a valid user ID.');
+    }
+
+    await _client.updateRoles(userID, roles, inactiveRoles);
   }
 
-  Future<void> updateQualifications(String ID, List<Qualification> qualifications) async {
-    await _client.updateQualifications(ID, qualifications);
-  }
 }
