@@ -69,7 +69,7 @@ class ChangeQualificationsViewModel extends FireAppViewModel {
       if (state is! SuccessRequestState) return;
 
       var qualifications = (state as SuccessRequestState<List<UserQualification>>).result;
-      var index = qualifications.indexOf(qualification);
+      var index = qualifications.indexWhere((element) => element.qualification == qualification.qualification);
       qualifications[index] = qualification.copyWith(checked: !qualification.checked);
       _userQualifications.add(RequestState.success(qualifications));
     });
