@@ -84,9 +84,9 @@ void main() {
       ];
 
       await volunteerInformationClient.updateRoles(userId, activeRoles, inactiveRoles);
-      verify(mockRestClient.updateVolunteerRoles(RoleRequest(userId: userId, roleId: 1))).called(1);
-      verify(mockRestClient.updateVolunteerRoles(RoleRequest(userId: userId, roleId: 2))).called(1);
-      verify(mockRestClient.patchVolunteerRoles(RoleRequest(userId: userId, roleId: 3))).called(1);
+      verify(mockRestClient.updateVolunteerRoles(userId, 1)).called(1);
+      verify(mockRestClient.updateVolunteerRoles(userId, 2)).called(1);
+      verify(mockRestClient.patchVolunteerRoles(userId, 3)).called(1);
     });
 
   });
