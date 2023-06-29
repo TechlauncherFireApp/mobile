@@ -104,60 +104,85 @@ class _RegisterPageState
     var aL = AppLocalizations.of(context);
     return Column(
       children: [
-        TextFormField(
-          decoration: textFieldStyle(context).copyWith(
-            labelText: aL?.registerUsername ?? ""
-          ),
-          style: Theme.of(context).textTheme.labelLarge,
-          controller: viewModel.email,
-          validator: (v) {
-            if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerUsername);
-            if (EmailValidator.validate(v)) return aL?.formFieldNotEmail(aL.registerUsername);
-            return null;
-          },
-          keyboardType: TextInputType.emailAddress,
-        ),
-        PasswordFormField(
-          decoration: textFieldStyle(context),
-          controller: viewModel.password,
-          validator: (v) {
-            if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerPassword);
-            return null;
-          },
-          label: aL?.registerPassword ?? "",
-        ),
-        TextFormField(
-          decoration: textFieldStyle(context).copyWith(
-            labelText: aL?.registerFirstName
-          ),
-          style: Theme.of(context).textTheme.labelLarge,
-          controller: viewModel.firstName,
-          validator: (v) {
-            if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerFirstName);
-            return null;
-          },
-        ),
-        TextFormField(
-          decoration: textFieldStyle(context).copyWith(
-              labelText: aL?.registerLastName
-          ),
-          style: Theme.of(context).textTheme.labelLarge,
-          controller: viewModel.lastName,
-          validator: (v) {
-            if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerLastName);
-            return null;
-          },
-        ),
-        TextFormField(
-          decoration: textFieldStyle(context).copyWith(
-              labelText: aL?.registerPhoneNumber
-          ),
-          style: Theme.of(context).textTheme.labelLarge,
-          controller: viewModel.phoneNumber,
-          validator: (v) {
-            if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerPhoneNumber);
-            return null;
-          },
+        Column(
+          children: [
+            TextFormField(
+              decoration: textFieldStyle(
+                context,
+                radius: BorderRadius.only(
+                    topLeft: Radius.circular(0.5.rdp()),
+                    topRight: Radius.circular(0.5.rdp())
+                )
+              ).copyWith(
+                  labelText: aL?.registerUsername ?? ""
+              ),
+              style: Theme.of(context).textTheme.labelLarge,
+              controller: viewModel.email,
+              validator: (v) {
+                if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerUsername);
+                if (EmailValidator.validate(v)) return aL?.formFieldNotEmail(aL.registerUsername);
+                return null;
+              },
+              keyboardType: TextInputType.emailAddress,
+            ),
+            PasswordFormField(
+              decoration: textFieldStyle(
+                context,
+                radius: const BorderRadius.all(Radius.zero)
+              ),
+              controller: viewModel.password,
+              validator: (v) {
+                if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerPassword);
+                return null;
+              },
+              label: aL?.registerPassword ?? "",
+            ),
+            TextFormField(
+              decoration: textFieldStyle(
+                  context,
+                  radius: const BorderRadius.all(Radius.zero)
+              ).copyWith(
+                  labelText: aL?.registerFirstName
+              ),
+              style: Theme.of(context).textTheme.labelLarge,
+              controller: viewModel.firstName,
+              validator: (v) {
+                if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerFirstName);
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: textFieldStyle(
+                  context,
+                  radius: const BorderRadius.all(Radius.zero)
+              ).copyWith(
+                  labelText: aL?.registerLastName
+              ),
+              style: Theme.of(context).textTheme.labelLarge,
+              controller: viewModel.lastName,
+              validator: (v) {
+                if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerLastName);
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: textFieldStyle(
+                context,
+                radius: BorderRadius.only(
+                    bottomLeft: Radius.circular(0.5.rdp()),
+                    bottomRight: Radius.circular(0.5.rdp())
+                )
+              ).copyWith(
+                  labelText: aL?.registerPhoneNumber
+              ),
+              style: Theme.of(context).textTheme.labelLarge,
+              controller: viewModel.phoneNumber,
+              validator: (v) {
+                if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerPhoneNumber);
+                return null;
+              },
+            ),
+          ].spacedBy(2),
         ),
         StreamBuilder(
           stream: viewModel.state,
