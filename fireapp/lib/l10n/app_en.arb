@@ -118,5 +118,6 @@
   "registerSubmit": "Submit",
   "registerGenderSelect": "Select your gender",
   "registerContinue": "Sign up",
-  "registerToLogin": "I already have an account"
+  "registerToLogin": "I already have an account",
+  "tabVolunteerTitle": "Volunteers"
 }

@@ -57,6 +57,7 @@ dependencies:
   sqflite: ^2.2.6
   mutex: ^3.0.1
   email_validator: ^2.1.17
+  easy_search_bar: ^2.5.0
 
 dev_dependencies:
   flutter_test:

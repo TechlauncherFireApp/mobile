@@ -41,8 +41,17 @@ ThemeData theme() {
             horizontal: 16
         )
     ),
-    elevatedButtonTheme: const ElevatedButtonThemeData(
-      style: buttonStyle
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: buttonStyle.copyWith(
+        padding: const MaterialStatePropertyAll(
+          EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 12,
+          )
+        )
+      )
     ),
     outlinedButtonTheme: const OutlinedButtonThemeData(
       style: buttonStyle
