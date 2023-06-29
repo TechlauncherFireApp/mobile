@@ -7,11 +7,20 @@ import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/login/login_navigation.dart';
 import 'package:fireapp/presentation/login/login_view_model.dart';
+import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/widgets/fill_width.dart';
 import 'package:fireapp/widgets/form/password_form_field.dart';
+import 'package:fireapp/widgets/request_state_spinner.dart';
+import 'package:fireapp/widgets/request_state_widget.dart';
+import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
+import 'package:fireapp/widgets/standard_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../widgets/simple_divider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -50,29 +59,131 @@ class _LoginState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(child: buildLogin()),
-        buildRegisterText(),
-      ],
+    return Scaffold(
+      body: SafeArea(
+        child: ScrollViewBottomContent(
+          padding: EdgeInsets.all(1.rdp()),
+          bottomChildren: bottomActions(context),
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: SvgPicture.asset(
+                  "assets/logo/logo_color.svg"
+                ),
+              ),
+            ),
+            buildLogin(context)
+          ].spacedBy(1.rdp()),
+        ),
+      ),
     );
   }
 
-  Widget buildRegisterText() {
-    return Container(
-      padding: const EdgeInsets.all(16),
+  List<Widget> bottomActions(BuildContext context) {
+    return [
+      SizedBox(height: 1.rdp(),),
+      FillWidth(
+          child: StandardButton(
+              type: ButtonType.primary,
+              onPressed: () => viewModel.login(),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppLocalizations.of(context)?.loginContinue ?? ""),
+                  RequestStateSpinner.stream(
+                      state: viewModel.state,
+                      child: SizedBox(
+                        width: 1.rdp(),
+                        height: 1.rdp(),
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                      )
+                  )
+                ].spacedBy(0.5.rdp()),
+              )
+          )
+      ),
+      FillWidth(
+          child: StandardButton(
+              type: ButtonType.tertiary,
+              onPressed: () => viewModel.navigateToRegister(),
+              child: Text(AppLocalizations.of(context)?.loginToRegister ?? "")
+          )
+      ),
+    ];
+  }
+
+  Widget buildLogin(BuildContext context) {
+    return Form(
+      key: _formKey,
       child: Column(
-        children: <Widget>[
-          const Text('----------New to FireApp?----------',
-              style: TextStyle(fontSize: 16, color: Colors.black45)),
-          const SizedBox(height: 16),
-          MaterialButton(
-            minWidth: double.infinity,
-            color: Colors.grey,
-            child:
-            const Text('Create an account', style: TextStyle(fontSize: 16)),
-            onPressed: () {
-              Navigator.pushNamed(context, '/register');
+        children: [
+          FillWidth(
+            child: Text(
+              AppLocalizations.of(context)?.loginBlurb ?? "",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          SizedBox(height: 0.5.rdp(),),
+          TextFormField(
+            decoration: textFieldStyle(
+              context,
+              radius: BorderRadius.only(
+                topLeft: Radius.circular(0.5.rdp()),
+                topRight: Radius.circular(0.5.rdp())
+              )
+            ).copyWith(
+              hintText: AppLocalizations.of(context)?.registerUsername ?? "",
+            ),
+            style: Theme.of(context).textTheme.labelLarge,
+            controller: viewModel.email,
+            validator: (v) {
+              if (v!.isEmpty) {
+                return 'Email is empty!';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 2,
+          ),
+          PasswordFormField(
+            decoration: textFieldStyle(
+              context,
+              radius: BorderRadius.only(
+                bottomLeft: Radius.circular(0.5.rdp()),
+                bottomRight: Radius.circular(0.5.rdp())
+              )
+            ).copyWith(
+              hintText: AppLocalizations.of(context)?.loginPassword ?? ""
+            ),
+            controller: viewModel.password,
+            validator: (v) {
+              if (v!.isEmpty) {
+                return 'Password is empty!';
+              }
+              return null;
+            },
+
+          ),
+          buildForgotPasswordText(context),
+          StreamBuilder(
+            stream: viewModel.state,
+            builder: (_, d) {
+              if (!d.hasData) return Container();
+              final data = d.data;
+              if (data == null || data is! ExceptionRequestState) return Container();
+              return Text(
+                "${data.exception}",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.error
+                ),
+              );
             },
           )
         ],
@@ -80,76 +191,19 @@ class _LoginState
     );
   }
 
-  Widget buildLogin() {
-    return Form(
-      key: _formKey,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          const SizedBox(height: 20), // Blank lines of a certain height
-          buildTitle(), // Login
-          const SizedBox(height: 20),
-          buildUserTextField(),
-          const SizedBox(height: 30),
-          buildPasswordTextField(), // Password text field
-          buildForgotPasswordText(context), // Forgot password button
-          const SizedBox(height: 30),
-          buildLoginButton(context),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTitle() {
-    return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Text(
-          'Login',
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        ));
-  }
-
-  Widget buildUserTextField() {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Username or Email'),
-      controller: viewModel.email,
-      validator: (v) {
-        if (v!.isEmpty) {
-          return 'Username is empty!';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget buildPasswordTextField() {
-    return PasswordFormField(
-      password: viewModel.password,
-      label: AppLocalizations.of(context)?.loginPassword ?? "",
-      validator: (v) {
-        if (v!.isEmpty) {
-          return AppLocalizations.of(context)?.formFieldEmpty(
-            AppLocalizations.of(context)?.loginPassword ?? ""
-          );
-        }
-        return null;
-      },
-    );
-  }
-
   Widget buildForgotPasswordText(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {
-            viewModel.navigateToForgotPassword();
-          },
-          child: const Text("Forgot Password?",
-              style: TextStyle(fontSize: 14, color: Colors.grey)),
-        ),
-      ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: StandardButton(
+        type: ButtonType.tertiary,
+        onPressed: () => viewModel.navigateToForgotPassword(),
+        child: Text(
+          AppLocalizations.of(context)?.loginForgotPassword ?? "",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).hintColor
+          )
+        )
+      )
     );
   }
 

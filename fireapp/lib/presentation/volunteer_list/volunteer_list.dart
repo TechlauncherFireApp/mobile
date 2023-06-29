@@ -1,3 +1,4 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:fireapp/layout/wrapper.dart';
@@ -32,41 +33,38 @@ class _VolunteerListState extends FireAppState<VolunteerList>
 
   @override
   Widget build(BuildContext context) {
-    return BasicWrapper(
-      page: RequestStateWidget.stream<List<VolunteerListing>>(
+    return Scaffold(
+      appBar: EasySearchBar(
+        title: Text(
+          AppLocalizations.of(context)?.tabVolunteerTitle ?? "",
+          style: Theme.of(context).primaryTextTheme.headline6,
+        ),
+        onSearch: (search){
+          viewModel.searchController.text = search;
+        },
+        foregroundColor: Colors.white,
+      ),
+      body: SafeArea(
+        child: RequestStateWidget.stream<List<VolunteerListing>>(
           state: viewModel.volunteers,
           retry: viewModel.getVolunteerList,
           child: (_,volunteers) {
             return Column(
               children: [
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: TextField(
-                    controller: viewModel.searchController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)?.
-                      volunteerListSearchHint,
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                      ),
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: volunteers.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(volunteers[index].name),
-                        subtitle: Text(volunteers[index].volunteerId),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => VolunteerInformationPage(
-                                volunteerId: volunteers[index].volunteerId,
-                              )
-                          ));
-                        }
+                          title: Text(volunteers[index].name),
+                          subtitle: Text(volunteers[index].volunteerId),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => VolunteerInformationPage(
+                                  volunteerId: volunteers[index].volunteerId,
+                                )
+                            ));
+                          }
                       );
                     },
                   ),
@@ -74,7 +72,8 @@ class _VolunteerListState extends FireAppState<VolunteerList>
               ],
             );
           }
-      ),
+        ),
+      )
     );
   }
 
