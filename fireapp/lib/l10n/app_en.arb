@@ -102,8 +102,10 @@
       }
     }
   },
+  "loginBlurb": "Sign in to your FireApp account",
   "loginEmail": "Email",
   "loginPassword": "Password",
+  "loginForgotPassword": "Forgot your password?",
   "loginContinue": "Sign in",
   "loginToRegister": "I need to sign up",
   "registerTitle": "Register",

@@ -61,8 +61,9 @@ class _LoginState
     return Scaffold(
       body: SafeArea(
         child: ScrollViewBottomContent(
-          padding: EdgeInsets.all(1.0.rdp()),
+          padding: EdgeInsets.all(1.rdp()),
           bottomChildren: [
+            SizedBox(height: 1.rdp(),),
             FillWidth(
               child: StandardButton(
                 type: ButtonType.primary,
@@ -75,8 +76,8 @@ class _LoginState
                     RequestStateSpinner.stream(
                       state: viewModel.state,
                       child: SizedBox(
-                        width: 1.0.rdp(),
-                        height: 1.0.rdp(),
+                        width: 1.rdp(),
+                        height: 1.rdp(),
                         child: CircularProgressIndicator(
                           color: Theme.of(context).colorScheme.surface,
                         ),
@@ -108,6 +109,14 @@ class _LoginState
       key: _formKey,
       child: Column(
         children: [
+          FillWidth(
+            child: Text(
+              AppLocalizations.of(context)?.loginBlurb ?? "",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          SizedBox(height: 0.5.rdp(),),
           TextFormField(
             decoration: textFieldStyle(
               context,
@@ -169,18 +178,18 @@ class _LoginState
   }
 
   Widget buildForgotPasswordText(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {
-            viewModel.navigateToForgotPassword();
-          },
-          child: const Text("Forgot Password?",
-              style: TextStyle(fontSize: 14, color: Colors.grey)),
-        ),
-      ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: StandardButton(
+        type: ButtonType.tertiary,
+        onPressed: () => viewModel.navigateToForgotPassword(),
+        child: Text(
+          AppLocalizations.of(context)?.loginForgotPassword ?? "",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).hintColor
+          )
+        )
+      )
     );
   }
 

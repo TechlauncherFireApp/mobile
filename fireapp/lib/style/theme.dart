@@ -86,8 +86,8 @@ const baseUnit = 16;
 
 extension DpInt on int {
 
-  int rdp() {
-    return this * baseUnit;
+  double rdp() {
+    return toDouble() * baseUnit;
   }
 
 }
