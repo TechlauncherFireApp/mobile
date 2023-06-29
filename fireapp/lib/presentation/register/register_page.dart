@@ -10,6 +10,7 @@ import 'package:fireapp/widgets/form/form_field_lockup.dart';
 import 'package:fireapp/widgets/form/password_form_field.dart';
 import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:email_validator/email_validator.dart';
@@ -46,6 +47,16 @@ class _RegisterPageState
           padding: EdgeInsets.all(1.rdp()),
           bottomChildren: bottomActions(context),
           children: [
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: SvgPicture.asset(
+                    "assets/logo/logo_color.svg"
+                ),
+              ),
+            ),
+            SizedBox(height: 1.rdp(),),
             FillWidth(
               child: Text(
                 AppLocalizations.of(context)?.registerTitle ?? "",

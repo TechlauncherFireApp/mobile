@@ -16,6 +16,7 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:fireapp/widgets/standard_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,9 +65,17 @@ class _LoginState
           padding: EdgeInsets.all(1.rdp()),
           bottomChildren: bottomActions(context),
           children: [
-            Text("Logo goes here"),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: SvgPicture.asset(
+                  "assets/logo/logo_color.svg"
+                ),
+              ),
+            ),
             buildLogin(context)
-          ],
+          ].spacedBy(1.rdp()),
         ),
       ),
     );
