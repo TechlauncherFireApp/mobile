@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 
 class PasswordFormField extends StatefulWidget {
 
-  final TextEditingController password;
+  final InputDecoration? decoration;
+  final TextEditingController controller;
   final FormFieldValidator<String>? validator;
-  final String label;
+  final String? label;
 
   const PasswordFormField({
     super.key,
-    required this.password,
+    this.decoration,
+    required this.controller,
     this.validator,
-    required this.label
+    this.label
   });
 
   @override
@@ -32,21 +34,21 @@ class _PasswordFormFieldState extends FireAppState<PasswordFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: widget.password,
+      controller: widget.controller,
       obscureText: textObscured,
       validator: widget.validator,
-      decoration: InputDecoration(
-        labelText: 'Password',
+      decoration: (widget.decoration ?? const InputDecoration()).copyWith(
+        labelText: widget.label,
         suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              textObscured = !textObscured;
-            });
-          },
-          icon: textObscured
-              ? const Icon(Icons.remove_red_eye_outlined)
-              : const Icon(Icons.remove_red_eye),
-          splashRadius: 20
+            onPressed: () {
+              setState(() {
+                textObscured = !textObscured;
+              });
+            },
+            icon: textObscured
+                ? const Icon(Icons.remove_red_eye_outlined)
+                : const Icon(Icons.remove_red_eye),
+            splashRadius: 20
         ),
       )
     );

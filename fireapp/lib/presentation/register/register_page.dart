@@ -73,7 +73,7 @@ class _RegisterPageState
           keyboardType: TextInputType.emailAddress,
         ),
         PasswordFormField(
-          password: viewModel.password,
+          controller: viewModel.password,
           validator: (v) {
             if (v!.isEmpty) return aL?.formFieldEmpty(aL.registerPassword);
             return null;

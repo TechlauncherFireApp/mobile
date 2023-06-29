@@ -102,7 +102,10 @@
       }
     }
   },
+  "loginEmail": "Email",
   "loginPassword": "Password",
+  "loginContinue": "Sign in",
+  "loginToRegister": "I need to sign up",
   "registerTitle": "Register",
   "registerUsername": "Email",
   "registerPassword": "Password",
