@@ -4,6 +4,7 @@ import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:fireapp/layout/wrapper.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list_viewmodel.dart';
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:fireapp/widgets/request_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,15 +35,10 @@ class _VolunteerListState extends FireAppState<VolunteerList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EasySearchBar(
-        title: Text(
-          AppLocalizations.of(context)?.tabVolunteerTitle ?? "",
-          style: Theme.of(context).primaryTextTheme.headline6,
-        ),
-        onSearch: (search){
-          viewModel.searchController.text = search;
-        },
-        foregroundColor: Colors.white,
+      appBar: fireAppSearchBar(
+        context,
+        AppLocalizations.of(context)?.tabVolunteerTitle ?? "",
+        (search) => viewModel.searchController.text = search
       ),
       body: SafeArea(
         child: RequestStateWidget.stream<List<VolunteerListing>>(
