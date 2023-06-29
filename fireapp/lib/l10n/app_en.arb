@@ -108,7 +108,7 @@
   "loginForgotPassword": "Forgot your password?",
   "loginContinue": "Sign in",
   "loginToRegister": "I need to sign up",
-  "registerTitle": "Register",
+  "registerTitle": "Create a new FireApp account",
   "registerUsername": "Email",
   "registerPassword": "Password",
   "registerFirstName": "First name",
@@ -116,5 +116,7 @@
   "registerPhoneNumber": "Phone number",
   "registerGender": "Gender",
   "registerSubmit": "Submit",
-  "registerGenderSelect": "Select your gender"
+  "registerGenderSelect": "Select your gender",
+  "registerContinue": "Sign up",
+  "registerToLogin": "I already have an account"
 }

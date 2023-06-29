@@ -32,7 +32,7 @@ ThemeData theme() {
     scaffoldBackgroundColor: Color(0xFFF7FAFA),
     primaryColor: Color(0xFFD3503D),
     textTheme: textTheme,
-    buttonTheme: ButtonThemeData(
+    buttonTheme: const ButtonThemeData(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8))
         ),
@@ -78,6 +78,12 @@ InputDecoration textFieldStyle(
     contentPadding: EdgeInsets.symmetric(
       vertical: 0.5.rdp(),
       horizontal: 1.0.rdp()
+    ),
+    hintStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+      color: Theme.of(context).hintColor
+    ),
+    labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+        color: Theme.of(context).hintColor
     )
   );
 }

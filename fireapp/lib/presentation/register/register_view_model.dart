@@ -49,7 +49,7 @@ class RegisterViewModel
           password.text,
           firstName.text,
           lastName.text,
-          _gender.value?.gender ?? Gender.other,
+          _gender.hasValue ? _gender.value?.gender ?? Gender.other : Gender.other,
           phoneNumber.text
         );
         _navigate.add(const RegisterNavigation.home());
@@ -63,6 +63,7 @@ class RegisterViewModel
 
   void toggleObscureText() => obscureText = !obscureText;
   void setGender(GenderOption? option) => _gender.add(option);
+  void navigateToLogin() => _navigate.add(const RegisterNavigation.login());
 
   @override
   Future<void> dispose() async {

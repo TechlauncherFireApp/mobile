@@ -52,9 +52,8 @@ class _MyAppState extends State<MyApp> {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart
         '/login': (context) => const LoginPage(), // See Authentication/Login.dart
-        '/register': (context) => const BasicWrapper(
-            page: RegisterPage()), //See Authentication/register.dart
-        '/reset_password': (context) => const BasicWrapper(page: ResetPage()),
+        '/register': (context) => const RegisterPage(), //See Authentication/register.dart
+        '/reset_password': (context) => const ResetPage(),
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
       },

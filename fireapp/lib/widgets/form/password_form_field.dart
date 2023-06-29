@@ -37,6 +37,7 @@ class _PasswordFormFieldState extends FireAppState<PasswordFormField> {
       controller: widget.controller,
       obscureText: textObscured,
       validator: widget.validator,
+      style: Theme.of(context).textTheme.labelLarge,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         labelText: widget.label,
         suffixIcon: IconButton(

@@ -32,7 +32,7 @@ const textTheme = TextTheme(
       height: 1.2
   ),
   labelLarge: TextStyle(
-      fontSize: 12,
+      fontSize: 14,
       fontWeight: FontWeight.w700,
       height: 1.84
   ),
@@ -42,7 +42,7 @@ const textTheme = TextTheme(
       height: 1.84
   ),
   labelSmall: TextStyle(
-      fontSize: 12,
+      fontSize: 10,
       fontWeight: FontWeight.w700,
       height: 1.84
   )

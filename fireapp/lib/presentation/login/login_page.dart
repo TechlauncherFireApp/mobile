@@ -62,18 +62,29 @@ class _LoginState
       body: SafeArea(
         child: ScrollViewBottomContent(
           padding: EdgeInsets.all(1.rdp()),
-          bottomChildren: [
-            SizedBox(height: 1.rdp(),),
-            FillWidth(
-              child: StandardButton(
-                type: ButtonType.primary,
-                onPressed: () => viewModel.login(),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocalizations.of(context)?.loginContinue ?? ""),
-                    RequestStateSpinner.stream(
+          bottomChildren: bottomActions(context),
+          children: [
+            Text("Logo goes here"),
+            buildLogin(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> bottomActions(BuildContext context) {
+    return [
+      SizedBox(height: 1.rdp(),),
+      FillWidth(
+          child: StandardButton(
+              type: ButtonType.primary,
+              onPressed: () => viewModel.login(),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppLocalizations.of(context)?.loginContinue ?? ""),
+                  RequestStateSpinner.stream(
                       state: viewModel.state,
                       child: SizedBox(
                         width: 1.rdp(),
@@ -82,26 +93,19 @@ class _LoginState
                           color: Theme.of(context).colorScheme.surface,
                         ),
                       )
-                    )
-                  ].spacedBy(0.5.rdp()),
-                )
+                  )
+                ].spacedBy(0.5.rdp()),
               )
-            ),
-            FillWidth(
-              child: StandardButton(
-                type: ButtonType.tertiary,
-                onPressed: () => viewModel.navigateToRegister(),
-                child: Text(AppLocalizations.of(context)?.loginToRegister ?? "")
-              )
-            ),
-          ],
-          children: [
-            Text("Logo goes here"),
-            buildLogin(context)
-          ],
-        ),
+          )
       ),
-    );
+      FillWidth(
+          child: StandardButton(
+              type: ButtonType.tertiary,
+              onPressed: () => viewModel.navigateToRegister(),
+              child: Text(AppLocalizations.of(context)?.loginToRegister ?? "")
+          )
+      ),
+    ];
   }
 
   Widget buildLogin(BuildContext context) {
@@ -127,6 +131,7 @@ class _LoginState
             ).copyWith(
               hintText: AppLocalizations.of(context)?.registerUsername ?? "",
             ),
+            style: Theme.of(context).textTheme.labelLarge,
             controller: viewModel.email,
             validator: (v) {
               if (v!.isEmpty) {
