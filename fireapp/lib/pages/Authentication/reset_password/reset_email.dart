@@ -1,3 +1,8 @@
+import 'package:fireapp/base/spaced_by.dart';
+import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/widgets/fill_width.dart';
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
+import 'package:fireapp/widgets/standard_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fireapp/global/constants.dart' as constants; //API URL
 import 'package:fireapp/pages/Authentication/login.dart';
@@ -34,36 +39,30 @@ class _ResetBoxState extends State<ResetBox> {
   Widget build(BuildContext context) {
     final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
     return Scaffold(
-        // appBar: AppBar(title: Text('Reset Password'),),
-        body: Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          const SizedBox(height: 20), // Blank lines of a certain height
-          buildTitle(), // Reset Password
-          const SizedBox(height: 20),
-          buildEmailTextField(),
-          const SizedBox(height: 30),
-          buildSubmitButton(context),
-        ],
-      ),
-    ));
-  }
-
-  Widget buildTitle() {
-    return const Padding(
-        padding: EdgeInsets.all(8),
-        child: Text(
-          'Input your email account',
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        ));
+      appBar: fireAppAppBar(context, 'Reset Password'),
+      body: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          children: [// Blank lines of a certain height
+            SizedBox(height: 0.5.rdp(),),
+            const Text(
+              'Please input your email',
+            ), // Reset Passwo
+            buildEmailTextField(),
+            buildSubmitButton(context),
+          ].spacedBy(1.rdp()),
+        ),
+      )
+    );
   }
 
   Widget buildEmailTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email Address'),
+      decoration: textFieldStyle(context).copyWith(
+          labelText: 'Email Address'
+      ),
       validator: (v) {
         if (v!.isEmpty) {
           return 'Email account is empty!';
@@ -71,7 +70,7 @@ class _ResetBoxState extends State<ResetBox> {
         var emailReg = RegExp(
             r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
         if (!emailReg.hasMatch(v)) {
-          return 'please input correct email account';
+          return 'Invalid email';
         }
       },
       controller: myController,
@@ -101,33 +100,26 @@ class _ResetBoxState extends State<ResetBox> {
   }
 
   Widget buildSubmitButton(BuildContext context) {
-    return Align(
-      child: SizedBox(
-        height: 45,
-        width: 270,
-        child: ElevatedButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all(const StadiumBorder(
-                  side: BorderSide(style: BorderStyle.none)))),
-          child: Text('Submit',
-              style: Theme.of(context).primaryTextTheme.headline6),
-          onPressed: () {
-            sendCode().then((value) => {
-                  if (value == LoginResult.success)
-                    {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ResetCodePage(email: myController.text)),
-                      )
-                    }
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResetCodePage()),)
-                });
-          },
-        ),
+    return FillWidth(
+      child: StandardButton(
+        // This is crap
+        onPressed: (){
+          sendCode().then((value) => {
+            if (value == LoginResult.success)
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ResetCodePage(email: myController.text)),
+                )
+              }
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => ResetCodePage()),)
+          });
+        },
+        child: Text("Submit"),
       ),
     );
   }

@@ -1,4 +1,5 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -10,10 +11,7 @@ class SchedulerFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Schduler'),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: fireAppAppBar(context, 'Scheduler'),
       resizeToAvoidBottomInset: false,
       body: const SchedulerForm(),
     );
