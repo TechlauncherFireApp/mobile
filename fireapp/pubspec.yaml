@@ -42,7 +42,7 @@ dependencies:
   http: ^0.13.5
   fluttertoast: ^8.0.6
   settings_ui: ^2.0.2
-  flutter_settings_screens: ^0.2.2+1
+  flutter_settings_screens: 0.3.3-null-safety+2
   retrofit: '>=4.0.0 <5.0.0'
   logger: any  #for logging purpose
   freezed: ^2.3.2
