@@ -51,9 +51,9 @@ dependencies:
   injectable: ^2.1.0
   mockito: ^5.3.2
   dio: ^5.0.2
-  intl: ^0.18.0
+  intl: ^0.18.1
   floor: ^1.4.1
-  json_serializable: '>4.8.0'
+  json_serializable: '>4.3.0'
   sqflite: ^2.2.6
   mutex: ^3.0.1
   email_validator: ^2.1.17
