@@ -42,7 +42,7 @@ dependencies:
   http: ^0.13.5
   fluttertoast: ^8.0.6
   settings_ui: ^2.0.2
-  flutter_settings_screens: ^0.2.2+1
+  flutter_settings_screens: 0.3.3-null-safety+2
   retrofit: '>=4.0.0 <5.0.0'
   logger: any  #for logging purpose
   freezed: ^2.3.2
@@ -51,9 +51,9 @@ dependencies:
   injectable: ^2.1.0
   mockito: ^5.3.2
   dio: ^5.0.2
-  intl: ^0.17.0
+  intl: ^0.18.0
   floor: ^1.4.1
-  json_serializable: '>4.8.0'
+  json_serializable: '>4.3.0'
   sqflite: ^2.2.6
   mutex: ^3.0.1
   email_validator: ^2.1.17
@@ -92,7 +92,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  generate: true
   assets:
     - assets/logo/logo_color.svg
 
@@ -100,7 +99,7 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-
+  generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
