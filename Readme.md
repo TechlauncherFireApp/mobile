@@ -1,5 +1,9 @@
+<div align="center">
+    
 [![Unit test](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml)
 [![Android CI](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml)
+
+</div>
 
 <p align="center">
     <a href="https://github.com/TechlauncherFireApp/mobile" rel="noopener">
