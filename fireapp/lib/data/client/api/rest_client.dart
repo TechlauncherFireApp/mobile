@@ -58,5 +58,4 @@ abstract class RestClient {
       @Query("volunteerId") String volunteerId,
       @Query("qualificationId") String qualificationId
   );
-
 }
