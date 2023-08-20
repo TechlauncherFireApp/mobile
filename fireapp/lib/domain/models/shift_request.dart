@@ -25,20 +25,12 @@ class ShiftVolunteer with _$ShiftVolunteer {
     required int volunteerId,
     required String volunteerGivenName,
     required String volunteerSurname,
-    @JsonKey(name: "mobile_number") required String mobileNumber,
+    @JsonKey(name: "mobile_number")
+    required String mobileNumber,
     required int positionId,
     required String role,
     required String status,
   }) = _ShiftVolunteer;
 
   factory ShiftVolunteer.fromJson(Map<String, Object?> json) => _$ShiftVolunteerFromJson(json);
-}
-
-@freezed
-class Results<T> with _$Results<T> {
-  const factory Results({
-    @JsonKey(name: "results") required List<T> results,
-  }) = _Results<T>;
-
-  factory Results.fromJson(Map<String, Object?> json, T Function(Object? json) fromJsonT) => _$ResultsFromJson(json);
 }
