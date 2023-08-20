@@ -5,14 +5,13 @@
     <p align="center">
         An cross platform application designed to efficiently manage and schedule volunteer firefighters.
     </p>
+    <div align="center">
+
+        [![Unit test](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml)
+        [![Android CI](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml)
+
+    </div>
 </p>
-
-<div align="center">
-
-    [![Unit test](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/unit.yml)
-    [![Android CI](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml/badge.svg)](https://github.com/TechlauncherFireApp/FireApp-Mobile/actions/workflows/android.yml)
-
-</div>
 
 ## SETUP
 
