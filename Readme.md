@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/TechlauncherFireApp/mobile" rel="noopener">
-        <img width=200px src="https://raw.githubusercontent.com/TechlauncherFireApp/mobile/main/app/src/main/assets/logo_gradient.svg" ></img>
+        <img width=200px src="https://raw.githubusercontent.com/TechlauncherFireApp/mobile/main/assets/logo_gradient.png" ></img>
     </a>
     <p align="center">
         An cross platform application designed to efficiently manage and schedule volunteer firefighters.
