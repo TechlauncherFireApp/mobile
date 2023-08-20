@@ -59,6 +59,8 @@ dependencies:
   email_validator: ^2.1.17
   easy_search_bar: ^2.5.0
   flutter_svg: ^2.0.5
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:
