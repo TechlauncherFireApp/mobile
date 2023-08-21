@@ -1,3 +1,4 @@
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'profile_logic.dart'; 
 
@@ -21,9 +22,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Account Details'),
-        ),
+        appBar: fireAppAppBar(context, 'Account Details'),
         resizeToAvoidBottomInset: false,
         body: FutureBuilder(
         future: _profileResult , //Data from API Request
