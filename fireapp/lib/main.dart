@@ -8,6 +8,7 @@ import 'package:fireapp/presentation/register/register_page.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 //INTERNAL
 import 'layout/wrapper.dart';
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         Locale('en'),
       ],
       title: 'FireApp',
-      initialRoute: 'scheduler_Form',
+      initialRoute: '/scheduler_Form',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart
@@ -57,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         '/reset_password': (context) => const ResetPage(),
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
-        '/scheduler_Form': (context) => const SchedulerForm(),
+        '/scheduler_Form': (context) => SchedulerFormRoute(),
       },
     );
   }
