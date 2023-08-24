@@ -10,6 +10,7 @@ import 'package:fireapp/presentation/register/register_page.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 //INTERNAL
 import 'layout/wrapper.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
         '/server_url_page': (context) => const ServerUrlPage(),
         '/scheduler_Form': (context) => const SchedulerForm(),
+        '/scheduler_Form': (context) => SchedulerFormRoute(),
       },
     );
   }
