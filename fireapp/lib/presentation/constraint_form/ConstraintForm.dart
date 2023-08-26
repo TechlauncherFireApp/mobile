@@ -41,25 +41,36 @@ class _ConstraintFormState extends State<ConstraintForm> {
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
             ),
-            DropdownButtonFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Row(
+              children: [
+                const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                Expanded(
+                  child: DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    value: dropdownValue,
+                    items: <int>[1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text('Asset $value'),
+                      );
+                    }).toList(),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        dropdownValue = newValue!;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              value: dropdownValue,
-              items: const [
-                DropdownMenuItem(value: 1, child: Text('Asset 1')),
-                DropdownMenuItem(value: 2, child: Text('Asset 2')),
               ],
-              onChanged: (int? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
             ),
+
+
             _SchedulerDateInput(
               controller: inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
