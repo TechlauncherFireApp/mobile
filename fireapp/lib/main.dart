@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
 import 'package:fireapp/global/di.dart';
+import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information.dart';
 import 'package:fireapp/presentation/login/login_page.dart';
 import 'package:fireapp/presentation/register/register_page.dart';
@@ -56,6 +57,7 @@ class _MyAppState extends State<MyApp> {
         '/reset_password': (context) => const ResetPage(),
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
+        '/scheduler_form': (context) => SchedulerFormRoute(),
       },
     );
   }
