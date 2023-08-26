@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
         '/scheduler_form': (context) => SchedulerFormRoute(),
-        '/constraint_form': (context) => ConstraintFormPage(),
+        '/constraint_form': (context) => ConstraintFormRoute(),
       },
     );
   }

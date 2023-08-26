@@ -1,243 +1,202 @@
-import 'dart:async';
-
-import 'package:fireapp/base/spaced_by.dart';
-import 'package:fireapp/base/widget.dart';
-import 'package:fireapp/domain/request_state.dart';
-import 'package:fireapp/presentation/fireapp_page.dart';
-import 'package:fireapp/presentation/login/login_navigation.dart';
-import 'package:fireapp/presentation/login/login_view_model.dart';
-import 'package:fireapp/style/theme.dart';
-import 'package:fireapp/widgets/fill_width.dart';
-import 'package:fireapp/widgets/form/password_form_field.dart';
-import 'package:fireapp/widgets/request_state_spinner.dart';
-import 'package:fireapp/widgets/request_state_widget.dart';
-import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
-import 'package:fireapp/widgets/standard_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../widgets/simple_divider.dart';
-
-class ConstraintFormPage extends StatefulWidget {
-  const ConstraintFormPage({super.key});
-
-  @override
-  State createState() => _LoginState();
-}
-
-class _LoginState extends FireAppState<ConstraintFormPage>
-    with Navigable<LoginNavigation, ConstraintFormPage>
-    implements ViewModelHolder<LoginViewModel> {
-  @override
-  LoginViewModel viewModel = GetIt.instance.get<LoginViewModel>();
-  final GlobalKey _formKey = GlobalKey<FormState>(); // Used to submit inputs
-
-  @override
-  void handleNavigationEvent(LoginNavigation event) {
-    if (event is HomeLoginNavigation) {
-      Navigator.of(context).popAndPushNamed("/nav");
-      return;
-    }
-
-    if (event is RegisterLoginNavigation) {
-      Navigator.of(context).popAndPushNamed("/register");
-      return;
-    }
-
-    if (event is ForgotPasswordLoginNavigation) {
-      Navigator.of(context).pushNamed("/reset_password");
-      return;
-    }
-  }
-
+class ConstraintFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ScrollViewBottomContent(
-          padding: EdgeInsets.all(1.rdp()),
-          bottomChildren: bottomActions(context),
-          children: [buildScheduler(context)].spacedBy(1.rdp()),
+      appBar: AppBar(title: const Text('Scheduler')),
+      resizeToAvoidBottomInset: false,
+      body: ConstraintForm(),
+    );
+  }
+}
+
+class ConstraintForm extends StatefulWidget {
+  @override
+  _ConstraintFormState createState() => _ConstraintFormState();
+}
+
+class _ConstraintFormState extends State<ConstraintForm> {
+  final _formKey = GlobalKey<FormState>();
+  int dropdownValue = 1;
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController inputDateController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SchedulerInputField(
+              controller: titleController,
+              label: AppLocalizations.of(context)?.volunteer_name ?? "",
+              icon: Icons.title,
+              validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
+            ),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              value: dropdownValue,
+              items: const [
+                DropdownMenuItem(value: 1, child: Text('Asset 1')),
+                DropdownMenuItem(value: 2, child: Text('Asset 2')),
+              ],
+              onChanged: (int? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+            ),
+            _SchedulerDateInput(
+              controller: inputDateController,
+              label: AppLocalizations.of(context)?.enterDate ?? "",
+              icon: Icons.calendar_today,
+              validator: (v) => v!.isEmpty ? 'Date is empty!' : null,
+            ),
+            _SchedulerTimeInput(
+              controller: startTimeController,
+              label: AppLocalizations.of(context)?.enterStartTime ?? "",
+              icon: Icons.hourglass_top,
+              validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // Call ViewModel or whatever business logic you have
+                }
+              },
+              child: const Text("Add Schedule"),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  List<Widget> bottomActions(BuildContext context) {
-    return [
-      SizedBox(
-        height: 1.rdp(),
+class _SchedulerInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final String? Function(String?)? validator;
+
+  const _SchedulerInputField({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[200],
+        icon: Icon(icon),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
-      FillWidth(
-          child: StandardButton(
-              type: ButtonType.primary,
-              onPressed: () => viewModel.login(),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppLocalizations.of(context)?.loginContinue ?? ""),
-                  RequestStateSpinner.stream(
-                      state: viewModel.state,
-                      child: SizedBox(
-                        width: 1.rdp(),
-                        height: 1.rdp(),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                      ))
-                ].spacedBy(0.5.rdp()),
-              ))),
-      FillWidth(
-          child: StandardButton(
-              type: ButtonType.tertiary,
-              onPressed: () => viewModel.navigateToRegister(),
-              child:
-                  Text(AppLocalizations.of(context)?.loginToRegister ?? ""))),
-    ];
-  }
-
-  Widget buildScheduler(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          FillWidth(
-            child: Text(
-              AppLocalizations.of(context)?.schedulerTitle ?? "",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-          SizedBox(
-            height: 0.5.rdp(),
-          ),
-          TextFormField(
-            decoration: textFieldStyle(context,
-                    radius: BorderRadius.only(
-                        topLeft: Radius.circular(0.5.rdp()),
-                        topRight: Radius.circular(0.5.rdp())))
-                .copyWith(
-              hintText: AppLocalizations.of(context)?.volunteer_name ?? "",
-            ),
-            style: Theme.of(context).textTheme.labelLarge,
-            controller: viewModel.email,
-            validator: (v) {
-              if (v!.isEmpty) {
-                return 'Email is empty!';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          DropdownMenu(
-              dropdownMenuEntries: (<String>[
-            "Asset 1",
-            "Asset 2",
-            "Asset 3",
-            "Asset 4"
-          ]).map<DropdownMenuEntry<String>>((String value) {
-            return DropdownMenuEntry<String>(value: value, label: value);
-          }).toList(),
-          label: const Text("Choose Asset"),
-          inputDecorationTheme: (),),
-
-          // PasswordFormField(
-          //   decoration: textFieldStyle(
-          //       context,
-          //       radius: BorderRadius.only(
-          //           bottomLeft: Radius.circular(0.5.rdp()),
-          //           bottomRight: Radius.circular(0.5.rdp())
-          //       )
-          //   ).copyWith(
-          //       hintText: AppLocalizations.of(context)?.loginPassword ?? ""
-          //   ),
-          //   controller: viewModel.password,
-          //   validator: (v) {
-          //     if (v!.isEmpty) {
-          //       return 'Password is empty!';
-          //     }
-          //     return null;
-          //   },
-          //
-          // ),
-          buildForgotPasswordText(context),
-          StreamBuilder(
-            stream: viewModel.state,
-            builder: (_, d) {
-              if (!d.hasData) return Container();
-              final data = d.data;
-              if (data == null || data is! ExceptionRequestState)
-                return Container();
-              return Text(
-                "${data.exception}",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Theme.of(context).colorScheme.error),
-              );
-            },
-          )
-        ],
-      ),
+      validator: validator,
     );
   }
+}
 
-  Widget buildForgotPasswordText(BuildContext context) {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: StandardButton(
-            type: ButtonType.tertiary,
-            onPressed: () => viewModel.navigateToForgotPassword(),
-            child: Text(AppLocalizations.of(context)?.loginForgotPassword ?? "",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Theme.of(context).hintColor))));
+class _SchedulerDateInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final String? Function(String?)? validator;
+
+  _SchedulerDateInput({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[200],
+        icon: Icon(icon),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      readOnly: true,
+      validator: validator,
+      onTap: () async {
+        DateTime? selectedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2020),
+          lastDate: DateTime(2100),
+        );
+        if (selectedDate != null) {
+          controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+        }
+      },
+    );
   }
+}
 
-  Widget buildLoginButton(BuildContext context) {
-    return StreamBuilder<RequestState<void>>(
-      stream: viewModel.state,
-      builder: (context, value) {
-        if (!value.hasData) return Container();
-        var data = value.data;
-        var onPressed = (data is! LoadingRequestState)
-            ? () {
-                if ((_formKey.currentState as FormState).validate()) {
-                  viewModel.login();
-                }
-              }
-            : null;
-        return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(
-                  40), // fromHeight use double.infinity as width and 40 is the height
-            ),
-            onPressed: onPressed,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Sign In',
-                    style: Theme.of(context).primaryTextTheme.headline6),
-                if (data is LoadingRequestState)
-                  SizedBox(
-                    height: 8,
-                    width: 8,
-                    child: CircularProgressIndicator(
-                        color: (Theme.of(context)
-                                .primaryTextTheme
-                                .headline6
-                                ?.color ??
-                            Colors.white)),
-                  )
-              ].spacedBy(8),
-            ));
+class _SchedulerTimeInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final String? Function(String?)? validator;
+
+  const _SchedulerTimeInput({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[200],
+        icon: Icon(icon),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      readOnly: true,
+      validator: validator,
+      onTap: () async {
+        TimeOfDay? selectedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+        );
+        if (selectedTime != null) {
+          controller.text = selectedTime.format(context);
+        }
       },
     );
   }

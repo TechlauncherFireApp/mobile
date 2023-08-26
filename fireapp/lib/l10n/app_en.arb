@@ -120,5 +120,8 @@
   "registerContinue": "Sign up",
   "registerToLogin": "I already have an account",
   "tabVolunteerTitle": "Volunteers",
-  "schedulerTitle" : "Scheduler"
+  "schedulerTitle" : "Scheduler",
+  "enterDate" : "Enter Date",
+  "enterStartTime" : "Enter Start Time",
+  "enterEndTime" : "Enter End Time"
 }
