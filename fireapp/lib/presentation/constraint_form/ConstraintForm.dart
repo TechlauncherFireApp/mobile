@@ -43,7 +43,10 @@ class _ConstraintFormState extends State<ConstraintForm> {
             ),
             Row(
               children: [
-                const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                Container(
+                  margin: const EdgeInsets.only(right: 16.0),
+                  child: const Icon(Icons.arrow_drop_down, color: Colors.grey, size: 24),
+                ),
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     decoration: InputDecoration(
