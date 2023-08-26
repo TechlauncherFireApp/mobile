@@ -119,5 +119,6 @@
   "registerGenderSelect": "Select your gender",
   "registerContinue": "Sign up",
   "registerToLogin": "I already have an account",
-  "tabVolunteerTitle": "Volunteers"
+  "tabVolunteerTitle": "Volunteers",
+  "schedulerTitle" : "Scheduler"
 }
