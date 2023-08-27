@@ -45,17 +45,19 @@ class _ConstraintFormState extends State<ConstraintForm> {
             ),
             Row(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 16.0),
-                  child: const Icon(Icons.arrow_drop_down, color: Colors.grey, size: 24),
-                ),
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     decoration: InputDecoration(
+                      labelStyle: Theme.of(context).textTheme.labelLarge,
                       filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      fillColor: Colors.white,
+                      prefixIcon: const Icon(Icons.arrow_drop_down),
+                      labelText: AppLocalizations.of(context)?.selectAsset,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
+                        ),
                       ),
                     ),
                     value: dropdownValue,
@@ -121,9 +123,9 @@ class _SchedulerInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.labelLarge, // For input text style
+      style: Theme.of(context).textTheme.labelLarge,
       decoration: InputDecoration(
-        labelStyle: Theme.of(context).textTheme.labelLarge, // For label text style
+        labelStyle: Theme.of(context).textTheme.labelLarge,
         filled: true,
         fillColor: Colors.white,
         prefixIcon: Icon(icon),
@@ -156,13 +158,13 @@ class _SchedulerDateInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller, // Make sure controller is defined and initialized
-      style: Theme.of(context).textTheme.labelLarge, // Moved style here
+      controller: controller,
+      style: Theme.of(context).textTheme.labelLarge,
       decoration: InputDecoration(
-        labelText: AppLocalizations.of(context)?.enterDate, // Removed const
+        labelText: AppLocalizations.of(context)?.enterDate,
         fillColor: Colors.white,
-        filled: true,  // Added this line to actually fill the field with color
-        prefixIcon: const Icon(Icons.calendar_today), // Removed const
+        filled: true,
+        prefixIcon: const Icon(Icons.calendar_today),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(4.0),
@@ -203,13 +205,13 @@ class _SchedulerTimeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller, // Make sure controller is defined and initialized
-      style: Theme.of(context).textTheme.labelLarge, // Moved style here
+      controller: controller,
+      style: Theme.of(context).textTheme.labelLarge,
       decoration: InputDecoration(
-        labelText: AppLocalizations.of(context)?.enterStartTime, // Removed const
+        labelText: AppLocalizations.of(context)?.enterStartTime,
         fillColor: Colors.white,
-        filled: true,  // Added this line to actually fill the field with color
-        prefixIcon: Icon(icon), // Removed const
+        filled: true,
+        prefixIcon: Icon(icon),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(4.0),
