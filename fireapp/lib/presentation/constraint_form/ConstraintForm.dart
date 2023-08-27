@@ -121,11 +121,14 @@ class _SchedulerInputField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.grey[200],
-        icon: Icon(icon),
+        fillColor: Colors.white,
+        prefixIcon: Icon(icon),
         labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.0),
+            topRight: Radius.circular(4.0),
+          ),
         ),
       ),
       validator: validator,
@@ -139,7 +142,7 @@ class _SchedulerDateInput extends StatelessWidget {
   final IconData icon;
   final String? Function(String?)? validator;
 
-  _SchedulerDateInput({
+  const _SchedulerDateInput({
     required this.controller,
     required this.label,
     required this.icon,
@@ -152,7 +155,7 @@ class _SchedulerDateInput extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)?.enterDate,
-        prefixIcon: Icon(Icons.calendar_today), // Using prefixIcon to put the calendar icon on the left side
+        prefixIcon: const Icon(Icons.calendar_today), // Using prefixIcon to put the calendar icon on the left side
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(4.0),
