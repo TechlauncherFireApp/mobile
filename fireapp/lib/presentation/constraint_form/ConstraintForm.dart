@@ -61,8 +61,8 @@ class _ConstraintFormState extends State<ConstraintForm> {
                       labelText: AppLocalizations.of(context)?.selectAsset,
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
+                          topLeft: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0),
                         ),
                       ),
                     ),
@@ -110,7 +110,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null,
             ),
             const SizedBox(
-              height: 2.0,
+              height: 420.0,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -162,8 +162,8 @@ class _SchedulerInputField extends StatelessWidget {
         labelText: label,
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
+            topLeft: Radius.circular(5.0),
+            topRight: Radius.circular(5.0),
           ),
         ),
       ),
@@ -197,8 +197,8 @@ class _SchedulerDateInput extends StatelessWidget {
         prefixIcon: const Icon(Icons.calendar_today),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
+            topLeft: Radius.circular(5.0),
+            topRight: Radius.circular(5.0),
           ),
         ),
       ),
@@ -246,8 +246,8 @@ class _SchedulerTimeInput extends StatelessWidget {
         prefixIcon: Icon(icon),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
+            topLeft: Radius.circular(5.0),
+            topRight: Radius.circular(5.0),
           ),
         ),
       ),
