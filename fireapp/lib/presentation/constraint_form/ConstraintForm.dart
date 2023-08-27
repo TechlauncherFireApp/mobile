@@ -14,6 +14,8 @@ class ConstraintFormRoute extends StatelessWidget {
 }
 
 class ConstraintForm extends StatefulWidget {
+  const ConstraintForm({super.key});
+
   @override
   _ConstraintFormState createState() => _ConstraintFormState();
 }
@@ -41,7 +43,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                   .textTheme
                   .labelLarge
                   ?.copyWith(color: Colors.grey[700]),
-              label: AppLocalizations.of(context)?.volunteer_name ?? "",
+              label: AppLocalizations.of(context)?.volunteer_name ?? "", // This will show volunteer name
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
             ),
@@ -78,7 +80,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                               .labelLarge
                               ?.copyWith(
                                   color: Colors
-                                      .grey[700]), // <-- Change color here
+                                      .grey[700]), // will generate asset list in dropdown menu
                         ),
                       );
                     }).toList(),
@@ -98,7 +100,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               controller: inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
               icon: Icons.calendar_today,
-              validator: (v) => v!.isEmpty ? 'Date is empty!' : null,
+              validator: (v) => v!.isEmpty ? 'Date is empty!' : null, //will return this if date is empty when submit
             ),
             const SizedBox(
               height: 2.0,
@@ -107,7 +109,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               controller: startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
               icon: Icons.hourglass_top,
-              validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null,
+              validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null, //will return this if start time is empty when submit
             ),
             const SizedBox(
               height: 420.0,
@@ -153,9 +155,9 @@ class _SchedulerInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.labelLarge,
+      style: Theme.of(context).textTheme.labelLarge, // using the same text theme from login_page
       decoration: InputDecoration(
-        labelStyle: Theme.of(context).textTheme.labelLarge,
+        labelStyle: Theme.of(context).textTheme.labelLarge, // using the same text theme from login_page
         filled: true,
         fillColor: Colors.white,
         prefixIcon: Icon(icon),
@@ -189,7 +191,7 @@ class _SchedulerDateInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.labelLarge,
+      style: Theme.of(context).textTheme.labelLarge, // using the same text theme from login_page
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)?.enterDate,
         fillColor: Colors.white,
@@ -247,7 +249,7 @@ class _SchedulerTimeInput extends StatelessWidget {
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(5.0),
-            topRight: Radius.circular(5.0),
+            topRight: Radius.circular(5.0), // same radius circular as login_page
           ),
         ),
       ),
