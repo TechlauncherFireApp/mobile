@@ -123,5 +123,6 @@
   "schedulerTitle" : "Scheduler",
   "enterDate": "Select Date",
   "enterStartTime" : "Enter Start Time",
-  "enterEndTime" : "Enter End Time"
+  "enterEndTime" : "Enter End Time",
+  "selectAsset" : "Select Asset"
 }
