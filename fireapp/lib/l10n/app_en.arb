@@ -125,7 +125,7 @@
   "serverUrlRemove": "This page can be skipped in official builds by running \"dart run environment_config:generate --serviceUrl=<your api url>\" before building."
   "tabVolunteerTitle": "Volunteers",
   "schedulerTitle" : "Scheduler"
-  "enterDate" : "Enter Date",
+  "enterDate": "Select Date",
   "enterStartTime" : "Enter Start Time",
   "enterEndTime" : "Enter End Time"
 }
