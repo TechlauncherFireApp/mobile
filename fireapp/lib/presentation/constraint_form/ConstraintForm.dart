@@ -30,7 +30,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: _formKey, // Make sure this is defined and initialized
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -38,6 +38,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
           children: [
             _SchedulerInputField(
               controller: titleController,
+              style: Theme.of(context).textTheme.bodyLarge,
               label: AppLocalizations.of(context)?.volunteer_name ?? "",
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
@@ -113,13 +114,16 @@ class _SchedulerInputField extends StatelessWidget {
     required this.label,
     required this.icon,
     this.validator,
+    TextStyle? style,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      style: Theme.of(context).textTheme.labelLarge, // For input text style
       decoration: InputDecoration(
+        labelStyle: Theme.of(context).textTheme.labelLarge, // For label text style
         filled: true,
         fillColor: Colors.white,
         prefixIcon: Icon(icon),
@@ -152,10 +156,13 @@ class _SchedulerDateInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      controller: controller, // Make sure controller is defined and initialized
+      style: Theme.of(context).textTheme.labelLarge, // Moved style here
       decoration: InputDecoration(
-        labelText: AppLocalizations.of(context)?.enterDate,
-        prefixIcon: const Icon(Icons.calendar_today), // Using prefixIcon to put the calendar icon on the left side
+        labelText: AppLocalizations.of(context)?.enterDate, // Removed const
+        fillColor: Colors.white,
+        filled: true,  // Added this line to actually fill the field with color
+        prefixIcon: const Icon(Icons.calendar_today), // Removed const
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(4.0),
@@ -196,14 +203,18 @@ class _SchedulerTimeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      controller: controller, // Make sure controller is defined and initialized
+      style: Theme.of(context).textTheme.labelLarge, // Moved style here
       decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200],
-        icon: Icon(icon),
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+        labelText: AppLocalizations.of(context)?.enterStartTime, // Removed const
+        fillColor: Colors.white,
+        filled: true,  // Added this line to actually fill the field with color
+        prefixIcon: Icon(icon), // Removed const
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.0),
+            topRight: Radius.circular(4.0),
+          ),
         ),
       ),
       readOnly: true,
