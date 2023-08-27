@@ -152,6 +152,7 @@ class _SchedulerDateInput extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)?.enterDate,
+        prefixIcon: Icon(Icons.calendar_today), // Using prefixIcon to put the calendar icon on the left side
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(4.0),
