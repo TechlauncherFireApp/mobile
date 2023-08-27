@@ -1,3 +1,4 @@
+import 'package:fireapp/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -150,12 +151,12 @@ class _SchedulerDateInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200],
-        icon: Icon(icon),
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+        labelText: AppLocalizations.of(context)?.enterDate,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.0),
+            topRight: Radius.circular(4.0),
+          ),
         ),
       ),
       readOnly: true,
