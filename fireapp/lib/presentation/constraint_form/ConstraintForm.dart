@@ -37,20 +37,24 @@ class _ConstraintFormState extends State<ConstraintForm> {
           children: [
             _SchedulerInputField(
               controller: titleController,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Colors.grey[700]),
               label: AppLocalizations.of(context)?.volunteer_name ?? "",
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
             ),
-            const SizedBox(
-              height: 2.0
-            ),
+            const SizedBox(height: 2.0),
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     decoration: InputDecoration(
-                      labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.grey[700]),
                       filled: true,
                       fillColor: Colors.white,
                       prefixIcon: const Icon(Icons.arrow_drop_down),
@@ -63,12 +67,18 @@ class _ConstraintFormState extends State<ConstraintForm> {
                       ),
                     ),
                     value: dropdownValue,
-                    items: <int>[1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
+                    items: <int>[1, 2, 3, 4]
+                        .map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
                         child: Text(
                           'Asset $value',
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),  // <-- Change color here
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                  color: Colors
+                                      .grey[700]), // <-- Change color here
                         ),
                       );
                     }).toList(),
@@ -84,8 +94,6 @@ class _ConstraintFormState extends State<ConstraintForm> {
             const SizedBox(
               height: 2.0,
             ),
-
-
             _SchedulerDateInput(
               controller: inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
@@ -105,12 +113,20 @@ class _ConstraintFormState extends State<ConstraintForm> {
               height: 2.0,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(40),
+              ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // Call ViewModel or whatever business logic you have
                 }
               },
-              child: const Text("Add Schedule"),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Add Schedule"),
+                ],
+              ),
             ),
           ],
         ),
