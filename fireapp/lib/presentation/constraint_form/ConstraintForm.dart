@@ -1,4 +1,4 @@
-import 'package:fireapp/style/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,7 +30,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey, // Make sure this is defined and initialized
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -38,17 +38,20 @@ class _ConstraintFormState extends State<ConstraintForm> {
           children: [
             _SchedulerInputField(
               controller: titleController,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),
               label: AppLocalizations.of(context)?.volunteer_name ?? "",
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
+            ),
+            const SizedBox(
+              height: 2.0
             ),
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     decoration: InputDecoration(
-                      labelStyle: Theme.of(context).textTheme.labelLarge,
+                      labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),
                       filled: true,
                       fillColor: Colors.white,
                       prefixIcon: const Icon(Icons.arrow_drop_down),
@@ -64,7 +67,10 @@ class _ConstraintFormState extends State<ConstraintForm> {
                     items: <int>[1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
-                        child: Text('Asset $value'),
+                        child: Text(
+                          'Asset $value',
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey[700]),  // <-- Change color here
+                        ),
                       );
                     }).toList(),
                     onChanged: (int? newValue) {
@@ -76,6 +82,9 @@ class _ConstraintFormState extends State<ConstraintForm> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 2.0,
+            ),
 
 
             _SchedulerDateInput(
@@ -84,11 +93,17 @@ class _ConstraintFormState extends State<ConstraintForm> {
               icon: Icons.calendar_today,
               validator: (v) => v!.isEmpty ? 'Date is empty!' : null,
             ),
+            const SizedBox(
+              height: 2.0,
+            ),
             _SchedulerTimeInput(
               controller: startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
               icon: Icons.hourglass_top,
               validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null,
+            ),
+            const SizedBox(
+              height: 2.0,
             ),
             ElevatedButton(
               onPressed: () {
@@ -194,19 +209,21 @@ class _SchedulerTimeInput extends StatelessWidget {
   final String label;
   final IconData icon;
   final String? Function(String?)? validator;
+  final TextStyle? style;
 
   const _SchedulerTimeInput({
     required this.controller,
     required this.label,
     required this.icon,
     this.validator,
+    this.style,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.labelLarge,
+      style: style ?? Theme.of(context).textTheme.labelLarge,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)?.enterStartTime,
         fillColor: Colors.white,
