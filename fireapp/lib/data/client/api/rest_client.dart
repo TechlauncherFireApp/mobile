@@ -12,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/models/role_request.dart';
+import '../../../domain/models/shift_request.dart';
 
 part 'rest_client.g.dart';
 
@@ -43,6 +44,7 @@ abstract class RestClient {
   Future<void> updateVolunteerRoles(
       @Body() RoleRequest roleRequest
   );
+
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
       @Body() RoleRequest roleRequest
@@ -53,9 +55,27 @@ abstract class RestClient {
       @Query("volunteerId") String volunteerId,
       @Query("qualificationId") String qualificationId
   );
+
   @PATCH("/user-qualification")
   Future<void> updateVolunteerQualificationsPatch(
       @Query("volunteerId") String volunteerId,
       @Query("qualificationId") String qualificationId
+  );
+  @GET("/shift/request")
+  Future<List<ShiftRequest>> getShiftRequest(
+      @Query("requestID") String requestID
+  );
+
+  @DELETE("/shift/request")
+  Future<void> deleteShiftAssignment(
+      @Query("shift_id") int shiftId,
+      @Query("position_id") int positionId
+  );
+
+  @PATCH("/shift/request")
+  Future<void> updateShiftByPosition(
+      @Query("shift_id") int shiftId,
+      @Query("position_id") int positionId,
+      @Query("volunteer_id") int volunteerId
   );
 }
