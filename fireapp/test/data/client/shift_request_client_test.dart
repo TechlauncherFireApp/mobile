@@ -1,27 +1,27 @@
 import 'package:fireapp/data/client/api/rest_client.dart';
 import 'package:fireapp/data/client/shift_request_client.dart';
-import 'package:fireapp/domain/repository/shift_request_repository.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
+import 'package:fireapp/domain/repository/shift_request_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateNiceMocks([
-  MockSpec<RestClient>(),
-])
 import 'shift_request_client_test.mocks.dart';
+@GenerateNiceMocks([
+  MockSpec<ShiftRequestClient>(),
+])
 
 void main() {
-  group('ShiftRequestClient', () {
-    late RestClient mockRestClient;
-    late ShiftRequestClient shiftRequestClient;
+  group('ShiftRequestRepository', () {
+    late ShiftRequestClient mockShiftRequestClient;
+    late ShiftRequestRepository shiftRequestRepository;
 
     setUp(() {
-      mockRestClient = MockRestClient();
-      shiftRequestClient = ShiftRequestClient(mockRestClient);
+      mockShiftRequestClient = MockShiftRequestClient();
+      shiftRequestRepository = ShiftRequestRepository(mockShiftRequestClient);
     });
 
-    test('getShiftRequestsByRequestID should return a list of ShiftRequest from RestClient', () async {
+    test('getShiftRequestsByRequestID should return a list of ShiftRequest from ShiftRequestClient', () async {
       const requestID = 'ABC123';
       final expectedList = [
         ShiftRequest(
@@ -31,30 +31,40 @@ void main() {
           endTime: DateTime.now().add(Duration(hours: 1)),
           shiftVolunteers: [],
         ),
-        // You can add more mock data to this list if necessary
       ];
 
-      when(mockRestClient.getShiftRequest(requestID))
+      when(mockShiftRequestClient.getShiftRequestsByRequestID(requestID))
           .thenAnswer((_) async => expectedList);
 
-      final result = await shiftRequestClient.getShiftRequestsByRequestID(requestID);
+      final result = await shiftRequestRepository.getShiftRequestsByRequestID(requestID);
 
       expect(result, equals(expectedList));
-      verify(mockRestClient.getShiftRequest(requestID)).called(1);
+      verify(mockShiftRequestClient.getShiftRequestsByRequestID(requestID)).called(1);
     });
 
-    test('updateShiftByPosition should call restClient.updateShiftByPosition', () async {
+    test('deleteShiftAssignment should call shiftRequestClient.deleteShiftAssignment', () async {
+      const shiftId = 1;
+      const positionId = 2;
+
+      when(mockShiftRequestClient.deleteShiftAssignment(shiftId, positionId))
+          .thenAnswer((_) async => null);
+
+      await shiftRequestRepository.deleteShiftAssignment(shiftId, positionId);
+
+      verify(mockShiftRequestClient.deleteShiftAssignment(shiftId, positionId)).called(1);
+    });
+
+    test('updateShiftByPosition should call shiftRequestClient.updateShiftByPosition', () async {
       const shiftId = 1;
       const positionId = 2;
       const volunteerId = 3;
 
-      when(mockRestClient.updateShiftByPosition(shiftId, positionId, volunteerId))
+      when(mockShiftRequestClient.updateShiftByPosition(shiftId, positionId, volunteerId))
           .thenAnswer((_) async => null);
 
-      await shiftRequestClient.updateShiftByPosition(shiftId, positionId, volunteerId);
+      await shiftRequestRepository.updateShiftByPosition(shiftId, positionId, volunteerId);
 
-      verify(mockRestClient.updateShiftByPosition(shiftId, positionId, volunteerId)).called(1);
+      verify(mockShiftRequestClient.updateShiftByPosition(shiftId, positionId, volunteerId)).called(1);
     });
-
   });
 }
