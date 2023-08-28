@@ -3,12 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConstraintFormRoute extends StatelessWidget {
+  const ConstraintFormRoute({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Scheduler')),
       resizeToAvoidBottomInset: false,
-      body: ConstraintForm(),
+      body: const ConstraintForm(),
     );
   }
 }
