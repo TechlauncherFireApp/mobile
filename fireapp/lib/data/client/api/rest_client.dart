@@ -44,6 +44,7 @@ abstract class RestClient {
   Future<void> updateVolunteerRoles(
       @Body() RoleRequest roleRequest
   );
+
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
       @Body() RoleRequest roleRequest
@@ -54,6 +55,7 @@ abstract class RestClient {
       @Query("volunteerId") String volunteerId,
       @Query("qualificationId") String qualificationId
   );
+
   @PATCH("/user-qualification")
   Future<void> updateVolunteerQualificationsPatch(
       @Query("volunteerId") String volunteerId,
@@ -62,21 +64,18 @@ abstract class RestClient {
   @GET("/shift/request")
   Future<List<ShiftRequest>> getShiftRequest(
       @Query("requestID") String requestID
-      );
+  );
 
-  // Corresponds to DELETE method in Flask
   @DELETE("/shift/request")
-  Future<Map<String, dynamic>> deleteShiftAssignment(
+  Future<void> deleteShiftAssignment(
       @Query("shift_id") int shiftId,
       @Query("position_id") int positionId
-      );
+  );
 
-  // Corresponds to PATCH method in Flask
   @PATCH("/shift/request")
-  Future<Map<String, dynamic>> updateShiftByPosition(
+  Future<void> updateShiftByPosition(
       @Query("shift_id") int shiftId,
       @Query("position_id") int positionId,
       @Query("volunteer_id") int volunteerId
-      );
-
+  );
 }

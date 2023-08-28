@@ -11,11 +11,12 @@ class ShiftRequestClient {
     return restClient.getShiftRequest(requestID);
   }
 
-  Future<Map<String, dynamic>> deleteShiftAssignment(int shiftId, int positionId) {
+  Future<void> deleteShiftAssignment(int shiftId, int positionId) {
     return restClient.deleteShiftAssignment(shiftId, positionId);
   }
 
-  Future<Map<String, dynamic>> updateShiftByPosition(int shiftId, int positionId, int volunteerId) {
+  Future<void> updateShiftByPosition(int shiftId, int positionId, int volunteerId) {
     return restClient.updateShiftByPosition(shiftId, positionId, volunteerId);
   }
 }
+

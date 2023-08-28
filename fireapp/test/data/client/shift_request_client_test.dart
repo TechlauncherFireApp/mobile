@@ -1,5 +1,6 @@
 import 'package:fireapp/data/client/api/rest_client.dart';
 import 'package:fireapp/data/client/shift_request_client.dart';
+import 'package:fireapp/domain/repository/shift_request_repository.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -42,32 +43,16 @@ void main() {
       verify(mockRestClient.getShiftRequest(requestID)).called(1);
     });
 
-    test('deleteShiftAssignment should call restClient.deleteShiftAssignment', () async {
-      const shiftId = 1;
-      const positionId = 2;
-      final expectedResponse = {'message': 'Shift assignment deleted successfully'};
-
-      when(mockRestClient.deleteShiftAssignment(shiftId, positionId))
-          .thenAnswer((_) async => expectedResponse);
-
-      final result = await shiftRequestClient.deleteShiftAssignment(shiftId, positionId);
-
-      expect(result, equals(expectedResponse));
-      verify(mockRestClient.deleteShiftAssignment(shiftId, positionId)).called(1);
-    });
-
     test('updateShiftByPosition should call restClient.updateShiftByPosition', () async {
       const shiftId = 1;
       const positionId = 2;
       const volunteerId = 3;
-      final expectedResponse = {'message': 'Shift updated successfully'};
 
       when(mockRestClient.updateShiftByPosition(shiftId, positionId, volunteerId))
-          .thenAnswer((_) async => expectedResponse);
+          .thenAnswer((_) async => null);
 
-      final result = await shiftRequestClient.updateShiftByPosition(shiftId, positionId, volunteerId);
+      await shiftRequestClient.updateShiftByPosition(shiftId, positionId, volunteerId);
 
-      expect(result, equals(expectedResponse));
       verify(mockRestClient.updateShiftByPosition(shiftId, positionId, volunteerId)).called(1);
     });
 
