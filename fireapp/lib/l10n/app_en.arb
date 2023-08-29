@@ -121,5 +121,6 @@
   "registerToLogin": "I already have an account",
   "tabVolunteerTitle": "Volunteers",
   "serverUrlBlurb": "You need to enter the URL of a development environment",
-  "serverUrlHint": "Server URL"
+  "serverUrlHint": "Server URL",
+  "serverUrlRemove": "This page can be skipped in official builds by running \"dart run environment_config:generate --serviceUrl=<your api url>\" before building."
 }

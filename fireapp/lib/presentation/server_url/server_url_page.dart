@@ -70,27 +70,27 @@ class _ServerUrlPage
     return [
       SizedBox(height: 1.rdp(),),
       FillWidth(
-          child: StandardButton(
-              type: ButtonType.primary,
-              onPressed: () => viewModel.submit(),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppLocalizations.of(context)?.registerSubmit ?? ""),
-                  RequestStateSpinner.stream(
-                      state: viewModel.state,
-                      child: SizedBox(
-                        width: 1.rdp(),
-                        height: 1.rdp(),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                      )
+        child: StandardButton(
+          type: ButtonType.primary,
+          onPressed: () => viewModel.submit(),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context)?.registerSubmit ?? ""),
+              RequestStateSpinner.stream(
+                  state: viewModel.state,
+                  child: SizedBox(
+                    width: 1.rdp(),
+                    height: 1.rdp(),
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
                   )
-                ].spacedBy(0.5.rdp()),
               )
+            ].spacedBy(0.5.rdp()),
           )
+        )
       ),
     ];
   }
@@ -136,7 +136,15 @@ class _ServerUrlPage
                 ),
               );
             },
-          )
+          ),
+          SizedBox(height: 0.5.rdp()),
+          FillWidth(
+            child: Text(
+              AppLocalizations.of(context)?.serverUrlRemove ?? "",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
         ],
       ),
     );
