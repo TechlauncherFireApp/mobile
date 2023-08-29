@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 
 class ConstraintFormRoute extends StatelessWidget {
   const ConstraintFormRoute({super.key});
@@ -23,24 +24,20 @@ class ConstraintForm extends StatefulWidget {
 }
 
 class _ConstraintFormState extends State<ConstraintForm> {
-  final _formKey = GlobalKey<FormState>();
-  int dropdownValue = 1;
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController inputDateController = TextEditingController();
-  TextEditingController startTimeController = TextEditingController();
+  final viewModel = ConstraintFormViewModel();
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: viewModel.formKey,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SchedulerInputField(
-              controller: titleController,
+              controller: viewModel.titleController,
               style: Theme.of(context)
                   .textTheme
                   .labelLarge
@@ -70,7 +67,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                         ),
                       ),
                     ),
-                    value: dropdownValue,
+                    value: viewModel.dropdownValue,
                     items: <int>[1, 2, 3, 4]
                         .map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
@@ -88,7 +85,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                     }).toList(),
                     onChanged: (int? newValue) {
                       setState(() {
-                        dropdownValue = newValue!;
+                        viewModel.dropdownValue = newValue!;
                       });
                     },
                   ),
@@ -99,7 +96,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               height: 2.0,
             ),
             _SchedulerDateInput(
-              controller: inputDateController,
+              controller: viewModel.inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
               icon: Icons.calendar_today,
               validator: (v) => v!.isEmpty ? 'Date is empty!' : null, //will return this if date is empty when submit
@@ -108,7 +105,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               height: 2.0,
             ),
             _SchedulerTimeInput(
-              controller: startTimeController,
+              controller: viewModel.startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
               icon: Icons.hourglass_top,
               validator: (v) => v!.isEmpty ? 'Start Time is empty!' : null, //will return this if start time is empty when submit
@@ -121,7 +118,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                 minimumSize: const Size.fromHeight(40),
               ),
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (viewModel.formKey.currentState!.validate()) {
                   // Call ViewModel or whatever business logic you have
                 }
               },
