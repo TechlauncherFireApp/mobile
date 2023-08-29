@@ -117,11 +117,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(40),
               ),
-              onPressed: () {
-                if (viewModel.formKey.currentState!.validate()) {
-                  // Call ViewModel or whatever business logic you have
-                }
-              },
+              onPressed: viewModel.submitForm,
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
