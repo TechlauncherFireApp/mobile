@@ -119,5 +119,7 @@
   "registerGenderSelect": "Select your gender",
   "registerContinue": "Sign up",
   "registerToLogin": "I already have an account",
-  "tabVolunteerTitle": "Volunteers"
+  "tabVolunteerTitle": "Volunteers",
+  "serverUrlBlurb": "You need to enter the URL of a development environment",
+  "serverUrlHint": "Server URL"
 }
