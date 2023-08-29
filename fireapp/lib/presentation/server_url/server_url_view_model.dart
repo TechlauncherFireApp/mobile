@@ -28,17 +28,10 @@ class ServerUrlViewModel
   ServerUrlViewModel(this._appConfigRepository);
 
   void submit() {
-    _state.add(RequestState.loading());
-    () async {
-      try {
-        _appConfigRepository.setServerUrl(url.text);
-        _navigate.add(const ServerUrlNavigation.home());
-        _state.add(RequestState.success(null));
-      } catch (e, stacktrace) {
-        logger.e("$e $stacktrace");
-        _state.add(RequestState.exception(e));
-      }
-    }();
+    handle(_state, () async {
+      _appConfigRepository.setServerUrl(url.text);
+      _navigate.add(const ServerUrlNavigation.home());
+    });
   }
 
   @override
