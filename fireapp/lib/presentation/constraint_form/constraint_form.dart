@@ -164,12 +164,7 @@ class _SchedulerInputField extends StatelessWidget {
         fillColor: Colors.white,
         prefixIcon: Icon(icon),
         labelText: label,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(5.0),
-            topRight: Radius.circular(5.0),
-          ),
-        ),
+        border: commonInputBorder
       ),
       validator: validator,
     );
@@ -199,12 +194,7 @@ class _SchedulerDateInput extends StatelessWidget {
         fillColor: Colors.white,
         filled: true,
         prefixIcon: const Icon(Icons.calendar_today),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(5.0),
-            topRight: Radius.circular(5.0),
-          ),
-        ),
+        border: commonInputBorder,
       ),
       readOnly: true,
       validator: validator,
@@ -248,12 +238,7 @@ class _SchedulerTimeInput extends StatelessWidget {
         fillColor: Colors.white,
         filled: true,
         prefixIcon: Icon(icon),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(5.0),
-            topRight: Radius.circular(5.0), // same radius circular as login_page
-          ),
-        ),
+        border: commonInputBorder,
       ),
       readOnly: true,
       validator: validator,
@@ -269,3 +254,11 @@ class _SchedulerTimeInput extends StatelessWidget {
     );
   }
 }
+
+var commonInputBorder =  const OutlineInputBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(5.0),
+        topRight: Radius.circular(5.0), // same radius circular as login_page
+      ),
+    );
+
