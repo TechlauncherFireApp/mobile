@@ -131,7 +131,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
 }
 
 class _SchedulerInputField extends _BaseInputField {
-  _SchedulerInputField(
+  const _SchedulerInputField(
       TextEditingController controller,
       TextStyle? style,
       String label,
@@ -147,7 +147,7 @@ class _SchedulerInputField extends _BaseInputField {
 }
 
 class _SchedulerDateInput extends _BaseInputField {
-  _SchedulerDateInput(
+  const _SchedulerDateInput(
   TextEditingController controller,
       String label,
       IconData icon,
@@ -162,7 +162,7 @@ class _SchedulerDateInput extends _BaseInputField {
 }
 
 class _SchedulerTimeInput extends _BaseInputField {
-  _SchedulerTimeInput(
+  const _SchedulerTimeInput(
       TextEditingController controller,
       String label,
       IconData icon,
