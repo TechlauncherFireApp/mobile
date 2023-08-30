@@ -26,7 +26,7 @@ class LoginViewModel
 
   bool obscureText = true;
 
-  final BehaviorSubject<LoginNavigation> _navigate = BehaviorSubject();
+  final BehaviorSubject<LoginNavigation>  _navigate = BehaviorSubject();
   @override
   Stream<LoginNavigation> get navigate => _navigate.stream;
 
