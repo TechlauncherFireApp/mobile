@@ -1,6 +1,6 @@
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
-tag-prefix: '(pre/)?[vV]'
+tag-prefix: '[vV]'
 next-version: 3.0.0
 branches:
   develop:
