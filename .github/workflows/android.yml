@@ -82,7 +82,7 @@ jobs:
           draft: false
           prerelease: true
           release_name: Prerelease ${{ needs.version.outputs.version }}
-          tag_name: pre/v${{ needs.version.outputs.version }}
+          tag_name: v${{ needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
