@@ -1,40 +1,21 @@
-next-version: 3.0
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
+tag-prefix: '(pre/)?[vV]'
+next-version: 3.0.0
 branches:
-  master:
+  develop:
     mode: ContinuousDeployment
+    increment: Patch
     tag: ''
-    increment: Minor
     track-merge-target: true
     tracks-release-branches: true
-    regex: ^main
     is-release-branch: false
     prevent-increment-of-merged-branch-version: false
-  release:
-    regex: release?[/]
+  main:
+    tag: ''
     mode: ContinuousDeployment
-    increment: Patch # not working, when merging a bugfix from main
-    tag: 'beta'
+    increment: Minor
     is-release-branch: true
     prevent-increment-of-merged-branch-version: true
-  feature:
-    regex: feature?[/]
-    mode: ContinuousDeployment
-    increment: Inherit
-    tag: 'alpha'
-    is-release-branch: false
-    prevent-increment-of-merged-branch-version: true
-  bugfix:
-    regex: bugfix?[/]
-    mode: ContinuousDeployment
-    increment: Inherit
-    tag: '-bugfix'
-    is-release-branch: false
-    prevent-increment-of-merged-branch-version: true
-    source-branches: ['main', 'feature', 'release']
-  pull-request:
-    mode: ContinuousDeployment
-    tag: '-pr'
 ignore:
   sha: []
