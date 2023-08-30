@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
+import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
 
 enum schedulerInputType { text, date, time }
 
@@ -39,7 +40,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
           children: [
             _SchedulerInputField(
               viewModel.titleController,
-               Theme.of(context)
+              Theme.of(context)
                   .textTheme
                   .labelLarge
                   ?.copyWith(color: Colors.grey[700]),
@@ -130,51 +131,51 @@ class _ConstraintFormState extends State<ConstraintForm> {
   }
 }
 
-class _SchedulerInputField extends _BaseInputField {
+class _SchedulerInputField extends BaseInputField {
   const _SchedulerInputField(
-      TextEditingController controller,
-      TextStyle? style,
-      String label,
-      IconData icon,
-      String? Function(String?)? validator,) : super(
-    controller: controller,
-    style: style,
-    label: label,
-    icon: icon,
-    validator: validator,
-    inputType: schedulerInputType.text,
-  );
+    TextEditingController controller,
+    TextStyle? style,
+    String label,
+    IconData icon,
+    String? Function(String?)? validator,
+  ) : super(
+          controller: controller,
+          style: style,
+          label: label,
+          icon: icon,
+          validator: validator,
+          inputType: schedulerInputType.text,
+        );
 }
 
-class _SchedulerDateInput extends _BaseInputField {
+class _SchedulerDateInput extends BaseInputField {
   const _SchedulerDateInput(
-  TextEditingController controller,
-      String label,
-      IconData icon,
-      String? Function(String?)? validator,
-      ): super(
-    controller: controller,
-    label: label,
-    icon: icon,
-    validator: validator,
-    inputType: schedulerInputType.date,
-  );
+    TextEditingController controller,
+    String label,
+    IconData icon,
+    String? Function(String?)? validator,
+  ) : super(
+          controller: controller,
+          label: label,
+          icon: icon,
+          validator: validator,
+          inputType: schedulerInputType.date,
+        );
 }
 
-class _SchedulerTimeInput extends _BaseInputField {
+class _SchedulerTimeInput extends BaseInputField {
   const _SchedulerTimeInput(
-      TextEditingController controller,
-      String label,
-      IconData icon,
-      String? Function(String?)? validator,
-      ): super(
-    controller: controller,
-    label: label,
-    icon: icon,
-    validator: validator,
-    inputType: schedulerInputType.time,
-  );
-
+    TextEditingController controller,
+    String label,
+    IconData icon,
+    String? Function(String?)? validator,
+  ) : super(
+          controller: controller,
+          label: label,
+          icon: icon,
+          validator: validator,
+          inputType: schedulerInputType.time,
+        );
 }
 
 var commonInputBorder = const OutlineInputBorder(
@@ -183,115 +184,3 @@ var commonInputBorder = const OutlineInputBorder(
     topRight: Radius.circular(5.0), // same radius circular as login_page
   ),
 );
-
-
-class _BaseInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final IconData icon;
-  final String? Function(String?)? validator;
-  final TextStyle? style;
-  final schedulerInputType inputType;
-
-  const _BaseInputField({
-    required this.controller,
-    required this.label,
-    required this.icon,
-    this.validator,
-    this.style,
-    required this.inputType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    switch (inputType) {
-      case schedulerInputType.text:
-        {
-          return TextFormField(
-            controller: controller,
-            style: Theme
-                .of(context)
-                .textTheme
-                .labelLarge, // using the same text theme from login_page
-            decoration: InputDecoration(
-                labelStyle: Theme
-                    .of(context)
-                    .textTheme
-                    .labelLarge,
-                // using the same text theme from login_page
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: Icon(icon),
-                labelText: label,
-                border: commonInputBorder),
-            validator: validator,
-          );
-          // statements;
-        }
-      case schedulerInputType.date:
-        {
-          return TextFormField(
-            controller: controller,
-            style: Theme
-                .of(context)
-                .textTheme
-                .labelLarge,
-            // using the same text theme from login_page
-            decoration: InputDecoration(
-              labelText: AppLocalizations
-                  .of(context)
-                  ?.enterDate,
-              fillColor: Colors.white,
-              filled: true,
-              prefixIcon: const Icon(Icons.calendar_today),
-              border: commonInputBorder,
-            ),
-            readOnly: true,
-            validator: validator,
-            onTap: () async {
-              DateTime? selectedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2020),
-                lastDate: DateTime(2100),
-              );
-              if (selectedDate != null) {
-                controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
-              }
-            },
-          );
-        }
-      case schedulerInputType.time:
-        {
-          return TextFormField(
-            controller: controller,
-            style: style ?? Theme
-                .of(context)
-                .textTheme
-                .labelLarge,
-            decoration: InputDecoration(
-              labelText: AppLocalizations
-                  .of(context)
-                  ?.enterStartTime,
-              fillColor: Colors.white,
-              filled: true,
-              prefixIcon: Icon(icon),
-              border: commonInputBorder,
-            ),
-            readOnly: true,
-            validator: validator,
-            onTap: () async {
-              TimeOfDay? selectedTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (selectedTime != null) {
-                controller.text = selectedTime.format(context);
-              }
-            },
-          );
-          //statements;
-        }
-    }
-  }
-}
