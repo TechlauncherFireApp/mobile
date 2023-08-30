@@ -3,7 +3,7 @@ continuous-delivery-fallback-tag: ''
 tag-prefix: '[vV]'
 next-version: 3.0.0
 branches:
-  develop:
+  main:
     mode: ContinuousDeployment
     increment: Patch
     tag: ''
@@ -11,7 +11,7 @@ branches:
     tracks-release-branches: true
     is-release-branch: false
     prevent-increment-of-merged-branch-version: false
-  main:
+  release:
     tag: ''
     mode: ContinuousDeployment
     increment: Minor
