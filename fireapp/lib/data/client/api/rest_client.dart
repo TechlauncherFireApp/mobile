@@ -42,12 +42,14 @@ abstract class RestClient {
 
   @POST("/user-role")
   Future<void> updateVolunteerRoles(
-      @Body() RoleRequest roleRequest
+      @Query("userId") int userId,
+      @Query("roleId") int roleId
   );
 
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
-      @Body() RoleRequest roleRequest
+      @Query("userId") int userId,
+      @Query("roleId") int roleId
   );
 
   @POST("/user-qualification")

@@ -19,10 +19,10 @@ class VolunteerInformationClient{
 
   Future<void> updateRoles(int userId,List<VolunteerRole> activeRoles, List<VolunteerRole> inactiveRoles) async {
     for (VolunteerRole role in activeRoles) {
-      restClient.updateVolunteerRoles(RoleRequest(userId: userId, roleId: role.id));
+      restClient.updateVolunteerRoles(userId, role.id);
     }
     for (VolunteerRole role in inactiveRoles) {
-      restClient.patchVolunteerRoles(RoleRequest(userId: userId, roleId: role.id));
+      restClient.patchVolunteerRoles(userId, role.id);
     }
   }
 
