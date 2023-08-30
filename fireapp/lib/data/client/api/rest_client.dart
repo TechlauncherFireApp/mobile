@@ -16,7 +16,7 @@ import '../../../domain/models/shift_request.dart';
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: "https://test.api.fireapp-au.com/")
+@RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -42,12 +42,14 @@ abstract class RestClient {
 
   @POST("/user-role")
   Future<void> updateVolunteerRoles(
-      @Body() RoleRequest roleRequest
+      @Query("userId") int userId,
+      @Query("roleId") int roleId
   );
 
   @PATCH("/user-role")
   Future<void> patchVolunteerRoles(
-      @Body() RoleRequest roleRequest
+      @Query("userId") int userId,
+      @Query("roleId") int roleId
   );
 
   @POST("/user-qualification")
