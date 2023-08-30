@@ -7,10 +7,30 @@ on:
     branches: [ "main", "release" ]
 
 jobs:
-  build:
-
+  version:
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.gitversion.outputs.semVer }}
+      versionCode: ${{ steps.run_number.outputs.versionCode }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.6
+      with:
+        versionSpec: '5.x'
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9.6
+      with:
+        useConfigFile: true
+        configFilePath: ./gitversion.yml
+    - name: Display SemVer
+      run: |
+        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -41,7 +61,9 @@ jobs:
       
       
   publish-pre:
-    needs: build
+    needs:
+      - build
+      - version
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
@@ -59,8 +81,8 @@ jobs:
         with:
           draft: false
           prerelease: true
-          release_name: Prerelease ${{ steps.date.outputs.date }}.${{github.run_number}}
-          tag_name: pre/v${{ steps.date.outputs.date }}-${{github.run_number}}
+          release_name: Prerelease ${{ needs.version.outputs.version }}
+          tag_name: pre/v${{ needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
@@ -73,7 +95,9 @@ jobs:
           asset_name: app-debug.apk
           asset_content_type: application/vnd.android.package-archive
   publish-release:
-    needs: build
+    needs:
+      - build
+      - version
     if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
 
@@ -85,25 +109,14 @@ jobs:
         with:
           name: ${{github.run_number}}-apk
           path: ./fireapp/build/app/outputs/flutter-apk/
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.6
-        with:
-          versionSpec: '5.x'
-      - name: Use GitVersion
-        id: gitversion # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v0.9.6
-        with:
-          useConfigFile: true
-          showConfig: true
-          configFilePath: ./GitVersion.yml
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: Release ${{ steps.gitversion.outputs.semVer }}
-          tag_name: v${{ steps.gitversion.outputs.semVer }}
+          release_name: Release ${{ needs.version.outputs.version }}
+          tag_name: v${{ needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
@@ -113,5 +126,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
-          asset_name: app-debug.apk
+          asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
