@@ -60,12 +60,7 @@ class _ConstraintFormState extends State<ConstraintForm> {
                       fillColor: Colors.white,
                       prefixIcon: const Icon(Icons.arrow_drop_down),
                       labelText: AppLocalizations.of(context)?.selectAsset,
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5.0),
-                          topRight: Radius.circular(5.0),
-                        ),
-                      ),
+                      border: commonInputBorder,
                     ),
                     value: viewModel.dropdownValue,
                     items: <int>[1, 2, 3, 4]

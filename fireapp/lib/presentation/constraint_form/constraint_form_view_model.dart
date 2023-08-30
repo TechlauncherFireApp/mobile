@@ -16,11 +16,14 @@ class ConstraintFormViewModel {
   int dropdownValue = 1;
 
   // Function to be called when the form is submitted
-  submitForm() {
-    if (formKey.currentState!.validate()) {
+  void submitForm() {
+    formKey.currentState!.validate();
       // sending the data to database or other page
-      return true;
-    }
-    return false;
+}
+
+  void dispose() {
+    titleController.dispose();
+    inputDateController.dispose();
+    startTimeController.dispose();
   }
 }
