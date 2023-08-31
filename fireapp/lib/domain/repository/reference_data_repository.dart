@@ -1,4 +1,5 @@
 import 'package:fireapp/data/client/reference_data_client.dart';
+import 'package:fireapp/domain/models/reference/asset_type.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/reference_data.dart';
 import 'package:fireapp/domain/models/reference/reference_data_db.dart';
@@ -40,6 +41,20 @@ class ReferenceDataRepository {
             created: DateTime.fromMillisecondsSinceEpoch(e.created),
         ),
             () => _client.getRoles()
+    );
+  }
+
+  Future<List<AssetType>> getAssetType() async {
+    return _fetch<AssetType>(
+        ReferenceDataType.assetType,
+            (e) => AssetType(
+          id: e.id,
+          name: e.name,
+          code: e.code ?? "",
+          updated: DateTime.fromMillisecondsSinceEpoch(e.updated),
+          created: DateTime.fromMillisecondsSinceEpoch(e.created),
+        ),
+            () => _client.getAssetTypes()
     );
   }
 

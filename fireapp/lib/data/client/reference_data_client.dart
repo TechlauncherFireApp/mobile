@@ -4,6 +4,8 @@ import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/models/reference/asset_type.dart';
+
 @injectable
 class ReferenceDataClient {
 
@@ -16,6 +18,10 @@ class ReferenceDataClient {
 
   Future<List<VolunteerRole>> getRoles() {
     return restClient.getRoles();
+  }
+
+  Future<List<AssetType>> getAssetTypes() {
+    return restClient.getAssetTypes();
   }
 
 }
