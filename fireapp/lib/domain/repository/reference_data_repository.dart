@@ -62,15 +62,15 @@ class ReferenceDataRepository {
       ReferenceDataType type,
       T Function(ReferenceDataDb) map,
       Future<List<T>> Function() get,
-      ) async {
-        var current = await _persistence.getLastUpdated(type);
-        if (
+  ) async {
+    var current = await _persistence.getLastUpdated(type);
+    if (
         current != null &&
-            current.millisecondsSinceEpoch + lifetime > DateTime.now().millisecondsSinceEpoch
-        ) {
-          return (await _persistence.getReferenceData(type)).map((e) => map(e)).toList();
-        }
-        var data = await get();
+        current.millisecondsSinceEpoch + lifetime > DateTime.now().millisecondsSinceEpoch
+    ) {
+      return (await _persistence.getReferenceData(type)).map((e) => map(e)).toList();
+    }
+    var data = await get();
 
     _persistence.save(type, data.map((e) {
       return ReferenceDataDb(
