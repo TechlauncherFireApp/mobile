@@ -59,7 +59,7 @@ class _RegisterPageState
             SizedBox(height: 1.rdp(),),
             FillWidth(
               child: Text(
-                'ConstraintForm', // AppLocalizations.of(context)?.registerTitle ?? "",
+                AppLocalizations.of(context)?.registerTitle ?? "",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
