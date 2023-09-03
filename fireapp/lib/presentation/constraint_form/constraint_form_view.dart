@@ -6,8 +6,8 @@ import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
 
 enum schedulerInputType { text, date, time }
 
-class ConstraintFormRoute extends StatelessWidget {
-  const ConstraintFormRoute({super.key});
+class SchedulerConstraintPage extends StatelessWidget {
+  const SchedulerConstraintPage({super.key});
 
   @override
   Widget build(BuildContext context) {
