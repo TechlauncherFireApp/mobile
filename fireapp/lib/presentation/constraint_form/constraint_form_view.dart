@@ -14,19 +14,19 @@ class SchedulerConstraintPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Scheduler')),
       resizeToAvoidBottomInset: false,
-      body: const ConstraintForm(),
+      body: const SchedulerConstraintForm(),
     );
   }
 }
 
-class ConstraintForm extends StatefulWidget {
-  const ConstraintForm({super.key});
+class SchedulerConstraintForm extends StatefulWidget {
+  const SchedulerConstraintForm({super.key});
 
   @override
-  _ConstraintFormState createState() => _ConstraintFormState();
+  _SchedulerConstraintFormState createState() => _SchedulerConstraintFormState();
 }
 
-class _ConstraintFormState extends State<ConstraintForm> {
+class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
   final viewModel = ConstraintFormViewModel();
 
   @override
