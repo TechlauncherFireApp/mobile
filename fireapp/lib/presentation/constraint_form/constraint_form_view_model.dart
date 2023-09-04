@@ -24,13 +24,9 @@ class SchedulerConstraintFormViewModel {
 
   // Function to be called when the form is submitted
   void submitForm() {
-    if (formKey.currentState?.validate() == true) {
-      // add submission logic here
-    } else {
-      // If the form is not valid, handle accordingly
-    }
+    if (formKey.currentState?.validate() != true) return;
+    // Submission logic here
   }
-
 
   void dispose() { // Dispose of resources
     titleController.dispose();
