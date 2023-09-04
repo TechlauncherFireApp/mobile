@@ -27,7 +27,7 @@ class SchedulerConstraintForm extends StatefulWidget {
 }
 
 class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
-  final viewModel = ConstraintFormViewModel();
+  final viewModel = SchedulerConstraintFormViewModel();
 
   @override
   Widget build(BuildContext context) {

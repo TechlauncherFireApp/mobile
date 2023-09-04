@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../domain/request_state.dart';
 
-class ConstraintFormViewModel {
+class SchedulerConstraintFormViewModel {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // Text Editing Controllers
