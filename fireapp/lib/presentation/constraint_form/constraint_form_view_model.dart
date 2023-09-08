@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/models/reference/asset_type.dart';
 import '../../domain/request_state.dart';
 
 class SchedulerConstraintFormViewModel {
@@ -12,12 +13,8 @@ class SchedulerConstraintFormViewModel {
   final TextEditingController inputDateController = TextEditingController();
   final TextEditingController startTimeController = TextEditingController();
 
-  // RequestState stream
-  final BehaviorSubject<RequestState<void>> _state = BehaviorSubject.seeded(RequestState.initial());
-  Stream<RequestState<void>> get state => _state.stream;
-
-  // Dummy values for the assets list
-  final Stream<List<int>> assetsStream = Stream<List<int>>.value([1, 2, 3, 4]);
+  final BehaviorSubject<List<AssetType>> _assetTypes = BehaviorSubject<List<AssetType>>();
+  Stream<List<AssetType>> get assetsStream => _assetTypes.stream;
 
   // Current dropdown value
   int dropdownValue = 1;
@@ -32,6 +29,6 @@ class SchedulerConstraintFormViewModel {
     titleController.dispose();
     inputDateController.dispose();
     startTimeController.dispose();
-    _state.close();
+    _assetTypes.close();
   }
 }
