@@ -12,6 +12,13 @@ class BaseInputField extends StatelessWidget {
   final TextStyle? style;
   final schedulerInputType inputType;
 
+  static const OutlineInputBorder _commonInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(5.0),
+      topRight: Radius.circular(5.0), // same radius circular as login_page
+    ),
+  );
+
   const BaseInputField({
     super.key,
     required this.controller,
@@ -39,7 +46,7 @@ class BaseInputField extends StatelessWidget {
                 fillColor: Colors.white,
                 prefixIcon: Icon(icon),
                 labelText: label,
-                border: commonInputBorder),
+                border: _commonInputBorder),
             validator: validator,
           );
           // statements;
@@ -55,7 +62,7 @@ class BaseInputField extends StatelessWidget {
               fillColor: Colors.white,
               filled: true,
               prefixIcon: const Icon(Icons.calendar_today),
-              border: commonInputBorder,
+              border: _commonInputBorder,
             ),
             readOnly: true,
             validator: validator,
@@ -82,7 +89,7 @@ class BaseInputField extends StatelessWidget {
               fillColor: Colors.white,
               filled: true,
               prefixIcon: Icon(icon),
-              border: commonInputBorder,
+              border: _commonInputBorder,
             ),
             readOnly: true,
             validator: validator,
