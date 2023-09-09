@@ -2,12 +2,9 @@ import 'package:fireapp/presentation/constraint_form/temporal_input_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'constraint_form_view.dart';
-
-class TimeInputField extends TemporalInputField {
-  const TimeInputField(
+class SchedulerTimeInputField extends TemporalInputField {
+  const SchedulerTimeInputField(
       {super.key, required super.controller,
       required super.label,
       required super.icon,

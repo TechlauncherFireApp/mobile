@@ -4,12 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'constraint_form_view.dart';
-
-class DateInputField extends TemporalInputField {
-  const DateInputField(
+class SchedulerDateInputField extends TemporalInputField {
+  const SchedulerDateInputField(
       {super.key,
       required super.controller,
       required super.label,
@@ -32,4 +29,3 @@ class DateInputField extends TemporalInputField {
     );
   }
 }
-

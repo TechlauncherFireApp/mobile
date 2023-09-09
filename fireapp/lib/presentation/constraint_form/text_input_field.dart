@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import 'constraint_form_view.dart';
-
-class TextInputField extends BaseInputField {
-  const TextInputField(
+class SchedulerTextInputField extends BaseInputField {
+  const SchedulerTextInputField(
       {super.key,
       required super.controller,
       required super.style,
@@ -26,7 +24,7 @@ class TextInputField extends BaseInputField {
           fillColor: Colors.white,
           prefixIcon: Icon(icon),
           labelText: label,
-          border: commonInputBorder),
+          border: BaseInputField.commonInputBorder),
           validator: validator,
           );
           // statements;

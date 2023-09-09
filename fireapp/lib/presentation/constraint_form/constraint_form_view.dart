@@ -2,7 +2,6 @@ import 'package:fireapp/presentation/constraint_form/date_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/text_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/time_input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
@@ -39,7 +38,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextInputField(
+            SchedulerTextInputField(
               controller: viewModel.titleController,
               style: Theme.of(context)
                   .textTheme
@@ -64,7 +63,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                       fillColor: Colors.white,
                       prefixIcon: const Icon(Icons.arrow_drop_down),
                       labelText: AppLocalizations.of(context)?.selectAsset,
-                      border: commonInputBorder,
+                      border: BaseInputField.commonInputBorder,
                     ),
                     value: viewModel.dropdownValue,
                     items: <int>[1, 2, 3, 4]
@@ -91,7 +90,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
             const SizedBox(
               height: 2.0,
             ),
-            DateInputField(
+            SchedulerDateInputField(
               controller: viewModel.inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
               icon: Icons.calendar_today,
@@ -102,7 +101,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
             const SizedBox(
               height: 2.0,
             ),
-            TimeInputField(
+            SchedulerTimeInputField(
               controller: viewModel.startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
               icon: Icons.hourglass_top,
@@ -131,10 +130,3 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
     );
   }
 }
-
-var commonInputBorder = const OutlineInputBorder(
-  borderRadius: BorderRadius.only(
-    topLeft: Radius.circular(5.0),
-    topRight: Radius.circular(5.0), // same radius circular as login_page
-  ),
-);
