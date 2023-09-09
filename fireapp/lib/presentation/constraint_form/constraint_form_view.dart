@@ -1,10 +1,11 @@
+import 'package:fireapp/presentation/constraint_form/date_input_field.dart';
+import 'package:fireapp/presentation/constraint_form/text_input_field.dart';
+import 'package:fireapp/presentation/constraint_form/time_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
-
-enum schedulerInputType { text, date, time }
 
 class SchedulerConstraintPage extends StatelessWidget {
   const SchedulerConstraintPage({super.key});
@@ -38,16 +39,16 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SchedulerInputField(
-              viewModel.titleController,
-              Theme.of(context)
+            TextInputField(
+              controller: viewModel.titleController,
+              style: Theme.of(context)
                   .textTheme
                   .labelLarge
                   ?.copyWith(color: Colors.grey[700]),
-              AppLocalizations.of(context)?.volunteer_name ??
+              label: AppLocalizations.of(context)?.volunteer_name ??
                   "", // This will show volunteer name
-              Icons.title,
-              (v) => v!.isEmpty ? 'Title is empty!' : null,
+              icon: Icons.title,
+              validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
             ),
             const SizedBox(height: 2.0),
             Row(
@@ -90,22 +91,22 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
             const SizedBox(
               height: 2.0,
             ),
-            _SchedulerDateInput(
-              viewModel.inputDateController,
-              AppLocalizations.of(context)?.enterDate ?? "",
-              Icons.calendar_today,
-              (v) => v!.isEmpty
+            DateInputField(
+              controller: viewModel.inputDateController,
+              label: AppLocalizations.of(context)?.enterDate ?? "",
+              icon: Icons.calendar_today,
+              validator: (v) => v!.isEmpty
                   ? 'Date is empty!'
                   : null, //will return this if date is empty when submit
             ),
             const SizedBox(
               height: 2.0,
             ),
-            _SchedulerTimeInput(
-              viewModel.startTimeController,
-              AppLocalizations.of(context)?.enterStartTime ?? "",
-              Icons.hourglass_top,
-              (v) => v!.isEmpty
+            TimeInputField(
+              controller: viewModel.startTimeController,
+              label: AppLocalizations.of(context)?.enterStartTime ?? "",
+              icon: Icons.hourglass_top,
+              validator: (v) => v!.isEmpty
                   ? 'Start Time is empty!'
                   : null, //will return this if start time is empty when submit
             ),
@@ -129,53 +130,6 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
       ),
     );
   }
-}
-
-class _SchedulerInputField extends BaseInputField {
-  const _SchedulerInputField(
-    TextEditingController controller,
-    TextStyle? style,
-    String label,
-    IconData icon,
-    String? Function(String?)? validator,
-  ) : super(
-          controller: controller,
-          style: style,
-          label: label,
-          icon: icon,
-          validator: validator,
-          inputType: schedulerInputType.text,
-        );
-}
-
-class _SchedulerDateInput extends BaseInputField {
-  const _SchedulerDateInput(
-    TextEditingController controller,
-    String label,
-    IconData icon,
-    String? Function(String?)? validator,
-  ) : super(
-          controller: controller,
-          label: label,
-          icon: icon,
-          validator: validator,
-          inputType: schedulerInputType.date,
-        );
-}
-
-class _SchedulerTimeInput extends BaseInputField {
-  const _SchedulerTimeInput(
-    TextEditingController controller,
-    String label,
-    IconData icon,
-    String? Function(String?)? validator,
-  ) : super(
-          controller: controller,
-          label: label,
-          icon: icon,
-          validator: validator,
-          inputType: schedulerInputType.time,
-        );
 }
 
 var commonInputBorder = const OutlineInputBorder(
