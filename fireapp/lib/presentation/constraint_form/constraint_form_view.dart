@@ -1,6 +1,7 @@
 import 'package:fireapp/presentation/constraint_form/date_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/text_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/time_input_field.dart';
+import 'package:fireapp/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
@@ -31,17 +32,12 @@ class SchedulerConstraintForm extends StatefulWidget {
 class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
   final viewModel = SchedulerConstraintFormViewModel();
 
-  double rdp(double value) {
-    // Calculate rdp based on 16 units per rdp
-    return value * (MediaQuery.of(context).size.width / 16);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: viewModel.formKey,
       child: Padding(
-        padding: EdgeInsets.all(rdp(1.0)),
+        padding: EdgeInsets.all(1.0.rdp()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
