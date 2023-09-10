@@ -12,7 +12,8 @@ class SchedulerConstraintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scheduler')),
+      appBar: AppBar(
+          title: Text(AppLocalizations.of(context)?.schedulerTitle ?? '')),
       resizeToAvoidBottomInset: false,
       body: const SchedulerConstraintForm(),
     );
@@ -23,7 +24,8 @@ class SchedulerConstraintForm extends StatefulWidget {
   const SchedulerConstraintForm({super.key});
 
   @override
-  _SchedulerConstraintFormState createState() => _SchedulerConstraintFormState();
+  _SchedulerConstraintFormState createState() =>
+      _SchedulerConstraintFormState();
 }
 
 class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
