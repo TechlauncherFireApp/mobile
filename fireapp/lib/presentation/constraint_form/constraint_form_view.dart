@@ -56,7 +56,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
               icon: Icons.title,
               validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
             ),
-            const SizedBox(height: 2.0),
+            const Spacer(),
             Row(
               children: [
                 Expanded(
@@ -94,9 +94,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 2.0,
-            ),
+            const Spacer(),
             SchedulerDateInputField(
               controller: viewModel.inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
@@ -105,9 +103,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                   ? 'Date is empty!'
                   : null, //will return this if date is empty when submit
             ),
-            const SizedBox(
-              height: 2.0,
-            ),
+            const Spacer(),
             SchedulerTimeInputField(
               controller: viewModel.startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
@@ -116,8 +112,8 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                   ? 'Start Time is empty!'
                   : null, //will return this if start time is empty when submit
             ),
-            const SizedBox(
-              height: 390.0,
+            const Spacer(
+              flex: 45,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
