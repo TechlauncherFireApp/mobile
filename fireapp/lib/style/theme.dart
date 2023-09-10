@@ -26,7 +26,8 @@ ThemeData theme() {
       surface: Colors.white,
       primary: Color(0xFFD3503D),
       secondary: Color(0xFF3DBFD3),
-      tertiary: Color(0xFFD33D74)
+      tertiary: Color(0xFFD33D74),
+      shadow: Color(0xFF4E5456),
     ),
     backgroundColor: Color(0xFFF7FAFA),
     scaffoldBackgroundColor: Color(0xFFF7FAFA),

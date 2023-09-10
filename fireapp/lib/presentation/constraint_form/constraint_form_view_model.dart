@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/models/reference/asset_type.dart';
-import '../../domain/request_state.dart';
-
 class SchedulerConstraintFormViewModel {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 

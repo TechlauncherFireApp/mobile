@@ -21,7 +21,7 @@ class TextInputField extends BaseInputField {
           labelStyle: Theme.of(context).textTheme.labelLarge,
                 // using the same text theme from login_page
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.surface,
           prefixIcon: Icon(icon),
           labelText: label,
           border: BaseInputField.commonInputBorder),

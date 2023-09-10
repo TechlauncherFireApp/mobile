@@ -46,7 +46,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
               style: Theme.of(context)
                   .textTheme
                   .labelLarge
-                  ?.copyWith(color: Colors.grey[700]),
+                  ?.copyWith(color: Theme.of(context).colorScheme.shadow),
               label: AppLocalizations.of(context)?.volunteer_name ??
                   "", // This will show volunteer name
               icon: Icons.title,
@@ -61,9 +61,9 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                       labelStyle: Theme.of(context)
                           .textTheme
                           .labelLarge
-                          ?.copyWith(color: Colors.grey[700]),
+                          ?.copyWith(color: Theme.of(context).colorScheme.shadow),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       prefixIcon: const Icon(Icons.arrow_drop_down),
                       labelText: AppLocalizations.of(context)?.selectAsset,
                       border: BaseInputField.commonInputBorder,
@@ -76,8 +76,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                         child: Text(
                           'Asset $value',
                           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Colors.grey[
-                                  700]), // will generate asset list in dropdown menu
+                              color: Theme.of(context).colorScheme.shadow), // will generate asset list in dropdown menu
                         ),
                       );
                     }).toList(),
