@@ -20,9 +20,9 @@ class SchedulerDateInputField extends TemporalInputField {
       () async {
         DateTime? selectedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2020),
-          lastDate: DateTime(2100),
+          initialDate: BaseInputField.initialDate,
+          firstDate: BaseInputField.firstSelectableDate,
+          lastDate: BaseInputField.lastSelectableDate,
         );
         if (selectedDate != null) {
           controller.text =

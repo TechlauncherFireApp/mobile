@@ -16,6 +16,9 @@ abstract class BaseInputField extends StatelessWidget {
   );
 
   static const String presentableDate = 'yyyy-MM-dd';
+  static DateTime initialDate = DateTime.now();
+  static DateTime firstSelectableDate = DateTime(2020);
+  static DateTime lastSelectableDate = DateTime(2100);
 
   const BaseInputField({
     super.key,
