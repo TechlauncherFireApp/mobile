@@ -46,8 +46,6 @@ class ShiftRequestViewModel extends FireAppViewModel {
       try {
         await _shiftRequestRepository.deleteShiftAssignment(shiftId, positionId);
         _updateState.add(RequestState.success(null));
-        // Optionally, you can reload the list of ShiftRequests after the deletion.
-        // loadShiftRequests(YOUR_REQUEST_ID_HERE);
       } catch (e) {
         logger.e(e);
         _updateState.add(RequestState.exception(e));
@@ -60,8 +58,6 @@ class ShiftRequestViewModel extends FireAppViewModel {
       try {
         await _shiftRequestRepository.updateShiftByPosition(shiftId, positionId, volunteerId);
         _updateState.add(RequestState.success(null));
-        // Optionally, you can reload the list of ShiftRequests after the update.
-        // loadShiftRequests(YOUR_REQUEST_ID_HERE);
       } catch (e) {
         logger.e(e);
         _updateState.add(RequestState.exception(e));
