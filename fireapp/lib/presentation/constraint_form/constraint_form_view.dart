@@ -117,7 +117,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
                   : null, //will return this if start time is empty when submit
             ),
             const SizedBox(
-              height: 420.0,
+              height: 390.0,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
