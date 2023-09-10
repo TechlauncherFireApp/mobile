@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 abstract class BaseInputField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -9,12 +8,14 @@ abstract class BaseInputField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextStyle? style;
 
-   static OutlineInputBorder commonInputBorder = const OutlineInputBorder(
+  static OutlineInputBorder commonInputBorder = const OutlineInputBorder(
     borderRadius: BorderRadius.only(
       topLeft: Radius.circular(5.0),
       topRight: Radius.circular(5.0), // same radius circular as login_page
     ),
   );
+
+  static const String presentableDate = 'yyyy-MM-dd';
 
   const BaseInputField({
     super.key,
