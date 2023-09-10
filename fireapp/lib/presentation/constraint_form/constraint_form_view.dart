@@ -31,12 +31,17 @@ class SchedulerConstraintForm extends StatefulWidget {
 class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
   final viewModel = SchedulerConstraintFormViewModel();
 
+  double rdp(double value) {
+    // Calculate rdp based on 16 units per rdp
+    return value * (MediaQuery.of(context).size.width / 16);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: viewModel.formKey,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(rdp(1.0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
