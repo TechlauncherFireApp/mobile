@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class SchedulerTextInputField extends BaseInputField {
-  const SchedulerTextInputField(
+class TextInputField extends BaseInputField {
+  const TextInputField(
       {super.key,
       required super.controller,
       required super.style,

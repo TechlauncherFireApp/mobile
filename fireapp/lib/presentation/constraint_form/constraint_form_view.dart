@@ -38,7 +38,7 @@ class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SchedulerTextInputField(
+            TextInputField(
               controller: viewModel.titleController,
               style: Theme.of(context)
                   .textTheme
