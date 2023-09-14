@@ -1,0 +1,8 @@
+environment_config:
+  path: environment_config.dart # optional, result file path against `lib/` folder
+  dotenv_path: .env # optional, result file path for .env file against project root folder
+  class: EnvironmentConfig # optional, class name
+
+  fields: # set of fields for command
+    serviceUrl:
+      default: ""
