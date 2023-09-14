@@ -51,22 +51,30 @@ void main() {
       when(shiftRequestRepository.deleteShiftAssignment(any, any))
           .thenAnswer((_) async => null);
 
+      final emittedStates = [];
+      final subscription = viewModel.updateState.listen(emittedStates.add);
+
       viewModel.deleteShiftAssignment(1, 1);
       await Future.delayed(Duration(milliseconds: 100));
 
-      final updateState = viewModel.updateState as BehaviorSubject<RequestState<void>>;
-      expect(updateState.value, isA<SuccessRequestState<void>>());
+      expect(emittedStates.last, isA<SuccessRequestState<void>>());
+
+      subscription.cancel();
     });
 
-    test('updates shift by position successfully', () async {
-      when(shiftRequestRepository.updateShiftByPosition(any, any, any))
-          .thenAnswer((_) async => null);
+  test('updates shift by position successfully', () async {
+    when(shiftRequestRepository.updateShiftByPosition(any, any, any))
+        .thenAnswer((_) async => null);
 
-      viewModel.updateShiftByPosition(1, 1, 1);
-      await Future.delayed(Duration(milliseconds: 100));
+    final emittedStates = [];
+    final subscription = viewModel.updateState.listen(emittedStates.add);
 
-      final updateState = viewModel.updateState as BehaviorSubject<RequestState<void>>;
-      expect(updateState.value, isA<SuccessRequestState<void>>());
+    viewModel.updateShiftByPosition(1, 1, 1);
+    await Future.delayed(Duration(milliseconds: 100));
+
+    expect(emittedStates.last, isA<SuccessRequestState<void>>());
+
+    subscription.cancel();
     });
 
   });
