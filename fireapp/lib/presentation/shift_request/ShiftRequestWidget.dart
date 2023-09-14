@@ -1,3 +1,4 @@
+import 'package:fireapp/style/theme.dart';
 import 'package:flutter/material.dart';
 
 class ShiftRequestWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class ShiftRequestWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.headline6,
               textAlign: TextAlign.left,
             ),
-            const SizedBox(width: 24,),
+            SizedBox(width: 1.5.rdp(),),
             Expanded(
               child: Text(
                 content ?? '',
