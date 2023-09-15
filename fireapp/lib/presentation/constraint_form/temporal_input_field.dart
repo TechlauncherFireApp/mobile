@@ -15,13 +15,7 @@ abstract class TemporalInputField extends BaseInputField {
         controller: controller,
         style: Theme.of(context).textTheme.labelLarge,
         // using the same text theme from login_page
-        decoration: InputDecoration(
-          labelText: AppLocalizations.of(context)?.enterDate,
-          fillColor: Theme.of(context).colorScheme.surface,
-          filled: true,
-          prefixIcon: const Icon(Icons.calendar_today),
-          border: BaseInputField.commonInputBorder,
-        ),
+        decoration: buildInputDecoration(context),
         readOnly: true,
         validator: validator,
         onTap: onTap);
