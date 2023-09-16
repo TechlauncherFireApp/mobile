@@ -20,8 +20,8 @@ void main() {
   const volunteers = <VolunteerListing>[
     VolunteerListing(
         volunteerId: "6",
-        firstName: "test",
-        lastName: "test",
+        firstName: "John",
+        lastName: "Testerson",
         qualification: ["test", "test"]
     ),
     VolunteerListing(
