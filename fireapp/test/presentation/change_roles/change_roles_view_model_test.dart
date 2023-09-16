@@ -21,8 +21,18 @@ import 'change_roles_view_model_test.mocks.dart';
 
 void main() {
   const volunteers = <VolunteerListing>[
-    VolunteerListing(volunteerId: "1", name: 'John Doe'),
-    VolunteerListing(volunteerId: "2", name: 'Jane Doe'),
+    VolunteerListing(
+        volunteerId: "6",
+        firstName: "test",
+        lastName: "test",
+        qualification: ["test", "test"]
+    ),
+    VolunteerListing(
+        volunteerId: "7",
+        firstName: "test",
+        lastName: "test",
+        qualification: ["test", "test"]
+    ),
   ];
 
   group('ChangeRolesViewModel', ()
