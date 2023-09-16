@@ -23,12 +23,16 @@ void main() {
     // Arrange
     final expectedList = [
       const VolunteerListing(
-        volunteerId: '1',
-        name: 'John Doe'
+          volunteerId: "6",
+          firstName: "test",
+          lastName: "test",
+          qualification: ["test", "test"]
       ),
       const VolunteerListing(
-        volunteerId: '2',
-        name: 'Jane Doe',
+          volunteerId: "7",
+          firstName: "test",
+          lastName: "test",
+          qualification: ["test", "test"]
       ),
     ];
 
