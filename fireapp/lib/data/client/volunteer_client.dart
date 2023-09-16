@@ -9,14 +9,6 @@ class VolunteerClient {
   VolunteerClient(this.restClient);
 
   Future<List<VolunteerListing>> volunteerList() async {
-    final volunteerListings = await restClient.volunteerList();
-
-    final transformed = volunteerListings.entries.map((v) => VolunteerListing(
-        volunteerId: v.key,
-        name: v.value
-    ));
-
-    return transformed.toList();
-
+    return restClient.volunteerList();
   }
 }
