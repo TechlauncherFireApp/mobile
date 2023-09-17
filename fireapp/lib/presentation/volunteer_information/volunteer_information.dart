@@ -45,15 +45,11 @@ class _VolunteerInformationState
   }
 
   String formatHour(double hour) {
-    if (hour == 0) {
-      return '12am';
-    } else if (hour < 12) {
-      return '${hour.floor()}' + 'am';
-    } else if (hour == 12) {
-      return '12pm';
-    } else {
-      return '${hour.floor() - 12}' + 'pm';
-    }
+    var h = hour.floor();
+    var m = ((hour % 1) * 60).floor();
+    var marker = hour > 12 ? "pm" : "am";
+    if (h == 0 || h == 24) h = 12;
+    return "$h:${"$m".padLeft(2, "0")}$marker";
   }
 
   @override
