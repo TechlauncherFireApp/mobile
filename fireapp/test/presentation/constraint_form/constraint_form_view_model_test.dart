@@ -4,15 +4,19 @@ import 'package:fireapp/domain/models/reference/asset_type.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+@GenerateMocks([SchedulerConstraintFormViewModel])
 class MockGlobalKey<T extends State<StatefulWidget>> extends Mock implements GlobalKey<T> {}
 class MockTextEditingController extends Mock implements TextEditingController {}
-class MockStream<T> extends Mock implements Stream<T> {}
+class MockStream<T> extends Mock implements Stream<T> {
+  close() {}
+}
 
 void main() {
   group('SchedulerConstraintFormViewModel Tests', () {
+
     late SchedulerConstraintFormViewModel viewModel;
     late MockGlobalKey<FormState> mockFormKey;
     late MockTextEditingController mockTitleController;
@@ -20,20 +24,14 @@ void main() {
     late MockTextEditingController mockStartTimeController;
     late MockStream<List<AssetType>> mockAssetsStream;
 
+
     setUp(() {
+      viewModel = SchedulerConstraintFormViewModel(); // Create an instance
       mockFormKey = MockGlobalKey<FormState>();
       mockTitleController = MockTextEditingController();
       mockInputDateController = MockTextEditingController();
       mockStartTimeController = MockTextEditingController();
       mockAssetsStream = MockStream<List<AssetType>>();
-
-      viewModel = SchedulerConstraintFormViewModel(
-        formKey: mockFormKey,
-        titleController: mockTitleController,
-        inputDateController: mockInputDateController,
-        startTimeController: mockStartTimeController,
-        assetsStream: mockAssetsStream,
-      );
     });
 
     tearDown(() {
@@ -42,8 +40,7 @@ void main() {
 
     test('Initial Values', () {
       // Mock the behavior of your dependencies using Mockito
-      when(mockFormKey.currentState).thenReturn(MockFormState());
-      when(mockAssetsStream.listen(any)).thenReturn(StreamSubscription<List<AssetType>>.empty());
+      when(mockFormKey.currentState).thenReturn(MockFormState() as FormState?);
 
       // Perform the test
       expect(viewModel.formKey, mockFormKey);
@@ -56,7 +53,8 @@ void main() {
 
     test('Form Submission Valid', () {
       // Mock form validation by setting a valid form state
-      when(mockFormKey.currentState).thenReturn(MockFormState());
+      when(mockFormKey.currentState).thenReturn(MockFormState() as FormState?);
+      when(mockFormKey.currentState).thenReturn(null); // Set to null if not needed
 
       // Set some input values for the form
       when(mockTitleController.text).thenReturn('Test Title');
@@ -65,7 +63,7 @@ void main() {
 
       // Mock the submission logic (e.g., by setting a flag)
       bool submitted = false;
-      viewModel.submitForm = () {
+      viewModel.submitFormCallback = () {
         submitted = true;
       };
 
@@ -73,17 +71,17 @@ void main() {
       viewModel.submitForm();
 
       // Expect that the form was submitted
-      expect(submitted, isTrue);
+      expect(submitted, true);
     });
 
     test('Form Submission Invalid', () {
       // Mock form validation by setting an invalid form state
-      when(mockFormKey.currentState).thenReturn(MockFormState());
+      when(mockFormKey.currentState).thenReturn(MockFormState() as FormState?);
       when(mockFormKey.currentState?.validate()).thenReturn(false);
 
       // Mock the submission logic (e.g., by setting a flag)
       bool submitted = false;
-      viewModel.submitForm = () {
+      viewModel.submitFormCallback = () {
         submitted = true;
       };
 
@@ -91,7 +89,7 @@ void main() {
       viewModel.submitForm();
 
       // Expect that the form was not submitted
-      expect(submitted, isFalse);
+      expect(submitted, false);
     });
 
     test('Resource Disposal', () {
@@ -105,4 +103,7 @@ void main() {
       verify(mockAssetsStream.close()).called(1);
     });
   });
+}
+
+class MockFormState {
 }

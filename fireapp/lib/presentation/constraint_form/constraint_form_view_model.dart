@@ -17,6 +17,8 @@ class SchedulerConstraintFormViewModel {
   // Current dropdown value
   int dropdownValue = 1;
 
+  set submitFormCallback(Null Function() submitFormCallback) {}
+
   // Function to be called when the form is submitted
   void submitForm() {
     if (formKey.currentState?.validate() != true) return;
