@@ -37,10 +37,12 @@ class ShiftRequestViewModel extends FireAppViewModel {
     Map<String, dynamic> mockDataMap = json.decode(jsonString);
 
     // Convert the 'results' list in mockDataMap to a list of ShiftRequest objects
-    List<ShiftRequest> shiftRequests = (mockDataMap['results'] as List)
-        .map((data) => ShiftRequest.fromJson(data))
-        .toList();
-
+    List<ShiftRequest> shiftRequests = [];
+    if (mockDataMap.containsKey('results') && mockDataMap['results'] is List) {
+        shiftRequests = (mockDataMap['results'] as List)
+            .map((data) => ShiftRequest.fromJson(data))
+            .toList();
+    }
     _shiftRequests.add(RequestState.success(shiftRequests));
 
   } catch (e) {

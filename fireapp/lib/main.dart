@@ -3,6 +3,7 @@
 import 'package:fireapp/environment_config.dart';
 import 'package:fireapp/global/di.dart';
 import 'package:fireapp/presentation/server_url/server_url_page.dart';
+import 'package:fireapp/presentation/shift_request/shift_request.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information.dart';
 import 'package:fireapp/presentation/login/login_page.dart';
 import 'package:fireapp/presentation/register/register_page.dart';
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
         '/server_url_page': (context) => const ServerUrlPage(),
+        '/shift_request': (context) => const ShiftRequestView(requestId: "1")
       },
     );
   }
