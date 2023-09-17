@@ -16,8 +16,9 @@ class VolunteerInformationDto with _$VolunteerInformationDto{
     required String email,
     required String mobileNo,
     required int prefHours,
+    @JsonKey(name: "expHours")
     required int expYears,
-    required List<String> qualifications,
+    required List<String> qualification,
     required AvailabilityFieldDto availabilities,
     required List<String> possibleRoles,
   }) = _VolunteerInformationDto;
@@ -30,13 +31,13 @@ class VolunteerInformationDto with _$VolunteerInformationDto{
 class AvailabilityFieldDto with _$AvailabilityFieldDto{
 
   const factory AvailabilityFieldDto({
-    @JsonKey(name: 'Monday') required List<List<int>> monday,
-    @JsonKey(name: 'Tuesday') required List<List<int>> tuesday,
-    @JsonKey(name: 'Wednesday') required List<List<int>> wednesday,
-    @JsonKey(name: 'Thursday') required List<List<int>> thursday,
-    @JsonKey(name: 'Friday') required List<List<int>> friday,
-    @JsonKey(name: 'Saturday') required List<List<int>> saturday,
-    @JsonKey(name: 'Sunday') required List<List<int>> sunday,
+    @JsonKey(name: 'Monday') required List<List<double>> monday,
+    @JsonKey(name: 'Tuesday') required List<List<double>> tuesday,
+    @JsonKey(name: 'Wednesday') required List<List<double>> wednesday,
+    @JsonKey(name: 'Thursday') required List<List<double>> thursday,
+    @JsonKey(name: 'Friday') required List<List<double>> friday,
+    @JsonKey(name: 'Saturday') required List<List<double>> saturday,
+    @JsonKey(name: 'Sunday') required List<List<double>> sunday,
   }) = _AvailabilityFieldDto;
 
   factory AvailabilityFieldDto.fromJson(Map<String, dynamic> json) => _$AvailabilityFieldDtoFromJson(json);

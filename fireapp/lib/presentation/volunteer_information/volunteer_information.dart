@@ -8,6 +8,7 @@ import 'package:fireapp/presentation/change_roles/change_roles_page.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information_viewmodel.dart';
 import 'package:fireapp/presentation/volunteer_information/VolunteerInformationWidget.dart';
+import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:fireapp/widgets/request_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,26 +33,26 @@ class VolunteerInformationPage extends StatefulWidget {
 class _VolunteerInformationState
     extends FireAppState<VolunteerInformationPage>
     implements ViewModelHolder<VolunteerInformationViewModel> {
-  String getAvailabilityMessage(BuildContext context, List<List<int>> availability) {
+  String getAvailabilityMessage(BuildContext context, List<List<double>> availability) {
     if (availability.isEmpty) {
       return AppLocalizations.of(context)?.unavailable ?? 'Unavailable';
     } else {
       return formatHours(availability);
     }
   }
-  String formatHours(List<List<int>> hours) {
+  String formatHours(List<List<double>> hours) {
     return hours.map((hourRange) => '${formatHour(hourRange[0])} to ${formatHour(hourRange[1])}').join(', ');
   }
 
-  String formatHour(int hour) {
+  String formatHour(double hour) {
     if (hour == 0) {
       return '12am';
     } else if (hour < 12) {
-      return '$hour' + 'am';
+      return '${hour.floor()}' + 'am';
     } else if (hour == 12) {
       return '12pm';
     } else {
-      return '${hour - 12}' + 'pm';
+      return '${hour.floor() - 12}' + 'pm';
     }
   }
 
@@ -67,9 +68,9 @@ class _VolunteerInformationState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.volunteerInformationTitle ??
-            'Volunteer Information'),
+      appBar: fireAppAppBar(context,
+        AppLocalizations.of(context)?.volunteerInformationTitle ??
+            'Volunteer Information',
       ),
         body: RequestStateWidget.stream<VolunteerInformation>(
             state: viewModel.volunteerInformation,

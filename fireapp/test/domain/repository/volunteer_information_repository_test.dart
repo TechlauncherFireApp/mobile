@@ -41,7 +41,7 @@ void main() {
         mobileNo: '1234567890',
         prefHours: 10,
         expYears: 2,
-        qualifications: ['1', '2'],
+        qualification: ['Qualification 1', 'Qualification 2'],
         availabilities: AvailabilityFieldDto(
           monday: [[1,8]],
           tuesday: [[]],
