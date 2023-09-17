@@ -27,8 +27,8 @@ abstract class RestClient {
   @POST("/authentication/register")
   Future<TokenResponse> register(@Body() RegisterRequest registerRequest);
 
-  @GET("/user/getAllVolunteer")
-  Future<Map<String, String>> volunteerList();
+  @GET("/v2/volunteers")
+  Future<List<VolunteerListing>> volunteerList();
 
   @GET("/reference/qualifications")
   Future<List<Qualification>> getQualifications();
