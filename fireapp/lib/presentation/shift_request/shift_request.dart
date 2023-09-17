@@ -90,7 +90,7 @@ import 'package:flutter/material.dart';
 import '../../domain/models/shift_request.dart';
 import '../../domain/request_state.dart';
 import '../../global/di.dart';
-import 'ShiftRequestWidget.dart'; // Ensure the correct path is used
+import 'ShiftRequestWidget.dart';
 
 class ShiftRequestView extends StatefulWidget {
   final String requestId;
@@ -157,10 +157,10 @@ class _ShiftRequestViewState extends State<ShiftRequestView> {
                 ),
               );
             } else if (state is ExceptionRequestState) {
-              return Center(child: Text('Error loading data.'));
+              return const Center(child: Text('Error loading data.'));
             }
           }
-          return SizedBox.shrink(); // Default empty state
+          return const SizedBox.shrink(); // Default empty state
         },
       ),
     );
