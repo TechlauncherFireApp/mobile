@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         Locale('en'),
       ],
       title: 'FireApp',
-      initialRoute: (EnvironmentConfig.serviceUrl.isEmpty) ? '/server_url_page' : '/login',
+      initialRoute: '/shift_request',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart

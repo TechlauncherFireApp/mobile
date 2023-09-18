@@ -38,7 +38,7 @@ void main() {
       final emittedStates = [];
       final subscription = viewModel.shiftRequests.listen(emittedStates.add);
 
-      viewModel.loadShiftRequests(requestId: "mockRequestId");
+      viewModel.loadShiftRequests("mockRequestId");
       await Future.delayed(Duration(milliseconds: 100));
 
       expect(emittedStates.last, isA<SuccessRequestState<List<ShiftRequest>>>());
@@ -75,6 +75,62 @@ void main() {
       expect(emittedStates.last, isA<SuccessRequestState<void>>());
 
       subscription.cancel();
+    });
+
+    test('loads shift requests unsuccessfully', () async {
+      // Arrange
+      const requestId = 'test';
+      const error = 'error';
+      when(shiftRequestRepository.getShiftRequestsByRequestID(requestId)).thenThrow(error);
+
+      // Assert
+      expectLater(viewModel.shiftRequests, emitsInOrder([
+        emits(const TypeMatcher<InitialRequestState<List<ShiftRequest>>>()),
+        emits(const TypeMatcher<LoadingRequestState<List<ShiftRequest>>>()),
+        emits(const TypeMatcher<ExceptionRequestState<List<ShiftRequest>>>())
+      ]));
+
+      // Act
+      viewModel.loadShiftRequests(requestId);
+    });
+
+    test('deletes shift assignment unsuccessfully', () async {
+      // Arrange
+      const shiftId = 1;
+      const positionId = 5; 
+      const error = 'error';
+      when(shiftRequestRepository.deleteShiftAssignment(shiftId, positionId)).thenThrow(error);
+
+      // Assert
+      expectLater(viewModel.updateState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<ExceptionRequestState<void>>())
+      ]));
+
+      // Act
+      viewModel.deleteShiftAssignment(shiftId, positionId);
+    });
+
+    test('updates shift by position unsuccessfully', () async {
+      // Arrange
+      const shiftId = 1;
+      const positionId = 5;
+      const volunteerId = 5;
+      const error = 'error';
+      when(shiftRequestRepository.updateShiftByPosition(shiftId, positionId, volunteerId)).thenThrow(error);
+
+      // Assert
+      expectLater(viewModel.updateState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<ExceptionRequestState<void>>())
+      ]));
+
+      // Act
+      viewModel.updateShiftByPosition(shiftId, positionId, volunteerId);
+    });
+
+    test('dispose throws nothing', () {
+      viewModel.dispose();
     });
   });
 }
