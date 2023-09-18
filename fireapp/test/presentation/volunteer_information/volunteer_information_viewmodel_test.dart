@@ -23,13 +23,17 @@ import 'volunteer_information_viewmodel_test.mocks.dart';
 void main() {
   const volunteers = <VolunteerListing>[
     VolunteerListing(
-        volunteerId: "1",
-        name: 'John Doe'
+        volunteerId: "6",
+        firstName: "test",
+        lastName: "test",
+        qualification: ["test", "test"]
     ),
     VolunteerListing(
-        volunteerId: "2",
-        name: 'Jane Doe'
-    )
+        volunteerId: "7",
+        firstName: "test",
+        lastName: "test",
+        qualification: ["test", "test"]
+    ),
   ];
 
   group('VolunteerListViewModel', ()

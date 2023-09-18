@@ -53,7 +53,7 @@ class _VolunteerListState extends FireAppState<VolunteerList>
                     itemBuilder: (context, index) {
                       return ListTile(
                           title: Text(volunteers[index].name),
-                          subtitle: Text(volunteers[index].volunteerId),
+                          subtitle: Text(volunteers[index].qualifications),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => VolunteerInformationPage(
