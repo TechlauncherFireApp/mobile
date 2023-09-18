@@ -9,7 +9,6 @@ import 'authentication_client_test.mocks.dart';
 
 @GenerateMocks([RestClient])
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
   group('ShiftRequestClient', () {
     late RestClient mockRestClient;
     late ShiftRequestClient shiftRequestClient;
@@ -23,18 +22,44 @@ void main() {
       const requestID = 'ABC123';
       final expectedList = [
         ShiftRequest(
-          shiftID: '123',
-          assetClass: 'A1',
-          startTime: DateTime(2023, 1, 1, 10, 0),
-          endTime: DateTime(2023, 1, 1, 12, 0),
+          shiftID: 'S001',
+          assetClass: 'Vehicle',
+          startTime: DateTime(2023, 8, 19, 14, 0),
+          endTime: DateTime(2023, 8, 19, 18, 0),
           shiftVolunteers: [
             ShiftVolunteer(
               volunteerId: 1,
               volunteerGivenName: 'John',
               volunteerSurname: 'Doe',
               mobileNumber: '1234567890',
-              positionId: 1,
-              role: 'RoleA',
+              positionId: 101,
+              role: 'Driver',
+              status: 'Active',
+            ),
+            ShiftVolunteer(
+              volunteerId: 2,
+              volunteerGivenName: 'Jane',
+              volunteerSurname: 'Doe',
+              mobileNumber: '0987654321',
+              positionId: 102,
+              role: 'Assistant',
+              status: 'Active',
+            ),
+          ],
+        ),
+        ShiftRequest(
+          shiftID: 'S002',
+          assetClass: 'Equipment',
+          startTime: DateTime(2023, 8, 20, 9, 0),
+          endTime: DateTime(2023, 8, 20, 15, 0),
+          shiftVolunteers: [
+            ShiftVolunteer(
+              volunteerId: 3,
+              volunteerGivenName: 'Alice',
+              volunteerSurname: 'Smith',
+              mobileNumber: '1122334455',
+              positionId: 103,
+              role: 'Operator',
               status: 'Active',
             ),
           ],
