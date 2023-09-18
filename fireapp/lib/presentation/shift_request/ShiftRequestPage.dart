@@ -32,7 +32,7 @@ class _ShiftRequestViewState extends State<ShiftRequestView> {
   void initState() {
     super.initState();
     _viewModel = getIt<ShiftRequestViewModel>();
-    _viewModel.loadShiftRequests(requestId: widget.requestId);
+    _viewModel.loadShiftRequests(widget.requestId);
   }
 
   @override
@@ -41,7 +41,7 @@ class _ShiftRequestViewState extends State<ShiftRequestView> {
       appBar: fireAppAppBar(context, AppLocalizations.of(context)!.shift_request_details), // Using fireAppAppBar here
       body: RequestStateWidget.stream<List<ShiftRequest>>(
         state: _viewModel.shiftRequests,
-        retry: () => _viewModel.loadShiftRequests(requestId: widget.requestId),
+        retry: () => _viewModel.loadShiftRequests(widget.requestId),
         child: (_, shiftRequests) {
           return SingleChildScrollView(
             child: Padding(
