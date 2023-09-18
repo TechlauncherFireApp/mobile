@@ -5,10 +5,8 @@ import 'package:fireapp/data/client/shift_request_client.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateNiceMocks([
-  MockSpec<RestClient>(),
-])
-import 'shift_request_client_test.mocks.dart';
+@GenerateNiceMocks([])
+import 'concrete_shift_request_client_test.mocks.dart';
 
 @GenerateMocks([RestClient])
 void main() {
