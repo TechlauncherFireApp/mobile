@@ -10,6 +10,7 @@ import 'authentication_client_test.mocks.dart';
 @GenerateMocks([RestClient])
 void main() {
   group('ShiftRequestClient', () {
+    TestWidgetsFlutterBinding.ensureInitialized();
     late RestClient mockRestClient;
     late ShiftRequestClient shiftRequestClient;
 

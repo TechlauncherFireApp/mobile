@@ -9,6 +9,12 @@ import '../../widgets/request_state_widget.dart';
 import 'ShiftRequestWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+extension SpacedByExtension on List<Widget> {
+  List<Widget> spacedBy(double space) {
+    if (this.isEmpty) return [];
+    return this.expand((widget) => [widget, SizedBox(height: space)]).toList()..removeLast();
+  }
+}
 
 class ShiftRequestView extends StatefulWidget {
   final String requestId;
@@ -50,47 +56,38 @@ class _ShiftRequestViewState extends State<ShiftRequestView> {
                         _buildContainer(
                           ShiftRequestWidget(title: AppLocalizations.of(context)!.shift_id, content: shiftRequest.shiftID),
                         ),
-                        SizedBox(height: 0.5.rdp()),
                         _buildContainer(
                           ShiftRequestWidget(title: AppLocalizations.of(context)!.asset_class, content: shiftRequest.assetClass),
                         ),
-                        SizedBox(height: 0.5.rdp()),
                         _buildContainer(
                           ShiftRequestWidget(title: AppLocalizations.of(context)!.start_time, content: shiftRequest.startTime.toIso8601String()),
                         ),
-                        SizedBox(height: 0.5.rdp()),
                         _buildContainer(
                           ShiftRequestWidget(title: AppLocalizations.of(context)!.end_time, content: shiftRequest.endTime.toIso8601String()),
                         ),
-                        SizedBox(height: 0.5.rdp()),
                         ...shiftRequest.shiftVolunteers.map((volunteer) {
                           return Column(
                             children: [
                               _buildContainer(
                                 ShiftRequestWidget(title: AppLocalizations.of(context)!.volunteer_name, content: '${volunteer.volunteerGivenName} ${volunteer.volunteerSurname}'),
                               ),
-                              SizedBox(height: 0.5.rdp()),
                               _buildContainer(
                                 ShiftRequestWidget(title: AppLocalizations.of(context)!.mobile_number, content: volunteer.mobileNumber),
                               ),
-                              SizedBox(height: 0.5.rdp()),
                               _buildContainer(
                                 ShiftRequestWidget(title: AppLocalizations.of(context)!.position_id, content: volunteer.positionId.toString()),
                               ),
-                              SizedBox(height: 0.5.rdp()),
                               _buildContainer(
                                 ShiftRequestWidget(title: AppLocalizations.of(context)!.role, content: volunteer.role),
                               ),
-                              SizedBox(height: 0.5.rdp()),
                               _buildContainer(
                                 ShiftRequestWidget(title: AppLocalizations.of(context)!.status, content: volunteer.status),
                               ),
-                              SizedBox(height: 0.5.rdp()),
-                            ],
+                            ].spacedBy(0.5.rdp()),
                           );
                         }).toList(),
                         SizedBox(height: 1.rdp()),
-                      ],
+                      ].spacedBy(0.5.rdp()),
                     );
                   }).toList(),
                 ],
