@@ -33,6 +33,34 @@ void main() {
       verify(mockRestClient.deleteShiftAssignment(shiftId, positionId)).called(1);
     });
 
+    test('getShiftRequestsByRequestID returns a list of ShiftRequest', () async {
+      const fakeRequestID = 'fakeRequestID';
+      final fakeShiftRequestList = [
+        ShiftRequest(
+          shiftID: "1",
+          assetClass: "Class1",
+          startTime: DateTime.now(),
+          endTime: DateTime.now().add(Duration(hours: 1)),
+          shiftVolunteers: [],
+        ),
+      ];
+
+      // Create a mock RestClient (you'll need a mocking library for this)
+      final mockRestClient = MockRestClient();
+
+      // Set up the behavior of the mock RestClient
+      when(mockRestClient.getShiftRequest(any))
+          .thenAnswer((_) async => fakeShiftRequestList);
+
+      final concreteShiftRequestClient = ConcreteShiftRequestClient(mockRestClient);
+
+      // Act
+      final result = await concreteShiftRequestClient.getShiftRequestsByRequestID(fakeRequestID);
+
+      // Assert
+      expect(result, equals(fakeShiftRequestList));
+    });
+
     test('updateShiftByPosition should call restClient.updateShiftByPosition', () async {
       const shiftId = 1;
       const positionId = 2;
