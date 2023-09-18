@@ -31,38 +31,32 @@ class ShiftRequestViewModel extends FireAppViewModel {
 
   ShiftRequestViewModel(this._shiftRequestRepository);
 
-  void loadMockShiftRequests() async {
-  try {
-    String jsonString = await rootBundle.loadString('assets/mock-data/shift_request.json');
-    Map<String, dynamic> mockDataMap = json.decode(jsonString);
+  void loadShiftRequests({String? requestId, bool useMockData = false}) async {
+  _shiftRequests.add(RequestState.loading());
 
-    // Convert the 'results' list in mockDataMap to a list of ShiftRequest objects
+  try {
     List<ShiftRequest> shiftRequests = [];
-    if (mockDataMap.containsKey('results') && mockDataMap['results'] is List) {
+
+    if (useMockData) {
+      String jsonString = await rootBundle.loadString('assets/mock-data/shift_request.json');
+      Map<String, dynamic> mockDataMap = json.decode(jsonString);
+
+      // Convert the 'results' list in mockDataMap to a list of ShiftRequest objects
+      if (mockDataMap.containsKey('results') && mockDataMap['results'] is List) {
         shiftRequests = (mockDataMap['results'] as List)
             .map((data) => ShiftRequest.fromJson(data))
             .toList();
+      }
+    } else if (requestId != null) {
+      shiftRequests = await _shiftRequestRepository.getShiftRequestsByRequestID(requestId);
     }
-    _shiftRequests.add(RequestState.success(shiftRequests));
 
+    _shiftRequests.add(RequestState.success(shiftRequests));
   } catch (e) {
     logger.e(e);
     _shiftRequests.add(RequestState.exception(e));
   }
 }
-
-  void loadShiftRequests(String requestId) {
-    _shiftRequests.add(RequestState.loading());
-    () async {
-      try {
-        final requests = await _shiftRequestRepository.getShiftRequestsByRequestID(requestId);
-        _shiftRequests.add(RequestState.success(requests));
-      } catch (e) {
-        logger.e(e);
-        _shiftRequests.add(RequestState.exception(e));
-      }
-    }();
-  }
 
   void deleteShiftAssignment(int shiftId, int positionId) async {
     await _updateMutex.protect(() async {
