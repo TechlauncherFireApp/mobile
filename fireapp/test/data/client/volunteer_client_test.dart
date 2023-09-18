@@ -20,15 +20,19 @@ void main() {
   });
 
   test('volunteerList returns transformed volunteer listings', () async {
-    final volunteerListings = {
-      'id1': 'John Doe',
-      'id2': 'Jane Smith',
-    };
-    when(mockRestClient.volunteerList()).thenAnswer((_) => Future.value(volunteerListings));
+    var listing = const VolunteerListing(
+        volunteerId: "6",
+        firstName: "test",
+        lastName: "test",
+        qualification: ["test", "test"]
+    );
+
+    when(mockRestClient.volunteerList()).thenAnswer((_) => Future.value([
+      listing
+    ]));
 
     final expected = [
-      const VolunteerListing(volunteerId: 'id1', name: 'John Doe'),
-      const VolunteerListing(volunteerId: 'id2', name: 'Jane Smith'),
+      listing
     ];
     final result = await volunteerClient.volunteerList();
 
