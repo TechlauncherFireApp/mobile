@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:matcher/matcher.dart';
 
 @GenerateMocks([SchedulerConstraintFormViewModel])
 class MockGlobalKey<T extends State<StatefulWidget>> extends Mock implements GlobalKey<T> {}
@@ -71,7 +72,7 @@ void main() {
       viewModel.submitForm();
 
       // Expect that the form was submitted
-      expect(submitted, true);
+      expect(submitted, isTrue);
     });
 
     test('Form Submission Invalid', () {
@@ -89,7 +90,7 @@ void main() {
       viewModel.submitForm();
 
       // Expect that the form was not submitted
-      expect(submitted, false);
+      expect(submitted, isFalse);
     });
 
     test('Resource Disposal', () {
