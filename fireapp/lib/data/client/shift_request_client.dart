@@ -16,11 +16,16 @@ class ShiftRequestClient {
   }
 
   Future<List<ShiftRequest>> getShiftRequestsByRequestID(String requestID) async {
-    Map<String, dynamic> mockData = await _loadMockData();
-    List<ShiftRequest> shiftRequests = (mockData['results'] as List)
-        .map((data) => ShiftRequest.fromJson(data))
-        .toList();
-    return shiftRequests;
+    if (requestID == "MOCK_DATA") { // You can decide the condition here
+      Map<String, dynamic> mockData = await _loadMockData();
+      return (mockData['results'] as List)
+          .map((data) => ShiftRequest.fromJson(data))
+          .toList();
+    } else {
+      // Make the actual API call using the restClient
+      // For now, I'm returning an empty list as a placeholder
+      return [];
+    }
   }
 
   Future<void> deleteShiftAssignment(int shiftId, int positionId) {

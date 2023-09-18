@@ -31,32 +31,20 @@ class ShiftRequestViewModel extends FireAppViewModel {
 
   ShiftRequestViewModel(this._shiftRequestRepository);
 
-  void loadShiftRequests({String? requestId, bool useMockData = false}) async {
-  _shiftRequests.add(RequestState.loading());
+  void loadShiftRequests({String? requestId}) async {
+    _shiftRequests.add(RequestState.loading());
 
-  try {
-    List<ShiftRequest> shiftRequests = [];
-
-    if (useMockData) {
-      String jsonString = await rootBundle.loadString('assets/mock-data/shift_request.json');
-      Map<String, dynamic> mockDataMap = json.decode(jsonString);
-
-      // Convert the 'results' list in mockDataMap to a list of ShiftRequest objects
-      if (mockDataMap.containsKey('results') && mockDataMap['results'] is List) {
-        shiftRequests = (mockDataMap['results'] as List)
-            .map((data) => ShiftRequest.fromJson(data))
-            .toList();
+    try {
+      List<ShiftRequest> shiftRequests = [];
+      if (requestId != null) {
+        shiftRequests = await _shiftRequestRepository.getShiftRequestsByRequestID(requestId);
       }
-    } else if (requestId != null) {
-      shiftRequests = await _shiftRequestRepository.getShiftRequestsByRequestID(requestId);
+      _shiftRequests.add(RequestState.success(shiftRequests));
+    } catch (e) {
+      logger.e(e);
+      _shiftRequests.add(RequestState.exception(e));
     }
-
-    _shiftRequests.add(RequestState.success(shiftRequests));
-  } catch (e) {
-    logger.e(e);
-    _shiftRequests.add(RequestState.exception(e));
   }
-}
 
   void deleteShiftAssignment(int shiftId, int positionId) async {
     await _updateMutex.protect(() async {

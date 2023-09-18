@@ -25,8 +25,8 @@ void main() {
         ShiftRequest(
           shiftID: 'S001',
           assetClass: 'Vehicle',
-          startTime: DateTime(2023, 8, 19, 14, 0),
-          endTime: DateTime(2023, 8, 19, 18, 0),
+          startTime: DateTime.parse('2023-08-19T14:00:00.000Z'), // Adjusted here
+          endTime: DateTime.parse('2023-08-19T18:00:00.000Z'),   // Adjusted here
           shiftVolunteers: [
             ShiftVolunteer(
               volunteerId: 1,
@@ -51,8 +51,8 @@ void main() {
         ShiftRequest(
           shiftID: 'S002',
           assetClass: 'Equipment',
-          startTime: DateTime(2023, 8, 20, 9, 0),
-          endTime: DateTime(2023, 8, 20, 15, 0),
+          startTime: DateTime.parse('2023-08-20T09:00:00.000Z'), // Adjusted here
+          endTime: DateTime.parse('2023-08-20T15:00:00.000Z'),   // Adjusted here
           shiftVolunteers: [
             ShiftVolunteer(
               volunteerId: 3,
