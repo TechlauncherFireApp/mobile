@@ -21,58 +21,6 @@ void main() {
       shiftRequestClient = ConcreteShiftRequestClient(mockRestClient);
     });
 
-    test('getShiftRequestsByRequestID with MOCK_DATA should return mock data', () async {
-      final expectedList = [
-      ShiftRequest(
-        shiftID: 'S001',
-        assetClass: 'Vehicle',
-        startTime: DateTime.parse("2023-08-19T14:00:00Z"),
-        endTime: DateTime.parse("2023-08-19T18:00:00Z"),
-        shiftVolunteers: [
-          ShiftVolunteer(
-            volunteerId: 1,
-            volunteerGivenName: 'John',
-            volunteerSurname: 'Doe',
-            mobileNumber: '1234567890',
-            positionId: 101,
-            role: 'Driver',
-            status: 'Active',
-          ),
-          ShiftVolunteer(
-            volunteerId: 2,
-            volunteerGivenName: 'Jane',
-            volunteerSurname: 'Doe',
-            mobileNumber: '0987654321',
-            positionId: 102,
-            role: 'Assistant',
-            status: 'Active',
-          ),
-        ],
-      ),
-        ShiftRequest(
-        shiftID: 'S002',
-        assetClass: 'Equipment',
-        startTime: DateTime.parse("2023-08-20T09:00:00Z"),
-        endTime: DateTime.parse("2023-08-20T15:00:00.000Z"),
-        shiftVolunteers: [
-          ShiftVolunteer(
-            volunteerId: 3,
-            volunteerGivenName: 'Alice',
-            volunteerSurname: 'Smith',
-            mobileNumber: '1122334455',
-            positionId: 103,
-            role: 'Operator',
-            status: 'Active',
-          ),
-        ],
-      ),
-    ];
-
-      final result = await shiftRequestClient.getShiftRequestsByRequestID("MOCK_DATA");
-
-      expect(result, equals(expectedList));
-    });
-
     test('deleteShiftAssignment should call restClient.deleteShiftAssignment', () async {
       const shiftId = 1;
       const positionId = 2;

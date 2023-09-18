@@ -16,7 +16,7 @@ void main() {
     late ShiftRequestRepository shiftRequestRepository;
 
     setUp(() {
-      mockShiftRequestClient = MockShiftRequestClient();
+      mockShiftRequestClient = MockConcreteShiftRequestClient();
       shiftRequestRepository = ShiftRequestRepository(mockShiftRequestClient);
     });
 
