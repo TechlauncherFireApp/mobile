@@ -38,7 +38,7 @@ void main() {
       final emittedStates = [];
       final subscription = viewModel.shiftRequests.listen(emittedStates.add);
 
-      viewModel.loadShiftRequests(requestId: "mockRequestId");
+      viewModel.loadShiftRequests("mockRequestId");
       await Future.delayed(Duration(milliseconds: 100));
 
       expect(emittedStates.last, isA<SuccessRequestState<List<ShiftRequest>>>());

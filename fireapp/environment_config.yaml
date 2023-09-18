@@ -6,3 +6,6 @@ environment_config:
   fields: # set of fields for command
     serviceUrl:
       default: ""
+    mock:
+      type: bool
+      default: false

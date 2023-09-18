@@ -31,15 +31,13 @@ class ShiftRequestViewModel extends FireAppViewModel {
 
   ShiftRequestViewModel(this._shiftRequestRepository);
 
-  void loadShiftRequests({String? requestId}) async {
+  void loadShiftRequests(String requestId) async {
     _shiftRequests.add(RequestState.loading());
 
     try {
-      List<ShiftRequest> shiftRequests = [];
-      if (requestId != null) {
-        shiftRequests = await _shiftRequestRepository.getShiftRequestsByRequestID(requestId);
-      }
-      _shiftRequests.add(RequestState.success(shiftRequests));
+      _shiftRequests.add(RequestState.success(
+          await _shiftRequestRepository.getShiftRequestsByRequestID(requestId)
+      ));
     } catch (e) {
       logger.e(e);
       _shiftRequests.add(RequestState.exception(e));

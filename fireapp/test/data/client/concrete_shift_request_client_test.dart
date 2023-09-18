@@ -5,6 +5,9 @@ import 'package:fireapp/data/client/shift_request_client.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:mockito/annotations.dart';
 
+@GenerateNiceMocks([
+  MockSpec<RestClient>(),
+])
 import 'shift_request_client_test.mocks.dart';
 
 @GenerateMocks([RestClient])
@@ -16,7 +19,7 @@ void main() {
 
     setUp(() {
       mockRestClient = MockRestClient();
-      shiftRequestClient = ShiftRequestClient(mockRestClient);
+      shiftRequestClient = ConcreteShiftRequestClient(mockRestClient);
     });
 
     test('getShiftRequestsByRequestID with MOCK_DATA should return mock data', () async {

@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
 @GenerateNiceMocks([
-  MockSpec<ShiftRequestClient>(),
+  MockSpec<ConcreteShiftRequestClient>(),
 ])
 import 'shift_request_repository_test.mocks.dart'; // This should be auto-generated
 
