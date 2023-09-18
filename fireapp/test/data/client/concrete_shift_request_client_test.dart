@@ -5,10 +5,11 @@ import 'package:fireapp/data/client/shift_request_client.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateNiceMocks([])
+@GenerateNiceMocks([
+  MockSpec<RestClient>()
+])
 import 'concrete_shift_request_client_test.mocks.dart';
 
-@GenerateMocks([RestClient])
 void main() {
   group('ShiftRequestClient', () {
     TestWidgetsFlutterBinding.ensureInitialized();
