@@ -24,8 +24,9 @@ class VolunteerInformationViewModel extends FireAppViewModel{
       try {
         _volunteerInformation.add(RequestState.success
           (await volunteerInformationRepository.getVolunteerInformation(volunteerId)));
-      } catch (e) {
-        logger.e(e);
+      } catch (e,stacktrace) {
+        // logger.e(e);
+        print(stacktrace);
         _volunteerInformation.add(RequestState.exception(e));
       }
     }();

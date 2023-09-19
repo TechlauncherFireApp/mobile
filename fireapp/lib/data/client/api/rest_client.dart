@@ -35,9 +35,9 @@ abstract class RestClient {
   @GET("/v2/reference/roles")
   Future<List<VolunteerRole>> getRoles();
 
-  @GET("/volunteer")
+  @GET("/v2/volunteers/{volunteerID}")
   Future<VolunteerInformationDto> getVolunteerInformation(
-      @Query("volunteerID") String volunteerId
+      @Path("volunteerID") String volunteerId
   );
 
   @POST("/user-role")
