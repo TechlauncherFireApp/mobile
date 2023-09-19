@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
         '/volunteer_list': (context) => const VolunteerList(),
         '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
         '/server_url_page': (context) => const ServerUrlPage(),
-        '/shift_request': (context) => const ShiftRequestView(requestId: "1")
+        '/shift_request': (context) => const ShiftRequestView(requestId: "1"),
         '/constraint_form': (context) => const SchedulerConstraintPage(),
       },
     );
