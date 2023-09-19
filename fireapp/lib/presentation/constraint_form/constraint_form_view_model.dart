@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../domain/models/reference/asset_type.dart';
 class SchedulerConstraintFormViewModel {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // Text Editing Controllers
   final TextEditingController titleController = TextEditingController();
@@ -20,7 +20,7 @@ class SchedulerConstraintFormViewModel {
   set submitFormCallback(Null Function() submitFormCallback) {}
 
   // Function to be called when the form is submitted
-  void submitForm() {
+  void submitForm(GlobalKey<FormState> formKey) {
     if (formKey.currentState?.validate() != true) return;
     // Submission logic here
   }
