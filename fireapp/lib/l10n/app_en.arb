@@ -123,6 +123,48 @@
   "serverUrlBlurb": "You need to enter the URL of a development environment",
   "serverUrlHint": "Server URL",
   "serverUrlRemove": "This page can be skipped in official builds by running \"dart run environment_config:generate --serviceUrl=<your api url>\" before building.",
+
+  "shift_request_details": "Shift Request Details",
+  "shift_id": "Shift ID",
+  "asset_class": "Asset Class",
+  "start_time": "Start Time",
+  "end_time": "End Time",
+  "volunteer_name": "Volunteer Name",
+  "mobile_number": "Mobile Number",
+  "position_id": "Position ID",
+  "role": "Role",
+  "status": "Status",
+  "@shift_request_details": {
+    "description": "Title for the Shift Request Details page"
+  },
+  "@shift_id": {
+    "description": "Label for Shift ID"
+  },
+  "@asset_class": {
+    "description": "Label for Asset Class"
+  },
+  "@start_time": {
+    "description": "Label for Start Time"
+  },
+  "@end_time": {
+    "description": "Label for End Time"
+  },
+  "@volunteer_name": {
+    "description": "Label for Volunteer Name"
+  },
+  "@mobile_number": {
+    "description": "Label for Mobile Number"
+  },
+  "@position_id": {
+    "description": "Label for Position ID"
+  },
+  "@role": {
+    "description": "Label for Role"
+  },
+  "@status": {
+    "description": "Label for Status"
+  }
+  "serverUrlRemove": "This page can be skipped in official builds by running \"dart run environment_config:generate --serviceUrl=<your api url>\" before building.",
   "schedulerTitle" : "Scheduler",
   "enterDate": "Select Date",
   "enterEndTime" : "Enter End Time",

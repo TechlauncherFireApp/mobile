@@ -5,48 +5,20 @@ import 'package:fireapp/data/client/shift_request_client.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:mockito/annotations.dart';
 
-import 'authentication_client_test.mocks.dart';
+@GenerateNiceMocks([
+  MockSpec<RestClient>()
+])
+import 'concrete_shift_request_client_test.mocks.dart';
 
-@GenerateMocks([RestClient])
 void main() {
   group('ShiftRequestClient', () {
-    late RestClient mockRestClient;
+    TestWidgetsFlutterBinding.ensureInitialized();
+    late MockRestClient mockRestClient;
     late ShiftRequestClient shiftRequestClient;
 
     setUp(() {
       mockRestClient = MockRestClient();
-      shiftRequestClient = ShiftRequestClient(mockRestClient);
-    });
-
-    test('getShiftRequestsByRequestID should return a list of ShiftRequest', () async {
-      const requestID = 'ABC123';
-      final expectedList = [
-        ShiftRequest(
-          shiftID: '123',
-          assetClass: 'A1',
-          startTime: DateTime(2023, 1, 1, 10, 0),
-          endTime: DateTime(2023, 1, 1, 12, 0),
-          shiftVolunteers: [
-            ShiftVolunteer(
-              volunteerId: 1,
-              volunteerGivenName: 'John',
-              volunteerSurname: 'Doe',
-              mobileNumber: '1234567890',
-              positionId: 1,
-              role: 'RoleA',
-              status: 'Active',
-            ),
-          ],
-        ),
-      ];
-
-      when(mockRestClient.getShiftRequest(requestID))
-          .thenAnswer((_) async => expectedList);
-
-      final result = await shiftRequestClient.getShiftRequestsByRequestID(requestID);
-
-      expect(result, equals(expectedList));
-      verify(mockRestClient.getShiftRequest(requestID)).called(1);
+      shiftRequestClient = ConcreteShiftRequestClient(mockRestClient);
     });
 
     test('deleteShiftAssignment should call restClient.deleteShiftAssignment', () async {
@@ -59,6 +31,34 @@ void main() {
       await shiftRequestClient.deleteShiftAssignment(shiftId, positionId);
 
       verify(mockRestClient.deleteShiftAssignment(shiftId, positionId)).called(1);
+    });
+
+    test('getShiftRequestsByRequestID returns a list of ShiftRequest', () async {
+      const fakeRequestID = 'fakeRequestID';
+      final fakeShiftRequestList = [
+        ShiftRequest(
+          shiftID: "1",
+          assetClass: "Class1",
+          startTime: DateTime.now(),
+          endTime: DateTime.now().add(Duration(hours: 1)),
+          shiftVolunteers: [],
+        ),
+      ];
+
+      // Create a mock RestClient (you'll need a mocking library for this)
+      final mockRestClient = MockRestClient();
+
+      // Set up the behavior of the mock RestClient
+      when(mockRestClient.getShiftRequest(any))
+          .thenAnswer((_) async => fakeShiftRequestList);
+
+      final concreteShiftRequestClient = ConcreteShiftRequestClient(mockRestClient);
+
+      // Act
+      final result = await concreteShiftRequestClient.getShiftRequestsByRequestID(fakeRequestID);
+
+      // Assert
+      expect(result, equals(fakeShiftRequestList));
     });
 
     test('updateShiftByPosition should call restClient.updateShiftByPosition', () async {

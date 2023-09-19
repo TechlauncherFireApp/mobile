@@ -98,6 +98,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo/logo_color.svg
+    - assets/mock-data/shift_request.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

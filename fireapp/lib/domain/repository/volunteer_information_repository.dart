@@ -29,8 +29,8 @@ class VolunteerInformationRepository {
       mobileNo: volunteerInformation.mobileNo,
       prefHours: volunteerInformation.prefHours,
       expYears: volunteerInformation.expYears,
-      qualifications: volunteerInformation.qualifications.map((e) =>
-          qualifications.firstWhere((element) => "${element.id}" == e)).toList(),
+      qualifications: volunteerInformation.qualification.map((e) =>
+          qualifications.firstWhere((element) => element.name == e)).toList(),
       availabilities: AvailabilityField(
         monday: volunteerInformation.availabilities.monday,
         tuesday: volunteerInformation.availabilities.tuesday,

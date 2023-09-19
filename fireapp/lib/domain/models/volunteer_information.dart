@@ -29,13 +29,13 @@ class VolunteerInformation with _$VolunteerInformation{
 class AvailabilityField with _$AvailabilityField{
 
   const factory AvailabilityField({
-    required List<List<int>> monday,
-    required List<List<int>> tuesday,
-    required List<List<int>> wednesday,
-    required List<List<int>> thursday,
-    required List<List<int>> friday,
-    required List<List<int>> saturday,
-    required List<List<int>> sunday,
+    required List<List<double>> monday,
+    required List<List<double>> tuesday,
+    required List<List<double>> wednesday,
+    required List<List<double>> thursday,
+    required List<List<double>> friday,
+    required List<List<double>> saturday,
+    required List<List<double>> sunday,
   }) = _AvailabilityField;
 
   factory AvailabilityField.fromJson(Map<String, Object?> json) => _$AvailabilityFieldFromJson(json);
