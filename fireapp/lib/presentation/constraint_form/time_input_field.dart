@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class SchedulerTimeInputField extends TemporalInputField {
-  const SchedulerTimeInputField(
+class TimeInputField extends TemporalInputField {
+  const TimeInputField(
       {super.key, required super.controller,
       required super.label,
       required super.icon,

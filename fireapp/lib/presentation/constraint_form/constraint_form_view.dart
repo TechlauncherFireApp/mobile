@@ -101,7 +101,7 @@ class _SchedulerConstraintFormState
               ],
             ),
             const Spacer(),
-            SchedulerDateInputField(
+            DateInputField(
               controller: viewModel.inputDateController,
               label: AppLocalizations.of(context)?.enterDate ?? "",
               icon: Icons.calendar_today,
@@ -110,7 +110,7 @@ class _SchedulerConstraintFormState
                   : null, //will return this if date is empty when submit
             ),
             const Spacer(),
-            SchedulerTimeInputField(
+            TimeInputField(
               controller: viewModel.startTimeController,
               label: AppLocalizations.of(context)?.enterStartTime ?? "",
               icon: Icons.hourglass_top,

@@ -39,7 +39,6 @@ abstract class RestClient {
   @GET("/reference/asset_types")
   Future<List<AssetType>> getAssetTypes();
 
-  @GET("/volunteer")
   @GET("/v2/volunteers/{volunteerID}")
   Future<VolunteerInformationDto> getVolunteerInformation(
       @Path("volunteerID") String volunteerId

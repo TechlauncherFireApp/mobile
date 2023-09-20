@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 
-class SchedulerDateInputField extends TemporalInputField {
-  const SchedulerDateInputField(
+class DateInputField extends TemporalInputField {
+  const DateInputField(
       {super.key,
       required super.controller,
       required super.label,
