@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/models/reference/asset_type.dart';
-class SchedulerConstraintFormViewModel {
+
+class SchedulerConstraintFormViewModel extends FireAppViewModel {
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // Text Editing Controllers
@@ -17,15 +19,14 @@ class SchedulerConstraintFormViewModel {
   // Current dropdown value
   int dropdownValue = 1;
 
-  set submitFormCallback(Null Function() submitFormCallback) {}
-
   // Function to be called when the form is submitted
-  void submitForm(GlobalKey<FormState> formKey) {
+  void submitForm() {
     if (formKey.currentState?.validate() != true) return;
     // Submission logic here
   }
 
-  void dispose() { // Dispose of resources
+  @override
+  Future<void> dispose() async {
     titleController.dispose();
     inputDateController.dispose();
     startTimeController.dispose();

@@ -1,11 +1,14 @@
+import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/presentation/constraint_form/date_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/text_input_field.dart';
 import 'package:fireapp/presentation/constraint_form/time_input_field.dart';
+import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
+import 'package:get_it/get_it.dart';
 
 class SchedulerConstraintPage extends StatelessWidget {
   const SchedulerConstraintPage({super.key});
@@ -25,19 +28,24 @@ class SchedulerConstraintForm extends StatefulWidget {
   const SchedulerConstraintForm({super.key});
 
   @override
-  _SchedulerConstraintFormState createState() =>
+  State createState() =>
       _SchedulerConstraintFormState();
+
 }
 
-class _SchedulerConstraintFormState extends State<SchedulerConstraintForm> {
-  final viewModel = SchedulerConstraintFormViewModel();
+class _SchedulerConstraintFormState
+    extends FireAppState<SchedulerConstraintForm>
+    implements ViewModelHolder<SchedulerConstraintFormViewModel> {
+
+  @override
+  SchedulerConstraintFormViewModel viewModel = GetIt.instance.get();
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: viewModel.formKey,
       child: Padding(
-        padding: EdgeInsets.all(1.0.rdp()),
+        padding: EdgeInsets.symmetric(horizontal: 1.0.rdp()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
