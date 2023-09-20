@@ -11,6 +11,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../domain/models/reference/asset_type.dart';
 import '../../../domain/models/role_request.dart';
 import '../../../domain/models/shift_request.dart';
 
@@ -34,6 +35,9 @@ abstract class RestClient {
 
   @GET("/v2/reference/roles")
   Future<List<VolunteerRole>> getRoles();
+
+  @GET("/reference/asset_types")
+  Future<List<AssetType>> getAssetTypes();
 
   @GET("/v2/volunteers/{volunteerID}")
   Future<VolunteerInformationDto> getVolunteerInformation(
