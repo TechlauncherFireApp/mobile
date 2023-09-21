@@ -8,7 +8,7 @@ class SchedulerConstraintFormClient {
   final RestClient restClient;
   SchedulerConstraintFormClient(this.restClient);
 
-  Future<List<AssetType>> getQualifications() {
+  Future<List<AssetType>> getAssetType() {
     return restClient.getAssetTypes();
   }
 }
