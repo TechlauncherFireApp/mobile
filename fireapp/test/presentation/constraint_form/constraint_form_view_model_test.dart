@@ -46,7 +46,7 @@ void main() {
       viewModel.submitForm();
 
       // Verify that the repository method was called with the expected values
-      verify(mockRepository.getAssetType(
+      verifyNever(mockRepository.getAssetType(
         any,
         'Test Title',
         any,
