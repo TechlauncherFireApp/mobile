@@ -51,7 +51,7 @@ void main() {
 
     flutter_test.test('selectEndTime should set the selected end time', () {
       // Arrange
-      const time = TimeOfDay(hour: 15, minute: 45);
+      const time = TimeOfDay(hour: 11, minute: 45);
 
       // Act
       viewModel.selectEndTime(time);
