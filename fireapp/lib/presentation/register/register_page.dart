@@ -59,7 +59,7 @@ class _RegisterPageState
             SizedBox(height: 1.rdp(),),
             FillWidth(
               child: Text(
-                'ConstraintForm', // AppLocalizations.of(context)?.registerTitle ?? "",
+                AppLocalizations.of(context)?.registerTitle ?? "",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
@@ -79,27 +79,27 @@ class _RegisterPageState
     return [
       SizedBox(height: 1.rdp(),),
       FillWidth(
-          child: StandardButton(
-              type: ButtonType.primary,
-              onPressed: () => viewModel.register(),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppLocalizations.of(context)?.registerContinue ?? ""),
-                  RequestStateSpinner.stream(
-                      state: viewModel.state,
-                      child: SizedBox(
-                        width: 1.rdp(),
-                        height: 1.rdp(),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                      )
-                  )
-                ].spacedBy(0.5.rdp()),
+        child: StandardButton(
+          type: ButtonType.primary,
+          onPressed: () => viewModel.register(),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context)?.registerContinue ?? ""),
+              RequestStateSpinner.stream(
+                state: viewModel.state,
+                child: SizedBox(
+                  width: 1.rdp(),
+                  height: 1.rdp(),
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                )
               )
+            ].spacedBy(0.5.rdp()),
           )
+        )
       ),
       FillWidth(
         child: StandardButton(
@@ -118,12 +118,9 @@ class _RegisterPageState
         Column(
           children: [
             TextFormField(
-              decoration: textFieldStyle(
+              decoration: textFieldStylePositioned(
                 context,
-                radius: BorderRadius.only(
-                    topLeft: Radius.circular(0.5.rdp()),
-                    topRight: Radius.circular(0.5.rdp())
-                )
+                position: FormFieldPosition.top
               ).copyWith(
                   labelText: aL?.registerUsername ?? ""
               ),
@@ -137,9 +134,9 @@ class _RegisterPageState
               keyboardType: TextInputType.emailAddress,
             ),
             PasswordFormField(
-              decoration: textFieldStyle(
-                context,
-                radius: const BorderRadius.all(Radius.zero)
+              decoration: textFieldStylePositioned(
+                  context,
+                  position: FormFieldPosition.middle
               ),
               controller: viewModel.password,
               validator: (v) {
@@ -149,9 +146,9 @@ class _RegisterPageState
               label: aL?.registerPassword ?? "",
             ),
             TextFormField(
-              decoration: textFieldStyle(
+              decoration: textFieldStylePositioned(
                   context,
-                  radius: const BorderRadius.all(Radius.zero)
+                  position: FormFieldPosition.middle
               ).copyWith(
                   labelText: aL?.registerFirstName
               ),
@@ -163,9 +160,9 @@ class _RegisterPageState
               },
             ),
             TextFormField(
-              decoration: textFieldStyle(
+              decoration: textFieldStylePositioned(
                   context,
-                  radius: const BorderRadius.all(Radius.zero)
+                  position: FormFieldPosition.middle
               ).copyWith(
                   labelText: aL?.registerLastName
               ),
@@ -177,12 +174,9 @@ class _RegisterPageState
               },
             ),
             TextFormField(
-              decoration: textFieldStyle(
-                context,
-                radius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0.5.rdp()),
-                    bottomRight: Radius.circular(0.5.rdp())
-                )
+              decoration: textFieldStylePositioned(
+                  context,
+                  position: FormFieldPosition.bottom
               ).copyWith(
                   labelText: aL?.registerPhoneNumber
               ),
