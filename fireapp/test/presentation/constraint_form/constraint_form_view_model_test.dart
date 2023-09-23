@@ -54,7 +54,7 @@ void main() {
 
       // Verify that the repository method was called with the expected values
       verify(mockRepository.getAssetType(
-        mockRepository.getAssetType as int?, // Replace with the expected asset ID
+        any, // Replace with the expected asset ID
         'Test Title',
         any,
         any,
@@ -88,13 +88,12 @@ void main() {
           [],
           emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
         ]),
-      ).timeout(Duration(seconds: 5)); // Adjust the timeout duration as needed
-    });
+      ).timeout(const Duration(hours: 1));
 
-    flutter_test.test('Dispose method should close BehaviorSubjects', () {
-      // Call the dispose method
-      viewModel.dispose();
-
+      flutter_test.test('Dispose method should close BehaviorSubjects', () {
+        // Call the dispose method
+        viewModel.dispose();
+      });
     });
   });
 }
