@@ -36,28 +36,6 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   // Function to be called when the form is submitted
   void submitForm() {
     final String name = titleController.text;
-
-    // if (_assetTypes.value.isEmpty || name.isEmpty || date.isEmpty || time.isEmpty) {
-    //   // Handle validation or show an error message.
-    //   const errorMessage = "Please provide all required data";
-    //   _assetTypes.add(RequestState.exception(errorMessage) as List<AssetType>);
-    //   return;
-    // }
-    //
-    // try {
-    //   // Assuming you have a method to submit this data to the repository
-    //   _schedulerConstraintFormRepository.getAssetType(
-    //     _assetTypes.value[0].id,
-    //     _assetTypes.value[2].code,
-    //     name,
-    //     date as DateTime,
-    //     time as DateTime,
-    //   );
-    //   _assetTypes.add(RequestState.success(null) as List<AssetType>);
-    // } catch (e) {
-    //   logger.e(e);
-    //   _assetTypes.add(RequestState.exception(e) as List<AssetType>);
-    // }
   }
 
   void selectDate(DateTime? date) {

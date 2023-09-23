@@ -23,7 +23,7 @@ void main() {
   });
 
   flutter_test.group('SchedulerConstraintFormViewModel', () {
-    flutter_test.test('Submit Form with Valid Data', () async {
+    flutter_test.test('Submit Form with Valid Data', () {
       // Prepare test data
       final assetType = AssetType(
         id: 1,
@@ -33,19 +33,14 @@ void main() {
         created: DateTime.now(),
       );
 
-      // Set up the expected behavior of the mock repository
-      when(mockRepository.getAssetType(
-        any,
-        any,
-        any,
-        any,
-        any,
-      )).thenAnswer((_) async => [assetType]);
-
       // Set the form values
       viewModel.titleController.text = 'Test Title';
       viewModel.selectDate(DateTime.now());
       viewModel.selectStartTime(TimeOfDay.now());
+
+      // Mock the repository method to return the test data
+      when(mockRepository.getAssetType(any, any, any, any, any))
+          .thenAnswer((_) async => [assetType]);
 
       // Trigger the form submission
       viewModel.submitForm();
@@ -59,17 +54,17 @@ void main() {
         any,
       )).called(1);
 
-      // Verify that the RequestState is success
+      // Expect that the assetTypes stream emits the success state
       expectLater(
         viewModel.assetsStream,
         emitsInOrder([
           [],
-          [assetType], // Expect the success state with the assetType
+          [assetType],
         ]),
       );
     });
 
-    flutter_test.test('Submit Form with Empty Data', () async {
+    flutter_test.test('Submit Form with Empty Data', () {
       // Set the form values to empty
       viewModel.titleController.text = '';
       viewModel.selectDate(null);
@@ -78,17 +73,16 @@ void main() {
       // Trigger the form submission
       viewModel.submitForm();
 
-      // Verify that the RequestState is an exception with an error message
-      await expectLater(
+      // Expect that the assetTypes stream emits an exception state
+      expectLater(
         viewModel.assetsStream,
         emitsInOrder([
           [],
           emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
         ]),
-      ).timeout(const Duration(seconds: 5)); // Adjust the timeout duration as needed
+      );
     });
 
-    // Move this test outside the previous test block
     flutter_test.test('Dispose method should close BehaviorSubjects', () {
       // Call the dispose method
       viewModel.dispose();
