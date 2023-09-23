@@ -78,6 +78,7 @@ class _SchedulerConstraintFormState
                   context,
                 ).copyWith(
                   labelText: AppLocalizations.of(context)?.scheduleName ?? "",
+                  prefixIcon: const Icon(Icons.label_outline)
                 ),
                 style: Theme.of(context).textTheme.labelLarge,
                 validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
@@ -90,7 +91,8 @@ class _SchedulerConstraintFormState
                       decoration: textFieldStylePositioned(
                         context,
                       ).copyWith(
-                          labelText: AppLocalizations.of(context)?.selectAsset
+                        labelText: AppLocalizations.of(context)?.selectAsset,
+                        prefixIcon: const Icon(Icons.car_rental_outlined)
                       ),
                       value: viewModel.dropdownValue,
                       items: <int>[1, 2, 3, 4]
