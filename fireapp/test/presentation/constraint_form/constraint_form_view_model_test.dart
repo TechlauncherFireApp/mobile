@@ -23,7 +23,7 @@ void main() {
   });
 
   flutter_test.group('SchedulerConstraintFormViewModel', () {
-    flutter_test.test('Submit Form with Valid Data', () {
+    flutter_test.test('Submit Form with Valid Data', () async {
       // Prepare test data
       final assetType = AssetType(
         id: 1,
@@ -42,8 +42,8 @@ void main() {
       when(mockRepository.getAssetType(any, any, any, any, any))
           .thenAnswer((_) async => [assetType]);
 
-      // // Trigger the form submission
-      // viewModel.submitForm();
+      // Trigger the form submission
+      viewModel.submitForm(); // Await the submission
 
       // Verify that the repository method was called with the expected values
       verify(mockRepository.getAssetType(
@@ -64,14 +64,14 @@ void main() {
       );
     });
 
-    flutter_test.test('Submit Form with Empty Data', () {
+    flutter_test.test('Submit Form with Empty Data', () async {
       // Set the form values to empty
       viewModel.titleController.text = '';
       viewModel.selectDate(null);
       viewModel.selectStartTime(null);
 
       // Trigger the form submission
-      // viewModel.submitForm();
+      viewModel.submitForm(); // Await the submission
 
       // Expect that the assetTypes stream emits an exception state
       expectLater(
