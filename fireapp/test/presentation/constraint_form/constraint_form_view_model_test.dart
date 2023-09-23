@@ -8,6 +8,10 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:test/expect.dart';
 
+// Import necessary test harness
+import 'package:mockito/mockito.dart';
+import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
+
 @GenerateNiceMocks([
   MockSpec<SchedulerConstraintFormRepository>(),
 ])
@@ -23,65 +27,38 @@ void main() {
   });
 
   flutter_test.group('SchedulerConstraintFormViewModel', () {
-    // flutter_test.test('Submit Form with Valid Data', () async {
-    //   // Prepare test data
-    //   final assetType = AssetType(
-    //     id: 1,
-    //     name: 'Asset 1',
-    //     code: 'A1',
-    //     updated: DateTime.now(),
-    //     created: DateTime.now(),
-    //   );
-    //
-    //   // Set the form values
-    //   viewModel.titleController.text = 'Test Title';
-    //   viewModel.selectDate(DateTime.now());
-    //   viewModel.selectStartTime(TimeOfDay.now());
-    //
-    //   // Mock the repository method to return the test data
-    //   when(mockRepository.getAssetType(any, any, any, any, any))
-    //       .thenAnswer((_) async => [assetType]);
-    //
-    //   // Trigger the form submission
-    //   viewModel.submitForm(); // Await the submission
-    //
-    //   // Verify that the repository method was called with the expected values
-    //   verify(mockRepository.getAssetType(
-    //     any,
-    //     'Test Title',
-    //     any,
-    //     any,
-    //     any,
-    //   )).called(1);
-    //
-    //   // Expect that the assetTypes stream emits the success state
-    //   expectLater(
-    //     viewModel.assetsStream,
-    //     emitsInOrder([
-    //       [],
-    //       [assetType],
-    //     ]),
-    //   );
-    // });
-    //
-    // flutter_test.test('Submit Form with Empty Data', () async {
-    //   // Set the form values to empty
-    //   viewModel.titleController.text = '';
-    //   viewModel.selectDate(null);
-    //   viewModel.selectStartTime(null);
-    //
-    //   // Trigger the form submission
-    //   viewModel.submitForm(); // Await the submission
-    //
-    //   // Expect that the assetTypes stream emits an exception state
-    //   expectLater(
-    //     viewModel.assetsStream,
-    //     emitsInOrder([
-    //       [],
-    //       emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
-    //     ]),
-    //   );
-    // });
+    flutter_test.test('selectDate should set the selected date', () {
+      // Arrange
+      final date = DateTime(2023, 9, 22);
+
+      // Act
+      viewModel.selectDate(date);
+
+      // Assert
+      expect(viewModel.selectedDate, emits(date));
+    });
+
+    flutter_test.test('selectStartTime should set the selected start time', () {
+      // Arrange
+      const time = TimeOfDay(hour: 9, minute: 30);
+
+      // Act
+      viewModel.selectStartTime(time);
+
+      // Assert
+      expect(viewModel.selectedStartTime, emits(time));
+    });
+
+    flutter_test.test('selectEndTime should set the selected end time', () {
+      // Arrange
+      const time = TimeOfDay(hour: 15, minute: 45);
+
+      // Act
+      viewModel.selectEndTime(time);
+
+      // Assert
+      expect(viewModel.selectedEndTime, emits(time));
+    });
 
     flutter_test.test('Dispose method should close BehaviorSubjects', () {
       // Call the dispose method
