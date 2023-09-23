@@ -2,12 +2,13 @@ import 'dart:async';
 import 'package:fireapp/domain/repository/scheduler_constraint_form_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
-
 import '../../domain/models/reference/asset_type.dart';
 import '../../domain/request_state.dart';
 import '../../global/di.dart';
 
+@injectable
 class SchedulerConstraintFormViewModel extends FireAppViewModel {
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final SchedulerConstraintFormRepository
@@ -18,8 +19,6 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   final TextEditingController inputDateController = TextEditingController();
   final TextEditingController startTimeController = TextEditingController();
 
-  // Remove this after actual thing implemented
-  // coverage:ignore-start
 
   final BehaviorSubject<List<AssetType>> _assetTypes =
       BehaviorSubject<List<AssetType>>();
@@ -29,11 +28,27 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   int dropdownValue = 1;
 
   // Function to be called when the form is submitted
-  void submit(int id, String name, String code, DateTime updated,
-      DateTime created) async {
+  void submitForm() {
+    final String name = titleController.text;
+    final String date = inputDateController.text;
+    final String time = startTimeController.text;
+
+    if (_assetTypes.value.isEmpty || name.isEmpty || date.isEmpty || time.isEmpty) {
+      // Handle validation or show an error message.
+      const errorMessage = "Please provide all required data";
+      _assetTypes.add(RequestState.exception(errorMessage) as List<AssetType>);
+      return;
+    }
+
     try {
-      await _schedulerConstraintFormRepository.getAssetType(
-          id, name, code, updated, created);
+      // Assuming you have a method to submit this data to the repository
+      _schedulerConstraintFormRepository.getAssetType(
+        _assetTypes.value[0].id,
+        _assetTypes.value[2].code,
+        name,
+        date as DateTime,
+        time as DateTime,
+      );
       _assetTypes.add(RequestState.success(null) as List<AssetType>);
     } catch (e) {
       logger.e(e);
