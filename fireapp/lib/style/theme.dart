@@ -63,13 +63,47 @@ ThemeData theme() {
   );
 }
 
+enum FormFieldPosition {
+  top,
+  middle,
+  bottom,
+  independent
+}
+
+double _borderRadius = 0.5.rdp();
+Radius _cornerRadius = Radius.circular(_borderRadius);
+
+InputDecoration textFieldStylePositioned(
+    BuildContext context,
+    { FormFieldPosition position = FormFieldPosition.independent }
+) {
+  BorderRadius radius;
+
+  switch(position) {
+    case FormFieldPosition.independent:
+      radius = BorderRadius.circular(_borderRadius);
+      break;
+    case FormFieldPosition.top:
+      radius = BorderRadius.only(topLeft: _cornerRadius, topRight: _cornerRadius);
+      break;
+    case FormFieldPosition.middle:
+      radius = BorderRadius.zero;
+      break;
+    case FormFieldPosition.bottom:
+      radius = BorderRadius.only(bottomLeft: _cornerRadius, bottomRight: _cornerRadius);
+      break;
+  }
+
+  return textFieldStyle(context, radius: radius);
+}
+
 InputDecoration textFieldStyle(
     BuildContext context,
     {
       BorderRadius? radius
     }
 ) {
-  radius = radius ?? BorderRadius.circular(0.5.rdp());
+  radius = radius ?? BorderRadius.circular(_borderRadius);
   return InputDecoration(
     filled: true,
     fillColor: Theme.of(context).colorScheme.surface,
