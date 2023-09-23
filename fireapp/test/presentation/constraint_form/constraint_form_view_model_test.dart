@@ -54,7 +54,7 @@ void main() {
 
       // Verify that the repository method was called with the expected values
       verify(mockRepository.getAssetType(
-        null, // Replace with the expected asset ID
+        mockRepository.getAssetType as int?, // Replace with the expected asset ID
         'Test Title',
         any,
         any,
@@ -81,20 +81,20 @@ void main() {
       viewModel.submitForm();
 
       // Verify that the RequestState is an exception with an error message
-      expect(
+      // Use expectLater with a timeout to verify the RequestState
+      await expectLater(
         viewModel.assetsStream,
         emitsInOrder([
           [],
           emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
         ]),
-      );
+      ).timeout(Duration(seconds: 5)); // Adjust the timeout duration as needed
     });
 
     flutter_test.test('Dispose method should close BehaviorSubjects', () {
       // Call the dispose method
       viewModel.dispose();
 
-      // Verify that BehaviorSubjects are closed
     });
   });
 }
