@@ -10,7 +10,8 @@ import 'package:test/expect.dart';
 
 @GenerateNiceMocks([
   MockSpec<SchedulerConstraintFormRepository>(),
-])import 'constraint_form_view_model_test.mocks.dart';
+])
+import 'constraint_form_view_model_test.mocks.dart';
 
 void main() {
   late SchedulerConstraintFormViewModel viewModel;
@@ -49,17 +50,14 @@ void main() {
       // Trigger the form submission
       viewModel.submitForm();
 
-      // Wait for the async operation to complete
-      await Future.delayed(Duration.zero);
-
       // Verify that the repository method was called with the expected values
-      // verifyNever(mockRepository.getAssetType(
-      //   any,
-      //   any,
-      //   any,
-      //   any,
-      //   any,
-      // ));
+      verify(mockRepository.getAssetType(
+        any,
+        'Test Title',
+        any,
+        any,
+        any,
+      )).called(1);
 
       // Verify that the RequestState is success
       expectLater(
@@ -81,20 +79,19 @@ void main() {
       viewModel.submitForm();
 
       // Verify that the RequestState is an exception with an error message
-      // Use expectLater with a timeout to verify the RequestState
       await expectLater(
         viewModel.assetsStream,
         emitsInOrder([
           [],
           emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
         ]),
-      ).timeout(const Duration(seconds: 30)); // Adjust the timeout duration as needed
+      ).timeout(const Duration(seconds: 5)); // Adjust the timeout duration as needed
+    });
 
-
-      flutter_test.test('Dispose method should close BehaviorSubjects', () {
-        // Call the dispose method
-        viewModel.dispose();
-      });
+    // Move this test outside the previous test block
+    flutter_test.test('Dispose method should close BehaviorSubjects', () {
+      // Call the dispose method
+      viewModel.dispose();
     });
   });
 }
