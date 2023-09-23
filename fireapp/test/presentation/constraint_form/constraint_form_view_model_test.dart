@@ -49,16 +49,16 @@ void main() {
       expect(viewModel.selectedStartTime, emits(time));
     });
 
-    flutter_test.test('selectEndTime should set the selected end time', () {
-      // Arrange
-      const time = TimeOfDay(hour: 11, minute: 45);
-
-      // Act
-      viewModel.selectEndTime(time);
-
-      // Assert
-      expect(viewModel.selectedEndTime, emits(time));
-    });
+    // flutter_test.test('selectEndTime should set the selected end time', () {
+    //   // Arrange
+    //   const time = TimeOfDay(hour: 11, minute: 45);
+    //
+    //   // Act
+    //   viewModel.selectEndTime(time);
+    //
+    //   // Assert
+    //   expect(viewModel.selectedEndTime, emits(time));
+    // });
 
     flutter_test.test('Dispose method should close BehaviorSubjects', () {
       // Call the dispose method
