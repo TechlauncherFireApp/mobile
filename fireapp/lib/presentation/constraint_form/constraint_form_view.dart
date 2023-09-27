@@ -57,10 +57,10 @@ class _SchedulerConstraintFormState
               minimumSize: const Size.fromHeight(40),
             ),
             onPressed: viewModel.submitForm,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Add Schedule"),
+                Text(AppLocalizations.of(context)?.addSchedule ?? "Add Schedule"),
               ],
             ),
           ),
