@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/domain/repository/scheduler_constraint_form_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final SchedulerConstraintFormRepository
       _schedulerConstraintFormRepository;
+  late final ReferenceDataRepository _referenceDataRepository;
 
   // Text Editing Controllers
   final TextEditingController titleController = TextEditingController();
@@ -36,6 +38,24 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   // Function to be called when the form is submitted
   void submitForm() {
     final String name = titleController.text;
+    final newAsset = AssetType(
+      id: 1, // Set the desired ID
+      name: name, // Set the desired name
+      code: name, // Set the desired code
+      updated: DateTime.now(), // Set the desired updated date
+      created: DateTime.now(), // Set the desired created date
+    );
+
+    if (_assetTypes.hasValue) {
+      List<AssetType> currentAssetTypes = _assetTypes.value!; // Use ! to assert that it's not null
+
+      // Step 2: Append the newAsset to the current list
+      currentAssetTypes.add(newAsset);
+      _assetTypes.add(currentAssetTypes);
+    } else {
+      _assetTypes.add([newAsset]);
+    }
+
   }
 
   void selectDate(DateTime? date) {
@@ -58,4 +78,23 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
     _selectedEndTime.close();
     _assetTypes.close();
   }
-}
+  SchedulerConstraintFormViewModel() {
+    // Initialize the ViewModel by fetching asset types
+    fetchAssetTypes();
+  }
+
+  // Create a method to fetch and update asset types
+  Future<void> fetchAssetTypes() async {
+    try {
+      var assetTypes = await _referenceDataRepository.getAssetType();
+      if (assetTypes.isEmpty) {
+        assetTypes = [];
+      }
+      _assetTypes.add(assetTypes);
+    } catch (e) {
+      // Handle errors here
+      print('Error fetching asset types: $e');
+    }
+  }
+  }
+

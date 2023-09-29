@@ -15,6 +15,8 @@ import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.
 import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../domain/models/reference/asset_type.dart';
+
 class SchedulerConstraintPage extends StatelessWidget {
   const SchedulerConstraintPage({super.key});
 
@@ -87,31 +89,46 @@ class _SchedulerConstraintFormState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: DropdownButtonFormField<int>(
-                      decoration: textFieldStylePositioned(
-                        context,
-                      ).copyWith(
-                        labelText: AppLocalizations.of(context)?.selectAsset,
-                        prefixIcon: const Icon(Icons.car_rental_outlined)
-                      ),
-                      value: viewModel.dropdownValue,
-                      items: <int>[1, 2, 3, 4]
-                          .map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(
-                            'Asset $value',
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .shadow), // will generate asset list in dropdown menu
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          viewModel.dropdownValue = newValue!;
-                        });
+                    child: StreamBuilder<List<AssetType>>(
+                      stream: viewModel.assetsStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<AssetType> assetTypes = snapshot.data!;
+                          return DropdownButtonFormField<AssetType>(
+                            decoration: textFieldStylePositioned(
+                              context,
+                            ).copyWith(
+                              labelText: AppLocalizations.of(context)?.selectAsset,
+                              prefixIcon: const Icon(Icons.car_rental_outlined),
+                            ),
+                            items: assetTypes.map<DropdownMenuItem<AssetType>>(
+                                  (AssetType asset) {
+                                return DropdownMenuItem<AssetType>(
+                                  value: asset,
+                                  child: Text(
+                                    '${asset.name}', // Adjust this based on your AssetType structure
+                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                      color: Theme.of(context).colorScheme.shadow,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                            onChanged: (AssetType? newValue) {
+                              if (newValue != null) {
+                                setState(() {
+
+                                });
+                              }
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          // Handle error here
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // Loading state
+                          return CircularProgressIndicator(); // or any other loading indicator
+                        }
                       },
                     ),
                   ),
