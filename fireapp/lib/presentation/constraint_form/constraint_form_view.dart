@@ -106,7 +106,7 @@ class _SchedulerConstraintFormState
                                 return DropdownMenuItem<AssetType>(
                                   value: asset,
                                   child: Text(
-                                    '${asset.name}', // Adjust this based on your AssetType structure
+                                    asset.name, // Adjust this based on your AssetType structure
                                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                       color: Theme.of(context).colorScheme.shadow,
                                     ),

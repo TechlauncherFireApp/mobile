@@ -11,10 +11,11 @@ import '../../global/di.dart';
 
 @injectable
 class SchedulerConstraintFormViewModel extends FireAppViewModel {
-  late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final SchedulerConstraintFormRepository
-      _schedulerConstraintFormRepository;
+    _schedulerConstraintFormRepository;
   late final ReferenceDataRepository _referenceDataRepository;
+
+  late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // Text Editing Controllers
   final TextEditingController titleController = TextEditingController();
@@ -35,21 +36,25 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
   // Current dropdown value
   int? dropdownValue;
 
+  SchedulerConstraintFormViewModel(this._referenceDataRepository, this._schedulerConstraintFormRepository) {
+    fetchAssetTypes();
+  }
+
   // Function to be called when the form is submitted
   void submitForm() {
     final String name = titleController.text;
     final newAsset = AssetType(
-      id: 1, // Set the desired ID
-      name: name, // Set the desired name
-      code: name, // Set the desired code
-      updated: DateTime.now(), // Set the desired updated date
-      created: DateTime.now(), // Set the desired created date
+      id: 1,
+      name: name,
+      code: name,
+      updated: DateTime.now(),
+      created: DateTime.now(),
     );
 
     if (_assetTypes.hasValue) {
-      List<AssetType> currentAssetTypes = _assetTypes.value!; // Use ! to assert that it's not null
+      List<AssetType> currentAssetTypes = _assetTypes.value!;
 
-      // Step 2: Append the newAsset to the current list
+       //Append the newAsset to the current list
       currentAssetTypes.add(newAsset);
       _assetTypes.add(currentAssetTypes);
     } else {
@@ -77,10 +82,6 @@ class SchedulerConstraintFormViewModel extends FireAppViewModel {
     _selectedStartTime.close();
     _selectedEndTime.close();
     _assetTypes.close();
-  }
-  SchedulerConstraintFormViewModel() {
-    // Initialize the ViewModel by fetching asset types
-    fetchAssetTypes();
   }
 
   // Create a method to fetch and update asset types
