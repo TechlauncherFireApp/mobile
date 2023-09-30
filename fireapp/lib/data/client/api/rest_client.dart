@@ -1,3 +1,4 @@
+import 'package:fireapp/domain/models/new/vehicle_request.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
@@ -13,6 +14,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../../domain/models/reference/asset_type.dart';
 import '../../../domain/models/role_request.dart';
+import '../../../domain/models/scheduler/new_request.dart';
+import '../../../domain/models/scheduler/new_request_response.dart';
 import '../../../domain/models/shift_request.dart';
 
 part 'rest_client.g.dart';
@@ -38,6 +41,12 @@ abstract class RestClient {
 
   @GET("/reference/asset_types")
   Future<List<AssetType>> getAssetTypes();
+
+  @POST("/new_request")
+  Future<NewRequestResponse> makeNewRequest(@Body() NewRequest newRequest);
+
+  @POST("/vehicle_request")
+  Future<void> makeVehicleRequest(@Body() VehicleRequest vehicleRequest);
 
   @GET("/v2/volunteers/{volunteerID}")
   Future<VolunteerInformationDto> getVolunteerInformation(

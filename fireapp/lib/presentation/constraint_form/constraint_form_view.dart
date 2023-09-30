@@ -1,5 +1,6 @@
 import 'package:fireapp/base/date_contants.dart';
 import 'package:fireapp/base/widget.dart';
+import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/shift_request/ShiftRequestPage.dart';
 import 'package:fireapp/style/theme.dart';
@@ -16,6 +17,8 @@ import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/models/reference/asset_type.dart';
+import '../../domain/request_state.dart';
+import '../../widgets/request_state_widget.dart';
 
 class SchedulerConstraintPage extends StatelessWidget {
   const SchedulerConstraintPage({super.key});
@@ -42,10 +45,20 @@ class SchedulerConstraintForm extends StatefulWidget {
 
 class _SchedulerConstraintFormState
     extends FireAppState<SchedulerConstraintForm>
+    with Navigable<ConstraintFormNavigation, SchedulerConstraintForm>
     implements ViewModelHolder<SchedulerConstraintFormViewModel> {
 
   @override
   SchedulerConstraintFormViewModel viewModel = GetIt.instance.get();
+
+  @override
+  void handleNavigationEvent(ConstraintFormNavigation event) {
+    event.when(
+      shiftRequest: (requestId) {
+        Navigator.of(context).pushNamed("/shift_request/$requestId");
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,17 +67,29 @@ class _SchedulerConstraintFormState
       bottomChildren: [
         SizedBox(height: 1.rdp(),),
         FillWidth(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(40),
-            ),
-            onPressed: viewModel.submitForm,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(AppLocalizations.of(context)?.addSchedule ?? "Add Schedule"),
-              ],
-            ),
+          child: StreamBuilder(
+            stream: viewModel.submissionState,
+            builder: (context, data) {
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40),
+                ),
+                onPressed: viewModel.submitForm,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppLocalizations.of(context)?.addSchedule ?? "Add Schedule"),
+                    if (data is LoadingRequestState) SizedBox(
+                      height: 8,
+                      width: 8,
+                      child: CircularProgressIndicator(
+                          color: (Theme.of(context).primaryTextTheme.headline6?.color ?? Colors.white)
+                      ),
+                    )
+                  ],
+                ),
+              )
+            },
           ),
         )
       ],
@@ -89,47 +114,37 @@ class _SchedulerConstraintFormState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: StreamBuilder<List<AssetType>>(
-                      stream: viewModel.assetsStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          List<AssetType> assetTypes = snapshot.data!;
-                          return DropdownButtonFormField<AssetType>(
-                            decoration: textFieldStylePositioned(
-                              context,
-                            ).copyWith(
-                              labelText: AppLocalizations.of(context)?.selectAsset,
-                              prefixIcon: const Icon(Icons.car_rental_outlined),
-                            ),
-                            items: assetTypes.map<DropdownMenuItem<AssetType>>(
-                                  (AssetType asset) {
-                                return DropdownMenuItem<AssetType>(
-                                  value: asset,
-                                  child: Text(
-                                    asset.name, // Adjust this based on your AssetType structure
-                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                      color: Theme.of(context).colorScheme.shadow,
-                                    ),
+                    child: RequestStateWidget.stream<List<AssetType>>(
+                      state: viewModel.assetsStream,
+                      child: (context, assetTypes) {
+                        return DropdownButtonFormField<AssetType>(
+                          decoration: textFieldStylePositioned(
+                            context,
+                          ).copyWith(
+                            labelText: AppLocalizations.of(context)?.selectAsset,
+                            prefixIcon: const Icon(Icons.car_rental_outlined),
+                          ),
+                          items: assetTypes.map<DropdownMenuItem<AssetType>>(
+                                (AssetType asset) {
+                              return DropdownMenuItem<AssetType>(
+                                value: asset,
+                                child: Text(
+                                  asset.name, // Adjust this based on your AssetType structure
+                                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.shadow,
                                   ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (AssetType? newValue) {
-                              if (newValue != null) {
-                                setState(() {
-
-                                });
-                              }
+                                ),
+                              );
                             },
-                          );
-                        } else if (snapshot.hasError) {
-                          // Handle error here
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          // Loading state
-                          return CircularProgressIndicator(); // or any other loading indicator
-                        }
+                          ).toList(),
+                          onChanged: (AssetType? newValue) {
+                            if (newValue != null) {
+                              viewModel.selectedAsset = newValue;
+                            }
+                          },
+                        );
                       },
+                      retry: () => viewModel.fetchAssetTypes()
                     ),
                   ),
                 ],
@@ -179,4 +194,5 @@ class _SchedulerConstraintFormState
       ]
     );
   }
+
 }
