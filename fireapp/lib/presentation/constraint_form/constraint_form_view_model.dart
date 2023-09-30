@@ -34,11 +34,11 @@ class SchedulerConstraintFormViewModel
   Stream<TimeOfDay?> get selectedStartTime => _selectedStartTime.stream;
 
   final BehaviorSubject<TimeOfDay?> _selectedEndTime = BehaviorSubject();
-  Stream<TimeOfDay?> get selectedEndTime => _selectedStartTime.stream;
+  Stream<TimeOfDay?> get selectedEndTime => _selectedEndTime.stream;
 
   List<AssetType> _assetTypesReal = [];
   final BehaviorSubject<RequestState<List<AssetType>>> _assetTypes =
-      BehaviorSubject<RequestState<List<AssetType>>>();
+      BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<AssetType>>> get assetsStream => _assetTypes.stream;
   AssetType? selectedAsset;
 
