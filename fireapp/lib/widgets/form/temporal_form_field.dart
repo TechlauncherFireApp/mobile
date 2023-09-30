@@ -82,7 +82,9 @@ class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
   }
 
   Future<void> _onTapCallback() async {
-    _selectedValue = await widget.onTap(context);
+    var value = await widget.onTap(context);
+    _selectedValue = value;
+    if (value != null) widget.onValueChanged(value);
     _updateValueForSelectedTime();
   }
 

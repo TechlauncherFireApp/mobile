@@ -1,4 +1,5 @@
 import 'package:fireapp/base/date_contants.dart';
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
@@ -55,7 +56,9 @@ class _SchedulerConstraintFormState
   void handleNavigationEvent(ConstraintFormNavigation event) {
     event.when(
       shiftRequest: (requestId) {
-        Navigator.of(context).pushNamed("/shift_request/$requestId");
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ShiftRequestView(requestId: requestId)
+        ));
       }
     );
   }
@@ -88,7 +91,7 @@ class _SchedulerConstraintFormState
                     )
                   ],
                 ),
-              )
+              );
             },
           ),
         )
@@ -116,6 +119,7 @@ class _SchedulerConstraintFormState
                   Expanded(
                     child: RequestStateWidget.stream<List<AssetType>>(
                       state: viewModel.assetsStream,
+                      shouldExpand: false,
                       child: (context, assetTypes) {
                         return DropdownButtonFormField<AssetType>(
                           decoration: textFieldStylePositioned(

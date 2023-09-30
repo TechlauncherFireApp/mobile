@@ -71,22 +71,24 @@ class SchedulerConstraintFormViewModel
         ));
         _submissionState.add(RequestState.success(null));
         _navigate.add(ConstraintFormNavigation.shiftRequest(request.id));
-      } catch(e) {
+      } catch(e, stacktrace) {
+        print(stacktrace);
+        logger.e(e, stackTrace: stacktrace);
         _submissionState.add(RequestState.exception(e));
       }
     }();
   }
 
   void selectDate(DateTime? date) {
-    _selectedDate.value = date;
+    _selectedDate.add(date);
   }
 
   void selectStartTime(TimeOfDay? time) {
-    _selectedStartTime.value = time;
+    _selectedStartTime.add(time);
   }
 
   void selectEndTime(TimeOfDay? time) {
-    _selectedEndTime.value = time;
+    _selectedEndTime.add(time);
   }
 
   @override

@@ -45,7 +45,7 @@ abstract class RestClient {
   @POST("/new_request")
   Future<NewRequestResponse> makeNewRequest(@Body() NewRequest newRequest);
 
-  @POST("/vehicle_request")
+  @POST("/vehicle/request")
   Future<void> makeVehicleRequest(@Body() VehicleRequest vehicleRequest);
 
   @GET("/v2/volunteers/{volunteerID}")
