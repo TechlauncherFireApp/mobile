@@ -1,68 +1,143 @@
-import 'package:fireapp/domain/models/reference/asset_type.dart';
+import 'package:fireapp/base/date_extensions.dart';
+import 'package:fireapp/domain/models/new/vehicle_request.dart';
+import 'package:fireapp/domain/models/scheduler/new_request.dart';
+import 'package:fireapp/domain/models/scheduler/new_request_response.dart';
+import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/domain/repository/scheduler_constraint_form_repository.dart';
-import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart' as flutter_test;
-import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fireapp/domain/models/reference/asset_type.dart';
+import 'package:fireapp/domain/request_state.dart';
+import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
+import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:mockito/annotations.dart';
-import 'package:test/expect.dart';
-
-// Import necessary test harness
 import 'package:mockito/mockito.dart';
-import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
+import 'package:matcher/expect.dart' hide expectLater, expect;
 
 @GenerateNiceMocks([
   MockSpec<SchedulerConstraintFormRepository>(),
+  MockSpec<ReferenceDataRepository>(),
 ])
 import 'constraint_form_view_model_test.mocks.dart';
 
+
 void main() {
-  late SchedulerConstraintFormViewModel viewModel;
-  late MockSchedulerConstraintFormRepository mockRepository;
+  group('SchedulerConstraintFormViewModel Tests', () {
+    late SchedulerConstraintFormViewModel viewModel;
+    late MockSchedulerConstraintFormRepository
+        mockSchedulerConstraintFormRepository;
+    late MockReferenceDataRepository mockReferenceDataRepository;
 
-  flutter_test.setUp(() {
-    mockRepository = MockSchedulerConstraintFormRepository();
-    viewModel = SchedulerConstraintFormViewModel();
-  });
+    setUp(() {
+      mockSchedulerConstraintFormRepository =
+          MockSchedulerConstraintFormRepository();
+      mockReferenceDataRepository = MockReferenceDataRepository();
+      viewModel = SchedulerConstraintFormViewModel(
+        mockReferenceDataRepository,
+        mockSchedulerConstraintFormRepository,
+      );
+    });
 
-  flutter_test.group('SchedulerConstraintFormViewModel', () {
-    flutter_test.test('selectDate should set the selected date', () {
-      // Arrange
-      final date = DateTime(2023, 9, 22);
+    test('SubmitForm sets submission state to loading', () async {
+      var title = "Test title";
+      var id = "test";
+      viewModel.titleController.text = title;
+      var request = NewRequest(title: title, status: "");
+      var response = NewRequestResponse(id: id);
+      when(mockSchedulerConstraintFormRepository.makeNewRequest(request)).thenAnswer((realInvocation) async => response);
 
-      // Act
+      DateTime date = DateTime.timestamp();
+      TimeOfDay start = TimeOfDay.now();
+      TimeOfDay end = TimeOfDay.now();
+      var assetType = "test asset type";
       viewModel.selectDate(date);
+      viewModel.selectStartTime(start);
+      viewModel.selectEndTime(end);
+      viewModel.selectedAsset = AssetType(
+          id: 0,
+          name: "",
+          code: assetType,
+          updated: DateTime.now(),
+          created: DateTime.now()
+      );
+      var vehicleRequest = VehicleRequest(requestId: id, startDate: date.withTime(start), endDate: date.withTime(end), assetType: assetType);
+      when(mockSchedulerConstraintFormRepository.makeVehicleRequest(vehicleRequest)).thenAnswer((realInvocation) async => response);
 
-      // Assert
-      expect(viewModel.selectedDate, emits(date));
+
+
+      expectLater(
+          viewModel.submissionState, emitsInOrder([
+        emits(const TypeMatcher<SuccessRequestState<void>>()),
+        emits(const TypeMatcher<LoadingRequestState<void>>()),
+        emits(const TypeMatcher<SuccessRequestState<void>>())
+      ]));
+
+      viewModel.submitForm();
     });
 
-    flutter_test.test('selectStartTime should set the selected start time', () {
-      // Arrange
-      const time = TimeOfDay(hour: 9, minute: 30);
+    test('SelectDate updates selectedDate stream', () {
+      final testDate = DateTime.now();
 
-      // Act
-      viewModel.selectStartTime(time);
+      expectLater(viewModel.selectedDate, emits(testDate));
 
-      // Assert
-      expect(viewModel.selectedStartTime, emits(time));
+      viewModel.selectDate(testDate);
     });
 
-    // flutter_test.test('selectEndTime should set the selected end time', () {
-    //   // Arrange
-    //   const time = TimeOfDay(hour: 11, minute: 45);
-    //
-    //   // Act
-    //   viewModel.selectEndTime(time);
-    //
-    //   // Assert
-    //   expect(viewModel.selectedEndTime, emits(time));
-    // });
+    test('SelectStartTime updates selectedStartTime stream', () {
+      final testTime = TimeOfDay.now();
 
-    flutter_test.test('Dispose method should close BehaviorSubjects', () {
-      // Call the dispose method
-      viewModel.dispose();
+      expectLater(viewModel.selectedStartTime, emits(testTime));
+
+      viewModel.selectStartTime(testTime);
+    });
+
+    test('SelectEndTime updates selectedEndTime stream', () {
+      final testTime = TimeOfDay.now();
+
+      expectLater(viewModel.selectedEndTime, emits(testTime));
+
+      viewModel.selectEndTime(testTime);
+    });
+
+    test('FetchAssetTypes updates assetsStream with data', () async {
+      final mockAssetTypes = [
+        AssetType(
+            id: 123,
+            name: 'Asset A',
+            code: '123A',
+            updated: DateTime.timestamp(),
+            created: DateTime.timestamp())
+      ];
+      when(mockReferenceDataRepository.getAssetType())
+          .thenAnswer((_) async => mockAssetTypes);
+
+      expectLater(
+        viewModel.assetsStream,
+        emitsInOrder([
+          emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
+          emits(const TypeMatcher<LoadingRequestState<List<AssetType>>>()),
+          emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
+        ])
+      );
+
+      viewModel.fetchAssetTypes();
+    });
+
+    test('FetchAssetTypes handles errors', () async {
+      const errorMessage = 'Error fetching asset types';
+      when(mockReferenceDataRepository.getAssetType()).thenThrow(errorMessage);
+
+      expectLater(
+        viewModel.assetsStream,
+          emitsInOrder([
+            emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
+            emits(const TypeMatcher<LoadingRequestState<List<AssetType>>>()),
+            emits(const TypeMatcher<ExceptionRequestState<List<AssetType>>>()),
+          ])
+      );
+
+      viewModel.fetchAssetTypes();
     });
   });
 }
