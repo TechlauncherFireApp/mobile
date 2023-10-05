@@ -10,6 +10,7 @@ import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/volunteer_information.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/domain/repository/volunteer_information_repository.dart';
+import 'package:matcher/expect.dart' hide expectLater, expect;
 
 @GenerateNiceMocks([
   MockSpec<VolunteerInformationClient>(),

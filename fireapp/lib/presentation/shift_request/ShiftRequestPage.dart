@@ -1,3 +1,4 @@
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/presentation/shift_request/shift_request_view_model.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,6 @@ import '../../widgets/fireapp_app_bar.dart';
 import '../../widgets/request_state_widget.dart';
 import 'ShiftRequestWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-extension SpacedByExtension on List<Widget> {
-  List<Widget> spacedBy(double space) {
-    if (this.isEmpty) return [];
-    return this.expand((widget) => [widget, SizedBox(height: space)]).toList()..removeLast();
-  }
-}
 
 class ShiftRequestView extends StatefulWidget {
   final String requestId;

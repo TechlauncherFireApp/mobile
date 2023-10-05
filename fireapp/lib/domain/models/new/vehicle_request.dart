@@ -9,8 +9,8 @@ part 'vehicle_request.g.dart';
 class VehicleRequest with _$VehicleRequest{
   const factory VehicleRequest({
     required String requestId,
-    required String startDate,
-    required String endDate,
+    required DateTime startDate,
+    required DateTime endDate,
     required String assetType,
   }) = _VehicleRequest;
   // Conversion of PostRequestInput from JSON

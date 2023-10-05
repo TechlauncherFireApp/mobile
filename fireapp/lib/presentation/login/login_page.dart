@@ -131,12 +131,9 @@ class _LoginState
           ),
           SizedBox(height: 0.5.rdp(),),
           TextFormField(
-            decoration: textFieldStyle(
+            decoration: textFieldStylePositioned(
               context,
-              radius: BorderRadius.only(
-                topLeft: Radius.circular(0.5.rdp()),
-                topRight: Radius.circular(0.5.rdp())
-              )
+              position: FormFieldPosition.top
             ).copyWith(
               hintText: AppLocalizations.of(context)?.registerUsername ?? "",
             ),
@@ -153,12 +150,9 @@ class _LoginState
             height: 2,
           ),
           PasswordFormField(
-            decoration: textFieldStyle(
+            decoration: textFieldStylePositioned(
               context,
-              radius: BorderRadius.only(
-                bottomLeft: Radius.circular(0.5.rdp()),
-                bottomRight: Radius.circular(0.5.rdp())
-              )
+              position: FormFieldPosition.bottom
             ).copyWith(
               hintText: AppLocalizations.of(context)?.loginPassword ?? ""
             ),

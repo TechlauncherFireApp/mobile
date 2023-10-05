@@ -2,6 +2,7 @@
 import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/presentation/change_qualification/change_qualification_option_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:matcher/expect.dart' hide expectLater, expect;
 
 class RequestStateHasContentMatcher<T> extends CustomMatcher {
 

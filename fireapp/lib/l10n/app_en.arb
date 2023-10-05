@@ -124,10 +124,12 @@
   "serverUrlHint": "Server URL",
   "serverUrlRemove": "This page can be skipped in official builds by running \"dart run environment_config:generate --serviceUrl=<your api url>\" before building.",
   "schedulerTitle" : "Scheduler",
-  "enterDate": "Select Date",
-  "enterEndTime" : "Enter End Time",
-  "selectAsset" : "Select Asset",
-  "enterStartTime" : "Enter Start Time",
+  "scheduleName" : "Schedule Name",
+  "enterDate": "Schedule Date",
+  "enterEndTime" : "Schedule End Time",
+  "selectAsset" : "Selected Asset",
+  "enterStartTime" : "Schedule Start Time",
+  "addSchedule" : "Add schedule",
 
   "shift_request_details": "Shift Request Details",
   "shift_id": "Shift ID",
@@ -139,6 +141,7 @@
   "position_id": "Position ID",
   "role": "Role",
   "status": "Status",
+
   "@shift_request_details": {
     "description": "Title for the Shift Request Details page"
   },

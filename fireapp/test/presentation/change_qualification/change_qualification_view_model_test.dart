@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:matcher/expect.dart' hide expectLater, expect;
 
 import '../../request_state_has_content_matcher.dart';
 @GenerateNiceMocks([
