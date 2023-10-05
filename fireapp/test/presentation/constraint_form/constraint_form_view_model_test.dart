@@ -23,10 +23,11 @@ import 'constraint_form_view_model_test.mocks.dart';
 
 
 void main() {
-  group('SchedulerConstraintFormViewModel Tests', () {
+  group('SchedulerConstraintFormViewModel Tests', ()
+  {
     late SchedulerConstraintFormViewModel viewModel;
     late MockSchedulerConstraintFormRepository
-        mockSchedulerConstraintFormRepository;
+    mockSchedulerConstraintFormRepository;
     late MockReferenceDataRepository mockReferenceDataRepository;
 
     setUp(() {
@@ -45,7 +46,8 @@ void main() {
       viewModel.titleController.text = title;
       var request = NewRequest(title: title, status: "");
       var response = NewRequestResponse(id: id);
-      when(mockSchedulerConstraintFormRepository.makeNewRequest(request)).thenAnswer((realInvocation) async => response);
+      when(mockSchedulerConstraintFormRepository.makeNewRequest(request))
+          .thenAnswer((realInvocation) async => response);
 
       DateTime date = DateTime.timestamp();
       TimeOfDay start = TimeOfDay.now();
@@ -61,9 +63,12 @@ void main() {
           updated: DateTime.now(),
           created: DateTime.now()
       );
-      var vehicleRequest = VehicleRequest(requestId: id, startDate: date.withTime(start), endDate: date.withTime(end), assetType: assetType);
-      when(mockSchedulerConstraintFormRepository.makeVehicleRequest(vehicleRequest)).thenAnswer((realInvocation) async => response);
-
+      var vehicleRequest = VehicleRequest(requestId: id,
+          startDate: date.withTime(start),
+          endDate: date.withTime(end),
+          assetType: assetType);
+      when(mockSchedulerConstraintFormRepository.makeVehicleRequest(
+          vehicleRequest)).thenAnswer((realInvocation) async => response);
 
 
       expectLater(
@@ -113,12 +118,12 @@ void main() {
           .thenAnswer((_) async => mockAssetTypes);
 
       expectLater(
-        viewModel.assetsStream,
-        emitsInOrder([
-          emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
-          emits(const TypeMatcher<LoadingRequestState<List<AssetType>>>()),
-          emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
-        ])
+          viewModel.assetsStream,
+          emitsInOrder([
+            emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
+            emits(const TypeMatcher<LoadingRequestState<List<AssetType>>>()),
+            emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
+          ])
       );
 
       viewModel.fetchAssetTypes();
@@ -129,7 +134,7 @@ void main() {
       when(mockReferenceDataRepository.getAssetType()).thenThrow(errorMessage);
 
       expectLater(
-        viewModel.assetsStream,
+          viewModel.assetsStream,
           emitsInOrder([
             emits(const TypeMatcher<SuccessRequestState<List<AssetType>>>()),
             emits(const TypeMatcher<LoadingRequestState<List<AssetType>>>()),
@@ -138,6 +143,10 @@ void main() {
       );
 
       viewModel.fetchAssetTypes();
+    });
+
+    test('Dispose closes all streams', () async {
+      viewModel.dispose();
     });
   });
 }
