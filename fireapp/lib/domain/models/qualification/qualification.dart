@@ -1,18 +1,18 @@
-// new_qualification.dart
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'new_qualification.freezed.dart';
-part 'new_qualification.g.dart';
+import 'package:flutter/foundation.dart';
+
+part 'qualification.freezed.dart';
+part 'qualification.g.dart';
 
 @freezed
-class NewQualification with _$NewQualification {
-  const factory NewQualification({
+class Qualification with _$Qualification {
+  const factory Qualification({
     required int id,
     required String name,
     required bool deleted,
-    DateTime? updateDateTime,
-    DateTime? insertDateTime,
-  }) = _NewQualification;
+    @JsonKey(name: 'update_datetime') DateTime? updateDateTime,
+    @JsonKey(name: 'insert_datetime') DateTime? insertDateTime,
+  }) = _Qualification;
 
-  factory NewQualification.fromJson(Map<String, dynamic> json) => _$NewQualificationFromJson(json);
+  factory Qualification.fromJson(Map<String, dynamic> json) => _$QualificationFromJson(json);
 }
