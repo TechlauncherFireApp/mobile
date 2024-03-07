@@ -122,6 +122,7 @@ branches:
     pre-release-weight: 55000
 ignore:
   sha: []
+  commits-before: 2023-10-23T12:23:15
 commit-date-format: yyyy-MM-dd
 merge-message-formats: {}
 update-build-number: true
