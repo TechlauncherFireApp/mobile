@@ -10,10 +10,9 @@ class UnavailabilityTime with _$UnavailabilityTime{
     required int eventId,
     required int userId,
     required String title,
-    required String periodicity,
+    required int periodicity, //Number of days between repeating event
     required DateTime start,
     required DateTime end,
-    required bool status,
   }) = _UnavailabilityTime;
 
   // Factory constructor to convert 'UnavailabilityTime' JSON to object
