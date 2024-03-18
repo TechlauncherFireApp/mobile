@@ -1,6 +1,7 @@
 import 'package:fireapp/base/date_contants.dart';
 import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
+import 'package:fireapp/presentation/unavailability_form/unavaliability_form_view_model.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/presentation/shift_request/ShiftRequestPage.dart';
@@ -47,10 +48,10 @@ class SchedulerConstraintForm extends StatefulWidget {
 class _SchedulerConstraintFormState
     extends FireAppState<SchedulerConstraintForm>
     with Navigable<ConstraintFormNavigation, SchedulerConstraintForm>
-    implements ViewModelHolder<SchedulerConstraintFormViewModel> {
+    implements ViewModelHolder<UnavailabilityFormViewModel> {
 
   @override
-  SchedulerConstraintFormViewModel viewModel = GetIt.instance.get();
+  UnavailabilityFormViewModel viewModel = GetIt.instance.get();
 
   @override
   void handleNavigationEvent(ConstraintFormNavigation event) {
@@ -65,6 +66,7 @@ class _SchedulerConstraintFormState
 
   @override
   Widget build(BuildContext context) {
+
     return ScrollViewBottomContent(
         padding: EdgeInsets.all(1.rdp()),
         bottomChildren: [
@@ -166,46 +168,46 @@ class _SchedulerConstraintFormState
                       );
                     }
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: RequestStateWidget.stream<List<AssetType>>(
-                          state: viewModel.assetsStream,
-                          shouldExpand: false,
-                          child: (context, assetTypes) {
-                            return DropdownButtonFormField<AssetType>(
-                              decoration: textFieldStylePositioned(
-                                context,
-                              ).copyWith(
-                                labelText: AppLocalizations.of(context)?.repeat,
-                                prefixIcon: const Icon(Icons.repeat),
-                              ),
-                              items: assetTypes.map<DropdownMenuItem<AssetType>>(
-                                    (AssetType asset) {
-                                  return DropdownMenuItem<AssetType>(
-                                    value: asset,
-                                    child: Text(
-                                      asset.name, // Adjust this based on your AssetType structure
-                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                        color: Theme.of(context).colorScheme.shadow,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ).toList(),
-                              onChanged: (AssetType? newValue) {
-                                if (newValue != null) {
-                                  viewModel.selectedAsset = newValue;
-                                }
-                              },
-                            );
-                          },
-                          retry: () => viewModel.fetchAssetTypes()
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Expanded(
+                //       child: RequestStateWidget.stream<List<String>>(
+                //           state: viewModel.periodicityStream,
+                //           shouldExpand: false,
+                //           child: (context, repeatItems) {
+                //             return DropdownButtonFormField<String>(
+                //               decoration: textFieldStylePositioned(
+                //                 context,
+                //               ).copyWith(
+                //                 labelText: AppLocalizations.of(context)?.repeat,
+                //                 prefixIcon: const Icon(Icons.repeat),
+                //               ),
+                //               items: repeatItems.map<DropdownMenuItem<String>>(
+                //                     (String item) {
+                //                   return DropdownMenuItem<String>(
+                //                     value: item,
+                //                     child: Text(
+                //                       item, // Adjust this based on your AssetType structure
+                //                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                //                         color: Theme.of(context).colorScheme.shadow,
+                //                       ),
+                //                     ),
+                //                   );
+                //                 },
+                //               ).toList(),
+                //               onChanged: (String? newValue) {
+                //                 if (newValue != null) {
+                //                   viewModel.selectedPeriodicity = newValue;
+                //                 }
+                //               },
+                //             );
+                //           },
+                //           retry: () => viewModel.fetchPeriodicityTypes()
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ].spacedBy(1.rdp()),
             ),
           )
