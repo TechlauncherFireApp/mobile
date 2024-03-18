@@ -109,7 +109,7 @@ class _SchedulerConstraintFormState
                     context,
                   ).copyWith(
                       labelText: AppLocalizations.of(context)?.unavailabilityTitle ?? "",
-                      prefixIcon: const Icon(Icons.title)
+                      prefixIcon: const Icon(Icons.event_note)
                   ),
                   style: Theme.of(context).textTheme.labelLarge,
                   validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
@@ -179,7 +179,7 @@ class _SchedulerConstraintFormState
                                 context,
                               ).copyWith(
                                 labelText: AppLocalizations.of(context)?.repeat,
-                                prefixIcon: const Icon(Icons.refresh),
+                                prefixIcon: const Icon(Icons.repeat),
                               ),
                               items: assetTypes.map<DropdownMenuItem<AssetType>>(
                                     (AssetType asset) {

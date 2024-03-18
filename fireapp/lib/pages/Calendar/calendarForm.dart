@@ -11,9 +11,9 @@ class CalendarFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Unavailability'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Add Unavailability'),
+      // ),
       resizeToAvoidBottomInset: false,
       body: const AddUnavailabilityPage(),
     );
