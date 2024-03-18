@@ -2,6 +2,7 @@
 // ignore: file_names
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, prefer_typing_uninitialized_variables, file_names
 import 'package:fireapp/pages/Calendar/calendar_logic.dart';
+import 'package:fireapp/presentation/add_unavailability/add_unavailability_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,11 +11,11 @@ class CalendarFormRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Unavailability'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Add Unavailability'),
+      // ),
       resizeToAvoidBottomInset: false,
-      body: const CalendarForm(),
+      body: const AddUnavailabilityPage(),
     );
   }
 }
@@ -55,13 +56,15 @@ class _CalendarFormState extends State<CalendarForm> {
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
 
-  var setDate;
+  var setStartDate;
+  var setEndDate;
   var setStart;
   var setEnd;
   var repeatDropDownValue = 0;
   bool allDayChecked = false;
   TextEditingController titleController = TextEditingController();
-  TextEditingController inputDateController = TextEditingController();
+  TextEditingController inputStartDateController = TextEditingController();
+  TextEditingController inputEndDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
 
@@ -69,7 +72,8 @@ class _CalendarFormState extends State<CalendarForm> {
   void initState() {
     //For modifying events - prefill out form with event details
     if (widget.eventBasis != null) {
-      setDate = widget.eventBasis.date;
+      setStartDate = widget.eventBasis.date;
+      setEndDate = widget.eventBasis.date;
       setStart = TimeOfDay(
           hour: int.parse(widget.eventBasis.start.split(":")[0]),
           minute: int.parse(widget.eventBasis.start.split(":")[1]));
@@ -85,7 +89,8 @@ class _CalendarFormState extends State<CalendarForm> {
         startTimeController.text = widget.eventBasis.start;
         endTimeController.text = widget.eventBasis.end;
       }
-      inputDateController.text = DateFormat('yyyy-MM-dd').format(setDate);
+      inputStartDateController.text = DateFormat('yyyy-MM-dd').format(setStartDate);
+      inputEndDateController.text = DateFormat('yyyy-MM-dd').format(setEndDate);
     }
     super.initState();
   }
@@ -104,9 +109,10 @@ class _CalendarFormState extends State<CalendarForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               buildTitleField(),
-              buildDatePicker(),
+              buildStartDatePicker(),
               //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
               Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+              buildEndDatePicker(),
               Visibility(visible: !allDayChecked, child: buildEndTimeField()),
               buildAllDayCheckbox(),
               buildEventDropDown(),
@@ -128,9 +134,10 @@ class _CalendarFormState extends State<CalendarForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               buildTitleField(),
-              buildDatePicker(),
+              buildStartDatePicker(),
               //Visbility widget allows the hidden status of fields to be toggled - auto handles turning off valudation
               Visibility(visible: !allDayChecked, child: buildStartTimeField()),
+              buildEndDatePicker(),
               Visibility(visible: !allDayChecked, child: buildEndTimeField()),
               buildAllDayCheckbox(),
               buildEventDropDown(),
@@ -160,13 +167,13 @@ class _CalendarFormState extends State<CalendarForm> {
     );
   }
 
-  Widget buildDatePicker() {
+  Widget buildStartDatePicker() {
     // Date Time Picker
     return TextFormField(
-      controller: inputDateController,
+      controller: inputStartDateController,
       decoration: const InputDecoration(
         icon: Icon(Icons.calendar_today),
-        labelText: "Enter Date",
+        labelText: "Enter start Date",
       ),
       readOnly: true, //So it can't be changed without using the picker
       validator: (v) {
@@ -185,9 +192,9 @@ class _CalendarFormState extends State<CalendarForm> {
         // If input is not dull
         if (selectedDate != null) {
           setState(() {
-            inputDateController.text =
+            inputStartDateController.text =
                 DateFormat('yyyy-MM-dd').format(selectedDate);
-            setDate = selectedDate;
+            setStartDate = selectedDate;
           });
         }
       },
@@ -238,6 +245,39 @@ class _CalendarFormState extends State<CalendarForm> {
       },
     );
   }
+  Widget buildEndDatePicker() {
+    // Date Time Picker
+    return TextFormField(
+      controller: inputEndDateController,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.calendar_today),
+        labelText: "Enter End Date",
+      ),
+      readOnly: true, //So it can't be changed without using the picker
+      validator: (v) {
+        if (v!.isEmpty) {
+          return 'Date is empty!';
+        }
+        return null;
+      },
+      onTap: () async {
+        DateTime? selectedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2020),
+          lastDate: DateTime(2100),
+        );
+        // If input is not dull
+        if (selectedDate != null) {
+          setState(() {
+            inputEndDateController.text =
+                DateFormat('yyyy-MM-dd').format(selectedDate);
+            setEndDate = selectedDate;
+          });
+        }
+      },
+    );
+  }
 
   // End Time Input
   Widget buildEndTimeField() {
@@ -274,7 +314,7 @@ class _CalendarFormState extends State<CalendarForm> {
     return DropdownButtonFormField(
       value: repeatDropDownValue,
       items: const [
-        DropdownMenuItem(value: 0, child: Text('None')),
+        DropdownMenuItem(value: 0, child: Text('Never')),
         DropdownMenuItem(value: 1, child: Text('Daily')),
         DropdownMenuItem(value: 2, child: Text('Weekly')),
         DropdownMenuItem(value: 3, child: Text('Monthly')),
@@ -316,9 +356,9 @@ class _CalendarFormState extends State<CalendarForm> {
       if (allDayChecked) {
         //If all day is checked then pass event as 12AM - 12PM
         String startDate =
-            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setDate);
+            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setStartDate);
         String endDate = convertTimeToISO8601(
-            const TimeOfDay(hour: 23, minute: 59), setDate);
+            const TimeOfDay(hour: 23, minute: 59), setEndDate);
 
         // POST REQUEST
         await createEvent(
@@ -330,8 +370,8 @@ class _CalendarFormState extends State<CalendarForm> {
         if (timeToDouble(setEnd) > timeToDouble(setStart)) {
           // Calendar Widget only accepts UTC dates without any time values
           // If all day not checked then parse date w/ selected time values
-          String startDate = convertTimeToISO8601(setStart, setDate);
-          String endDate = convertTimeToISO8601(setEnd, setDate);
+          String startDate = convertTimeToISO8601(setStart, setStartDate);
+          String endDate = convertTimeToISO8601(setEnd, setEndDate);
 
           // POST REQUEST
           await createEvent(
@@ -363,9 +403,9 @@ class _CalendarFormState extends State<CalendarForm> {
       if (allDayChecked) {
         //If all day is checked then pass event as 12AM - 12PM
         String startDate =
-            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setDate);
+            convertTimeToISO8601(const TimeOfDay(hour: 0, minute: 0), setStartDate);
         String endDate = convertTimeToISO8601(
-            const TimeOfDay(hour: 23, minute: 59), setDate);
+            const TimeOfDay(hour: 23, minute: 59), setEndDate);
 
         //Remove old event ... then add new one
         await removeEvent(widget.eventBasis.eventId);
@@ -379,8 +419,8 @@ class _CalendarFormState extends State<CalendarForm> {
         if (timeToDouble(setEnd) > timeToDouble(setStart)) {
           // Calendar Widget only accepts UTC dates without any time values
           // If all day not checked then parse date w/ selected time values
-          String startDate = convertTimeToISO8601(setStart, setDate);
-          String endDate = convertTimeToISO8601(setEnd, setDate);
+          String startDate = convertTimeToISO8601(setStart, setStartDate);
+          String endDate = convertTimeToISO8601(setEnd, setEndDate);
 
           //Remove old event ... then add new one
           await removeEvent(widget.eventBasis.eventId);

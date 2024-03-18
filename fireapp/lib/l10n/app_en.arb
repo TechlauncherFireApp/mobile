@@ -102,6 +102,7 @@
       }
     }
   },
+
   "loginBlurb": "Sign in to your FireApp account",
   "loginEmail": "Email",
   "loginPassword": "Password",
@@ -130,6 +131,14 @@
   "selectAsset" : "Selected Asset",
   "enterStartTime" : "Schedule Start Time",
   "addSchedule" : "Add schedule",
+  "unavailabilityTitle" : "Event",
+  "addUnavailabilityTitle" : "Add Unavailability",
+  "addUnavailabilityButton" : "Add Unavailability",
+  "enterUnavailabilityStartDate": "Start Date",
+  "enterUnavailabilityStartTime" : "Enter Start Time",
+  "enterUnavailabilityEndDate": "End Date",
+  "enterUnavailabilityEndTime" : "Enter End Time",
+  "repeat" : "Repeat",
 
   "shift_request_details": "Shift Request Details",
   "shift_id": "Shift ID",
