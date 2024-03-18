@@ -29,24 +29,24 @@ class AddUnavailabilityPage extends StatelessWidget {
     return Scaffold(
       appBar: fireAppAppBar(context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
       body: const SafeArea(
-        child: AddUnavailabilityConstraintForm(),
+        child: SchedulerConstraintForm(),
       ),
     );
   }
 }
 
-class AddUnavailabilityConstraintForm extends StatefulWidget {
-  const AddUnavailabilityConstraintForm({super.key});
+class SchedulerConstraintForm extends StatefulWidget {
+  const SchedulerConstraintForm({super.key});
 
   @override
   State createState() =>
-      _AddUnavailabilityConstraintFormState();
+      _SchedulerConstraintFormState();
 
 }
 
-class _AddUnavailabilityConstraintFormState
-    extends FireAppState<AddUnavailabilityConstraintForm>
-    with Navigable<ConstraintFormNavigation, AddUnavailabilityConstraintForm>
+class _SchedulerConstraintFormState
+    extends FireAppState<SchedulerConstraintForm>
+    with Navigable<ConstraintFormNavigation, SchedulerConstraintForm>
     implements ViewModelHolder<SchedulerConstraintFormViewModel> {
 
   @override
