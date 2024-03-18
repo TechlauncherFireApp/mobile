@@ -109,50 +109,10 @@ class _SchedulerConstraintFormState
                     context,
                   ).copyWith(
                       labelText: AppLocalizations.of(context)?.unavailabilityTitle ?? "",
-                      prefixIcon: const Icon(Icons.label_outline)
+                      prefixIcon: const Icon(Icons.title)
                   ),
                   style: Theme.of(context).textTheme.labelLarge,
                   validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: RequestStateWidget.stream<List<AssetType>>(
-                          state: viewModel.assetsStream,
-                          shouldExpand: false,
-                          child: (context, assetTypes) {
-                            return DropdownButtonFormField<AssetType>(
-                              decoration: textFieldStylePositioned(
-                                context,
-                              ).copyWith(
-                                labelText: AppLocalizations.of(context)?.selectAsset,
-                                prefixIcon: const Icon(Icons.car_rental_outlined),
-                              ),
-                              items: assetTypes.map<DropdownMenuItem<AssetType>>(
-                                    (AssetType asset) {
-                                  return DropdownMenuItem<AssetType>(
-                                    value: asset,
-                                    child: Text(
-                                      asset.name, // Adjust this based on your AssetType structure
-                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                        color: Theme.of(context).colorScheme.shadow,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ).toList(),
-                              onChanged: (AssetType? newValue) {
-                                if (newValue != null) {
-                                  viewModel.selectedAsset = newValue;
-                                }
-                              },
-                            );
-                          },
-                          retry: () => viewModel.fetchAssetTypes()
-                      ),
-                    ),
-                  ],
                 ),
                 StreamFormField<DateTime?>(
                     stream: viewModel.selectedDate,
@@ -205,6 +165,46 @@ class _SchedulerConstraintFormState
                         ),
                       );
                     }
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: RequestStateWidget.stream<List<AssetType>>(
+                          state: viewModel.assetsStream,
+                          shouldExpand: false,
+                          child: (context, assetTypes) {
+                            return DropdownButtonFormField<AssetType>(
+                              decoration: textFieldStylePositioned(
+                                context,
+                              ).copyWith(
+                                labelText: AppLocalizations.of(context)?.repeat,
+                                prefixIcon: const Icon(Icons.refresh),
+                              ),
+                              items: assetTypes.map<DropdownMenuItem<AssetType>>(
+                                    (AssetType asset) {
+                                  return DropdownMenuItem<AssetType>(
+                                    value: asset,
+                                    child: Text(
+                                      asset.name, // Adjust this based on your AssetType structure
+                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                        color: Theme.of(context).colorScheme.shadow,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                              onChanged: (AssetType? newValue) {
+                                if (newValue != null) {
+                                  viewModel.selectedAsset = newValue;
+                                }
+                              },
+                            );
+                          },
+                          retry: () => viewModel.fetchAssetTypes()
+                      ),
+                    ),
+                  ],
                 ),
               ].spacedBy(1.rdp()),
             ),

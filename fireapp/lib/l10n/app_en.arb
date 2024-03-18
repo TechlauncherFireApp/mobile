@@ -138,6 +138,7 @@
   "enterUnavailabilityStartTime" : "Enter Start Time",
   "enterUnavailabilityEndDate": "End Date",
   "enterUnavailabilityEndTime" : "Enter End Time",
+  "repeat" : "Repeat",
 
   "shift_request_details": "Shift Request Details",
   "shift_id": "Shift ID",
