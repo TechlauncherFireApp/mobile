@@ -1,4 +1,3 @@
-import 'package:fireapp/base/date_contants.dart';
 import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/presentation/unavailability_form/unavaliability_form_view_model.dart';
@@ -14,40 +13,35 @@ import 'package:fireapp/widgets/form/time_form_field.dart';
 import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fireapp/presentation/constraint_form/constraint_form_view_model.dart';
-import 'package:fireapp/presentation/constraint_form/base_input_field.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../domain/models/reference/asset_type.dart';
 import '../../domain/request_state.dart';
-import '../../widgets/request_state_widget.dart';
 
-class AddUnavailabilityPage extends StatelessWidget {
-  const AddUnavailabilityPage({super.key});
+class UnavailabilityFormPage extends StatelessWidget {
+  const UnavailabilityFormPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: fireAppAppBar(context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
       body: const SafeArea(
-        child: SchedulerConstraintForm(),
+        child: UnavailabilityForm(),
       ),
     );
   }
 }
 
-class SchedulerConstraintForm extends StatefulWidget {
-  const SchedulerConstraintForm({super.key});
+class UnavailabilityForm extends StatefulWidget {
+  const UnavailabilityForm({super.key});
 
   @override
   State createState() =>
-      _SchedulerConstraintFormState();
+      _UnavailabilityFormState();
 
 }
 
-class _SchedulerConstraintFormState
-    extends FireAppState<SchedulerConstraintForm>
-    with Navigable<ConstraintFormNavigation, SchedulerConstraintForm>
+class _UnavailabilityFormState
+    extends FireAppState<UnavailabilityForm>
+    with Navigable<ConstraintFormNavigation, UnavailabilityForm>
     implements ViewModelHolder<UnavailabilityFormViewModel> {
 
   @override
@@ -70,7 +64,6 @@ class _SchedulerConstraintFormState
     return ScrollViewBottomContent(
         padding: EdgeInsets.all(1.rdp()),
         bottomChildren: [
-          SizedBox(height: 1.rdp(),),
           FillWidth(
             child: StreamBuilder(
               stream: viewModel.submissionState,
@@ -110,18 +103,19 @@ class _SchedulerConstraintFormState
                   decoration: textFieldStylePositioned(
                     context,
                   ).copyWith(
-                      labelText: AppLocalizations.of(context)?.unavailabilityTitle ?? "",
+                      labelText: AppLocalizations.of(context)?.enterUnavailabilityTitle ?? "",
                       prefixIcon: const Icon(Icons.event_note)
                   ),
                   style: Theme.of(context).textTheme.labelLarge,
-                  validator: (v) => v!.isEmpty ? 'Title is empty!' : null,
+                  validator: (v) => v!.isEmpty ?
+                    AppLocalizations.of(context)?.eventTitleEmptyError: null,
                 ),
                 StreamFormField<DateTime?>(
-                    stream: viewModel.selectedDate,
+                    stream: viewModel.selectedStartDate,
                     builder: (context, value) {
                       return DateFormField(
                           currentValue: value,
-                          onValueChanged: viewModel.selectDate,
+                          onValueChanged: viewModel.updateStartDate,
                           decoration: textFieldStylePositioned(context).copyWith(
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)?.enterUnavailabilityStartDate,
@@ -134,7 +128,7 @@ class _SchedulerConstraintFormState
                     builder: (context, value) {
                       return TimeFormField(
                         currentValue: value,
-                        onValueChanged: viewModel.selectStartTime,
+                        onValueChanged: viewModel.updateStartTime,
                         decoration: textFieldStylePositioned(context).copyWith(
                           prefixIcon: const Icon(Icons.hourglass_top),
                           labelText: AppLocalizations.of(context)?.enterUnavailabilityStartTime,
@@ -143,11 +137,11 @@ class _SchedulerConstraintFormState
                     }
                 ),
                 StreamFormField<DateTime?>(
-                    stream: viewModel.selectedDate,
+                    stream: viewModel.selectedEndDate,
                     builder: (context, value) {
                       return DateFormField(
                           currentValue: value,
-                          onValueChanged: viewModel.selectDate,
+                          onValueChanged: viewModel.updateEndDate,
                           decoration: textFieldStylePositioned(context).copyWith(
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)?.enterUnavailabilityEndDate,
@@ -160,7 +154,7 @@ class _SchedulerConstraintFormState
                     builder: (context, value) {
                       return TimeFormField(
                         currentValue: value,
-                        onValueChanged: viewModel.selectEndTime,
+                        onValueChanged: viewModel.updateEndTime,
                         decoration: textFieldStylePositioned(context).copyWith(
                           prefixIcon: const Icon(Icons.hourglass_bottom),
                           labelText: AppLocalizations.of(context)?.enterUnavailabilityEndTime,
@@ -168,46 +162,6 @@ class _SchedulerConstraintFormState
                       );
                     }
                 ),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Expanded(
-                //       child: RequestStateWidget.stream<List<String>>(
-                //           state: viewModel.periodicityStream,
-                //           shouldExpand: false,
-                //           child: (context, repeatItems) {
-                //             return DropdownButtonFormField<String>(
-                //               decoration: textFieldStylePositioned(
-                //                 context,
-                //               ).copyWith(
-                //                 labelText: AppLocalizations.of(context)?.repeat,
-                //                 prefixIcon: const Icon(Icons.repeat),
-                //               ),
-                //               items: repeatItems.map<DropdownMenuItem<String>>(
-                //                     (String item) {
-                //                   return DropdownMenuItem<String>(
-                //                     value: item,
-                //                     child: Text(
-                //                       item, // Adjust this based on your AssetType structure
-                //                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                //                         color: Theme.of(context).colorScheme.shadow,
-                //                       ),
-                //                     ),
-                //                   );
-                //                 },
-                //               ).toList(),
-                //               onChanged: (String? newValue) {
-                //                 if (newValue != null) {
-                //                   viewModel.selectedPeriodicity = newValue;
-                //                 }
-                //               },
-                //             );
-                //           },
-                //           retry: () => viewModel.fetchPeriodicityTypes()
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ].spacedBy(1.rdp()),
             ),
           )
