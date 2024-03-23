@@ -5,7 +5,7 @@ import 'package:fireapp/domain/models/register_request.dart';
 import 'package:fireapp/domain/models/role_response.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
-import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -96,9 +96,9 @@ abstract class RestClient {
   );
 
   @POST("/v2/volunteers/{userId}/unavailability")
-  Future<void> createUnavailabilityEvent(
+  Future<int> createUnavailabilityEvent(
       @Path("userId") int userId,
-      @Body() UnavailabilityTime newEvent
+      @Body() UnavailabilityEventPost newEvent
       );
 
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
@@ -82,15 +82,14 @@ class UnavailabilityFormViewModel extends FireAppViewModel
             _selectedEndTime.value!.hour,
             _selectedEndTime.value!.minute);
 
-        var newEvent = UnavailabilityTime(
-            eventId: eventId,
-            userId: userID,
+        var newEvent = UnavailabilityEventPost(
             title: titleController.text,
-            periodicity: 0,
             start: startDateTime,
-            end: endDateTime);
+            end: endDateTime,
+            periodicity: 0);
 
-        await _unavailabilityFormRepository.createUnavailabilityEvent(newEvent);
+        await _unavailabilityFormRepository.createUnavailabilityEvent(
+            userID, newEvent);
         _submissionState.add(RequestState.success(null));
         //_navigate.add(ConstraintFormNavigation.shiftRequest(request.id));
       } catch (e, stacktrace) {
