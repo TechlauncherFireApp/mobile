@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../domain/request_state.dart';
+import '../../global/di.dart';
+import 'package:fireapp/domain/repository/unavailability_form_repository.dart';
 
 @injectable
 class UnavailabilityFormViewModel
@@ -14,8 +17,13 @@ class UnavailabilityFormViewModel
     implements NavigationViewModel<ConstraintFormNavigation> {
 
   late final ReferenceDataRepository _referenceDataRepository;
+  late final UnavailabilityFormRepository
+  _unavailabilityFormRepository;
 
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  //TODO load in event ID and existing information
+  final eventId = null;
 
   // Text Editing Controllers
   final TextEditingController titleController = TextEditingController();
@@ -42,6 +50,50 @@ class UnavailabilityFormViewModel
 
   @override
   Stream<ConstraintFormNavigation> get navigate => _navigate.stream;
+
+  void submitForm() {
+    _submissionState.add(RequestState.loading());
+      () async {
+        try {
+          //Combine start date and start time
+          DateTime startDateTime = DateTime(_selectedStartDate.value!.year,
+              _selectedStartDate.value!.month, _selectedStartDate.value!.day,
+              _selectedStartTime.value!.hour, _selectedStartTime.value!.minute);
+          //Combine end date and end time
+          DateTime endDateTime = DateTime(_selectedEndDate.value!.year,
+              _selectedEndDate.value!.month, _selectedEndDate.value!.day,
+              _selectedEndTime.value!.hour, _selectedEndTime.value!.minute);
+
+              //   periodicity: 0,
+              //         start: _selectedStartDate.value,
+              //         end: _selectedEndDate.value)
+          // var request = await _schedulerConstraintFormRepository.makeNewRequest(NewRequest(
+          //   title: titleController.text,
+          //   status:"",
+          // ));
+          // await
+          // // _dietaryRequirementsRepository.updateDietaryRequirements(
+          //     const UnavailabilityTime(
+          //   eventId: null,
+          //   userId: null,
+          //   title: titleController.text,
+          //   periodicity: 0,
+          //         start: _selectedStartDate.value,
+          //         end: _selectedEndDate.value
+          //
+          //     );
+          // );
+          _submissionState.add(RequestState.success(null));
+
+        }
+        catch (e, stacktrace) {
+          print(stacktrace);
+          logger.e(e, stackTrace: stacktrace);
+          _submissionState.add(RequestState.exception(e));
+        }
+      }
+      ();
+  }
 
   // Function to be called when the form is submitted
   // void submitForm() {
@@ -97,6 +149,7 @@ class UnavailabilityFormViewModel
     titleController.dispose();
     _selectedStartDate.close();
     _selectedStartTime.close();
+    _selectedEndDate.close();
     _selectedEndTime.close();
   }
 

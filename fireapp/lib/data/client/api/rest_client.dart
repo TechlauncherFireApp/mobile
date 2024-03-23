@@ -5,6 +5,7 @@ import 'package:fireapp/domain/models/register_request.dart';
 import 'package:fireapp/domain/models/role_response.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -93,4 +94,16 @@ abstract class RestClient {
       @Query("position_id") int positionId,
       @Query("volunteer_id") int volunteerId
   );
+
+  @POST("/v2/volunteers/{userId}/unavailability")
+  Future<void> makeNewUnavailabilityEvent(
+      // @Query("eventId") int eventId,
+      // @Query("userId") int userId,
+      // @Query("title") String title,
+      // @Query("periodicity") int periodicity,
+      // @Query("start") DateTime start,
+      // @Query("end") DateTime end
+      @Body() UnavailabilityTime newEvent
+      );
+
 }

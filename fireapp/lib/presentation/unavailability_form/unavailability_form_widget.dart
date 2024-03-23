@@ -72,8 +72,7 @@ class _UnavailabilityFormState
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(40),
                   ),
-                  // onPressed: viewModel.submitForm,
-                  onPressed: () {  },
+                  onPressed: viewModel.submitForm,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
