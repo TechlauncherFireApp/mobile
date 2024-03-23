@@ -3,7 +3,6 @@ import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/presentation/unavailability_form/unavaliability_form_view_model.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
-import 'package:fireapp/presentation/shift_request/ShiftRequestPage.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:fireapp/widgets/fill_width.dart';
 import 'package:fireapp/widgets/fireapp_app_bar.dart';
@@ -22,7 +21,8 @@ class UnavailabilityFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: fireAppAppBar(context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
+      appBar: fireAppAppBar(
+          context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
       body: const SafeArea(
         child: UnavailabilityForm(),
       ),
@@ -34,33 +34,24 @@ class UnavailabilityForm extends StatefulWidget {
   const UnavailabilityForm({super.key});
 
   @override
-  State createState() =>
-      _UnavailabilityFormState();
-
+  State createState() => _UnavailabilityFormState();
 }
 
-class _UnavailabilityFormState
-    extends FireAppState<UnavailabilityForm>
+class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
     with Navigable<ConstraintFormNavigation, UnavailabilityForm>
     implements ViewModelHolder<UnavailabilityFormViewModel> {
-
   @override
   UnavailabilityFormViewModel viewModel = GetIt.instance.get();
 
   @override
   void handleNavigationEvent(ConstraintFormNavigation event) {
-    event.when(
-        shiftRequest: (requestId) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ShiftRequestView(requestId: requestId)
-          ));
-        }
-    );
+    event.when(shiftRequest: (requestId) {
+      Navigator.of(context).pop();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return ScrollViewBottomContent(
         padding: EdgeInsets.all(1.rdp()),
         bottomChildren: [
@@ -76,14 +67,20 @@ class _UnavailabilityFormState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(AppLocalizations.of(context)?.addUnavailabilityButton ?? "Add Schedule"),
-                      if (data is LoadingRequestState) SizedBox(
-                        height: 8,
-                        width: 8,
-                        child: CircularProgressIndicator(
-                            color: (Theme.of(context).primaryTextTheme.headline6?.color ?? Colors.white)
-                        ),
-                      )
+                      Text(AppLocalizations.of(context)
+                              ?.addUnavailabilityButton ??
+                          "Add Schedule"),
+                      if (data is LoadingRequestState)
+                        SizedBox(
+                          height: 8,
+                          width: 8,
+                          child: CircularProgressIndicator(
+                              color: (Theme.of(context)
+                                      .primaryTextTheme
+                                      .headline6
+                                      ?.color ??
+                                  Colors.white)),
+                        )
                     ],
                   ),
                 );
@@ -102,12 +99,14 @@ class _UnavailabilityFormState
                   decoration: textFieldStylePositioned(
                     context,
                   ).copyWith(
-                      labelText: AppLocalizations.of(context)?.enterUnavailabilityTitle ?? "",
-                      prefixIcon: const Icon(Icons.event_note)
-                  ),
+                      labelText: AppLocalizations.of(context)
+                              ?.enterUnavailabilityTitle ??
+                          "",
+                      prefixIcon: const Icon(Icons.event_note)),
                   style: Theme.of(context).textTheme.labelLarge,
-                  validator: (v) => v!.isEmpty ?
-                    AppLocalizations.of(context)?.eventTitleEmptyError: null,
+                  validator: (v) => v!.isEmpty
+                      ? AppLocalizations.of(context)?.eventTitleEmptyError
+                      : null,
                 ),
                 StreamFormField<DateTime?>(
                     stream: viewModel.selectedStartDate,
@@ -115,13 +114,13 @@ class _UnavailabilityFormState
                       return DateFormField(
                           currentValue: value,
                           onValueChanged: viewModel.updateStartDate,
-                          decoration: textFieldStylePositioned(context).copyWith(
+                          decoration:
+                              textFieldStylePositioned(context).copyWith(
                             prefixIcon: const Icon(Icons.calendar_today),
-                            labelText: AppLocalizations.of(context)?.enterUnavailabilityStartDate,
-                          )
-                      );
-                    }
-                ),
+                            labelText: AppLocalizations.of(context)
+                                ?.enterUnavailabilityStartDate,
+                          ));
+                    }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedStartTime,
                     builder: (context, value) {
@@ -130,24 +129,24 @@ class _UnavailabilityFormState
                         onValueChanged: viewModel.updateStartTime,
                         decoration: textFieldStylePositioned(context).copyWith(
                           prefixIcon: const Icon(Icons.hourglass_top),
-                          labelText: AppLocalizations.of(context)?.enterUnavailabilityStartTime,
+                          labelText: AppLocalizations.of(context)
+                              ?.enterUnavailabilityStartTime,
                         ),
                       );
-                    }
-                ),
+                    }),
                 StreamFormField<DateTime?>(
                     stream: viewModel.selectedEndDate,
                     builder: (context, value) {
                       return DateFormField(
                           currentValue: value,
                           onValueChanged: viewModel.updateEndDate,
-                          decoration: textFieldStylePositioned(context).copyWith(
+                          decoration:
+                              textFieldStylePositioned(context).copyWith(
                             prefixIcon: const Icon(Icons.calendar_today),
-                            labelText: AppLocalizations.of(context)?.enterUnavailabilityEndDate,
-                          )
-                      );
-                    }
-                ),
+                            labelText: AppLocalizations.of(context)
+                                ?.enterUnavailabilityEndDate,
+                          ));
+                    }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedEndTime,
                     builder: (context, value) {
@@ -156,16 +155,14 @@ class _UnavailabilityFormState
                         onValueChanged: viewModel.updateEndTime,
                         decoration: textFieldStylePositioned(context).copyWith(
                           prefixIcon: const Icon(Icons.hourglass_bottom),
-                          labelText: AppLocalizations.of(context)?.enterUnavailabilityEndTime,
+                          labelText: AppLocalizations.of(context)
+                              ?.enterUnavailabilityEndTime,
                         ),
                       );
-                    }
-                ),
+                    }),
               ].spacedBy(1.rdp()),
             ),
           )
-        ]
-    );
+        ]);
   }
-
 }

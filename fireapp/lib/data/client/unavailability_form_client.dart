@@ -8,8 +8,9 @@ class UnavailabilityFormClient {
   final RestClient restClient;
   UnavailabilityFormClient(this.restClient);
 
-  Future<void> makeNewUnavailabilityEvent(UnavailabilityTime newEvent){
-    return restClient.makeNewUnavailabilityEvent(newEvent);
+  Future<void> createUnavailabilityEvent(UnavailabilityTime newEvent){
+    int userId = newEvent.userId;
+    return restClient.createUnavailabilityEvent(userId,newEvent);
   }
 
 }

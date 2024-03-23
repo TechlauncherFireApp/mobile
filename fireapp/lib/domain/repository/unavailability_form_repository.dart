@@ -4,12 +4,12 @@ import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 
 @injectable
 class UnavailabilityFormRepository {
-  final UnavailabilityFormClient schedulerConstraintFormClient;
+  final UnavailabilityFormClient unavailabilityFormClient;
 
-  UnavailabilityFormRepository(this.schedulerConstraintFormClient);
+  UnavailabilityFormRepository(this.unavailabilityFormClient);
 
-  Future<void> makeNewUnavailabilityEvent(UnavailabilityTime newEvent){
-    return schedulerConstraintFormClient.makeNewUnavailabilityEvent(newEvent);
+  Future<void> createUnavailabilityEvent(UnavailabilityTime newEvent){
+    return unavailabilityFormClient.createUnavailabilityEvent(newEvent);
   }
 
 }

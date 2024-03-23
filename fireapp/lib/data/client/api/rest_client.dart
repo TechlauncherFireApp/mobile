@@ -96,13 +96,8 @@ abstract class RestClient {
   );
 
   @POST("/v2/volunteers/{userId}/unavailability")
-  Future<void> makeNewUnavailabilityEvent(
-      // @Query("eventId") int eventId,
-      // @Query("userId") int userId,
-      // @Query("title") String title,
-      // @Query("periodicity") int periodicity,
-      // @Query("start") DateTime start,
-      // @Query("end") DateTime end
+  Future<void> createUnavailabilityEvent(
+      @Path("userId") int userId,
       @Body() UnavailabilityTime newEvent
       );
 
