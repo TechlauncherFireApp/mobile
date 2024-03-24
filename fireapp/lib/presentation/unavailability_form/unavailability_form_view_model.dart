@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
-import 'package:fireapp/presentation/unavailability_form/unavaliability_form_navigation.dart';
+import 'package:fireapp/presentation/unavailability_form/unavailability_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +14,7 @@ import 'package:fireapp/domain/repository/unavailability_form_repository.dart';
 
 @injectable
 class UnavailabilityFormViewModel extends FireAppViewModel
-    implements NavigationViewModel<UnavaliabilityFormNavigation> {
+    implements NavigationViewModel<UnavailabilityFormNavigation> {
   //Load in authentication and unavailability actions
   late final AuthenticationRepository _authenticationRepository;
   late final UnavailabilityFormRepository _unavailabilityFormRepository;
@@ -62,10 +62,10 @@ class UnavailabilityFormViewModel extends FireAppViewModel
 
 
   // Navigation handling
-  final BehaviorSubject<UnavaliabilityFormNavigation> _navigate = BehaviorSubject();
+  final BehaviorSubject<UnavailabilityFormNavigation> _navigate = BehaviorSubject();
 
   @override
-  Stream<UnavaliabilityFormNavigation> get navigate => _navigate.stream;
+  Stream<UnavailabilityFormNavigation> get navigate => _navigate.stream;
 
   UnavailabilityFormViewModel(
       this._authenticationRepository, this._unavailabilityFormRepository);
@@ -108,7 +108,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
         await _unavailabilityFormRepository.createUnavailabilityEvent(
             userID, newEvent);
         _submissionState.add(RequestState.success(null));
-        _navigate.add(UnavaliabilityFormNavigation.calendar());
+        _navigate.add(UnavailabilityFormNavigation.calendar());
       } catch (e, stacktrace) {
         print(stacktrace);
         logger.e(e, stackTrace: stacktrace);

@@ -1,7 +1,7 @@
 import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
-import 'package:fireapp/presentation/unavailability_form/unavaliability_form_view_model.dart';
-import 'package:fireapp/presentation/unavailability_form/unavaliability_form_navigation.dart';
+import 'package:fireapp/presentation/unavailability_form/unavailability_form_view_model.dart';
+import 'package:fireapp/presentation/unavailability_form/unavailability_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:fireapp/widgets/fill_width.dart';
@@ -38,13 +38,13 @@ class UnavailabilityForm extends StatefulWidget {
 }
 
 class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
-    with Navigable<UnavaliabilityFormNavigation, UnavailabilityForm>
+    with Navigable<UnavailabilityFormNavigation, UnavailabilityForm>
     implements ViewModelHolder<UnavailabilityFormViewModel> {
   @override
   UnavailabilityFormViewModel viewModel = GetIt.instance.get();
 
   @override
-  void handleNavigationEvent(UnavaliabilityFormNavigation event) {
+  void handleNavigationEvent(UnavailabilityFormNavigation event) {
     event.when(calendar:() {
       Navigator.of(context).pop();
     });
