@@ -44,6 +44,22 @@ class UnavailabilityFormViewModel extends FireAppViewModel
 
   Stream<RequestState<void>> get submissionState => _submissionState.stream;
 
+  // Track if form is filled
+  final BehaviorSubject<bool> _isFormValid = BehaviorSubject.seeded(false);
+
+  Stream<bool> get isFormValidStream => _isFormValid.stream;
+
+// Method to check form validity (if form has all fields filled)
+  void checkFormValidity() {
+    bool isFormValid = titleController.text.isNotEmpty &&
+        _selectedStartDate.hasValue &&
+        _selectedStartTime.hasValue  &&
+        _selectedEndDate.hasValue  &&
+        _selectedEndTime.hasValue ;
+    _isFormValid.add(isFormValid);
+  }
+
+
   // Navigation handling
   final BehaviorSubject<ConstraintFormNavigation> _navigate = BehaviorSubject();
 
@@ -104,22 +120,27 @@ class UnavailabilityFormViewModel extends FireAppViewModel
 
   void updateStartDate(DateTime? date) {
     _selectedStartDate.add(date);
+    checkFormValidity();
   }
 
   void updateEndDate(DateTime? date) {
     _selectedEndDate.add(date);
+    checkFormValidity();
   }
 
   void updateStartTime(TimeOfDay? time) {
     _selectedStartTime.add(time);
+    checkFormValidity();
   }
 
   void updateEndTime(TimeOfDay? time) {
     _selectedEndTime.add(time);
+    checkFormValidity();
   }
 
   void updateEventTitle(String? value) {
     titleController.text = value ?? "";
+    checkFormValidity();
   }
 
   @override

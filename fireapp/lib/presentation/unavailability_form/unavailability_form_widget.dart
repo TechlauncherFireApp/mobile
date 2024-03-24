@@ -56,37 +56,43 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
         padding: EdgeInsets.all(1.rdp()),
         bottomChildren: [
           FillWidth(
-            child: StreamBuilder(
-              stream: viewModel.submissionState,
-              builder: (context, data) {
-                return ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(40),
-                  ),
-                  onPressed: viewModel.submitForm,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(AppLocalizations.of(context)
-                              ?.addUnavailabilityButton ??
-                          "Add Schedule"),
-                      if (data is LoadingRequestState)
-                        SizedBox(
-                          height: 8,
-                          width: 8,
-                          child: CircularProgressIndicator(
-                              color: (Theme.of(context)
-                                      .primaryTextTheme
-                                      .headline6
-                                      ?.color ??
-                                  Colors.white)),
-                        )
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
+              child: StreamBuilder<bool>(
+                  stream: viewModel.isFormValidStream,
+                  builder: (context, isFormValidSnapshot) {
+                    return StreamBuilder(
+                      stream: viewModel.submissionState,
+                      builder: (context, data) {
+                        final isFormValid = isFormValidSnapshot.data ?? false;
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(40),
+                          ),
+                          onPressed: isFormValid
+                              ? viewModel.submitForm
+                              : null,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(AppLocalizations.of(context)
+                                      ?.addUnavailabilityButton ??
+                                  "Add Schedule"),
+                              if (data is LoadingRequestState)
+                                SizedBox(
+                                  height: 8,
+                                  width: 8,
+                                  child: CircularProgressIndicator(
+                                      color: (Theme.of(context)
+                                              .primaryTextTheme
+                                              .titleLarge
+                                              ?.color ??
+                                          Colors.white)),
+                                )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }))
         ],
         children: [
           Form(
