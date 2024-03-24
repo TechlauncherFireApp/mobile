@@ -96,7 +96,7 @@ abstract class RestClient {
   );
 
   @POST("/v2/volunteers/{userId}/unavailability")
-  Future<int> createUnavailabilityEvent(
+  Future<void> createUnavailabilityEvent(
       @Path("userId") int userId,
       @Body() UnavailabilityEventPost newEvent
       );
