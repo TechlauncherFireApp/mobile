@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
-import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
 import 'package:fireapp/presentation/unavailability_form/unavailability_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   //TODO load in event ID and existing information
   final eventId = null;
 
-  // Text Editing Controllers
+  // Editing Controllers
   final TextEditingController titleController = TextEditingController();
 
   final BehaviorSubject<DateTime?> _selectedStartDate = BehaviorSubject();
@@ -54,15 +53,15 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   void checkFormValidity() {
     bool isFormValid = titleController.text.isNotEmpty &&
         _selectedStartDate.hasValue &&
-        _selectedStartTime.hasValue  &&
-        _selectedEndDate.hasValue  &&
-        _selectedEndTime.hasValue ;
+        _selectedStartTime.hasValue &&
+        _selectedEndDate.hasValue &&
+        _selectedEndTime.hasValue;
     _isFormValid.add(isFormValid);
   }
 
-
   // Navigation handling
-  final BehaviorSubject<UnavailabilityFormNavigation> _navigate = BehaviorSubject();
+  final BehaviorSubject<UnavailabilityFormNavigation> _navigate =
+      BehaviorSubject();
 
   @override
   Stream<UnavailabilityFormNavigation> get navigate => _navigate.stream;
@@ -71,8 +70,6 @@ class UnavailabilityFormViewModel extends FireAppViewModel
       this._authenticationRepository, this._unavailabilityFormRepository);
 
   void submitForm() {
-    //TODO: disable button until all fields are filled out
-
     _submissionState.add(RequestState.loading());
     () async {
       try {
@@ -84,6 +81,9 @@ class UnavailabilityFormViewModel extends FireAppViewModel
           throw Exception(
               'User ID is null. Cannot update roles without a valid user ID.');
         }
+
+    const int periodicity = 0;
+
         //Combine start date and start time
         DateTime startDateTime = DateTime(
             _selectedStartDate.value!.year,
@@ -103,12 +103,12 @@ class UnavailabilityFormViewModel extends FireAppViewModel
             title: titleController.text,
             start: startDateTime,
             end: endDateTime,
-            periodicity: 0);
-
+            periodicity: periodicity);
+        // Submit and navigate back to Calendar if successful.
         await _unavailabilityFormRepository.createUnavailabilityEvent(
             userID, newEvent);
         _submissionState.add(RequestState.success(null));
-        _navigate.add(UnavailabilityFormNavigation.calendar());
+        _navigate.add(const UnavailabilityFormNavigation.calendar());
       } catch (e, stacktrace) {
         print(stacktrace);
         logger.e(e, stackTrace: stacktrace);

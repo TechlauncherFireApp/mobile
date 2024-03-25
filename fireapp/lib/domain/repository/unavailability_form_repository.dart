@@ -8,6 +8,8 @@ class UnavailabilityFormRepository {
 
   UnavailabilityFormRepository(this.unavailabilityFormClient);
 
+  // Send an http request to make a new unavailability event in the
+  // corresponding userID calendar
   Future<void> createUnavailabilityEvent(int userId,UnavailabilityEventPost newEvent){
     return unavailabilityFormClient.createUnavailabilityEvent(userId,newEvent);
   }

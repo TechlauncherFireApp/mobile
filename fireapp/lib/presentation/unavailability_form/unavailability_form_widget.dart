@@ -68,9 +68,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(40),
                           ),
-                          onPressed: isFormValid
-                              ? viewModel.submitForm
-                              : null,
+                          onPressed: isFormValid ? viewModel.submitForm : null,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
