@@ -7,7 +7,7 @@ part 'unavailability_time.g.dart';
 @freezed
 class UnavailabilityTime with _$UnavailabilityTime{
   const factory UnavailabilityTime({
-    required int eventId,
+    required int? eventId,
     required int userId,
     required String title,
     required int periodicity, //Number of days between repeating event
