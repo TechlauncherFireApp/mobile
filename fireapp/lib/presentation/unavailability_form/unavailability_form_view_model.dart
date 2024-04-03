@@ -41,12 +41,10 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   // Loading State controllers
   final BehaviorSubject<RequestState<void>> _submissionState =
       BehaviorSubject.seeded(RequestState.success(null));
-
   Stream<RequestState<void>> get submissionState => _submissionState.stream;
 
   // Track if form is filled
   final BehaviorSubject<bool> _isFormValid = BehaviorSubject.seeded(false);
-
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
 // Method to check form validity (if form has all fields filled)
@@ -110,7 +108,6 @@ class UnavailabilityFormViewModel extends FireAppViewModel
         _submissionState.add(RequestState.success(null));
         _navigate.add(const UnavailabilityFormNavigation.calendar());
       } catch (e, stacktrace) {
-        print(stacktrace);
         logger.e(e, stackTrace: stacktrace);
         _submissionState.add(RequestState.exception(e));
       }
@@ -151,5 +148,8 @@ class UnavailabilityFormViewModel extends FireAppViewModel
     _selectedStartTime.close();
     _selectedEndDate.close();
     _selectedEndTime.close();
+    _navigate.close();
+    _submissionState.close();
+    _isFormValid.close();
   }
 }

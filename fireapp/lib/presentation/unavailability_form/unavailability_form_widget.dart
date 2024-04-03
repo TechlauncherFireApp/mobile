@@ -84,14 +84,16 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                                               .primaryTextTheme
                                               .titleLarge
                                               ?.color ??
-                                          Colors.white)),
+                                          Colors.white)
+                                  ),
                                 )
                             ],
                           ),
                         );
                       },
                     );
-                  }))
+                  })
+          )
         ],
         children: [
           Form(
@@ -124,7 +126,8 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)
                                 ?.enterUnavailabilityStartDate,
-                          ));
+                          )
+                      );
                     }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedStartTime,
@@ -150,7 +153,8 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)
                                 ?.enterUnavailabilityEndDate,
-                          ));
+                          )
+                      );
                     }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedEndTime,
