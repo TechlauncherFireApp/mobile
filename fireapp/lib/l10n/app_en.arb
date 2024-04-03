@@ -102,6 +102,7 @@
       }
     }
   },
+
   "loginBlurb": "Sign in to your FireApp account",
   "loginEmail": "Email",
   "loginPassword": "Password",
@@ -130,6 +131,16 @@
   "selectAsset" : "Selected Asset",
   "enterStartTime" : "Schedule Start Time",
   "addSchedule" : "Add schedule",
+
+  "addUnavailabilityTitle" : "Add Unavailability",
+  "enterUnavailabilityTitle" : "Event",
+  "addUnavailabilityButton" : "Add Unavailability",
+  "enterUnavailabilityStartDate": "Start Date",
+  "enterUnavailabilityStartTime" : "Start Time",
+  "enterUnavailabilityEndDate": "End Date",
+  "enterUnavailabilityEndTime" : "End Time",
+  "repeat" : "Repeat",
+  "eventTitleEmptyError": "Event title is empty!",
 
   "shift_request_details": "Shift Request Details",
   "shift_id": "Shift ID",
