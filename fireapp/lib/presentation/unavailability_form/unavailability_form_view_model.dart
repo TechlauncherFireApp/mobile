@@ -80,7 +80,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
               'User ID is null. Cannot update roles without a valid user ID.');
         }
 
-    const int periodicity = 0;
+        const int periodicity = 0;
 
         //Combine start date and start time
         DateTime startDateTime = DateTime(
@@ -89,7 +89,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
             _selectedStartDate.value!.day,
             _selectedStartTime.value!.hour,
             _selectedStartTime.value!.minute);
-        //Combine end date and end time
+        // Combine end date and end time
         DateTime endDateTime = DateTime(
             _selectedEndDate.value!.year,
             _selectedEndDate.value!.month,
@@ -97,11 +97,17 @@ class UnavailabilityFormViewModel extends FireAppViewModel
             _selectedEndTime.value!.hour,
             _selectedEndTime.value!.minute);
 
+        // Check if startDateTime is before endDateTime
+        if (!startDateTime.isBefore(endDateTime)) {
+          throw Exception('The start time must be before the end time.');
+        }
+
         var newEvent = UnavailabilityEventPost(
             title: titleController.text,
             start: startDateTime,
             end: endDateTime,
             periodicity: periodicity);
+
         // Submit and navigate back to Calendar if successful.
         await _unavailabilityFormRepository.createUnavailabilityEvent(
             userID, newEvent);
