@@ -52,7 +52,7 @@ void main() {
     viewModel.updateEndDate(DateTime.now().add(const Duration(days: 1)));
     viewModel.updateEndTime(TimeOfDay.now());
 
-    // Allow time for changes to propagate
+    // Allow time for async logic
     await Future.delayed(const Duration(milliseconds: 100));
 
     // Expectations
@@ -106,14 +106,13 @@ void main() {
     final List<RequestState<void>> emittedStates = [];
     final subscription = viewModel.submissionState.listen(emittedStates.add);
 
-    // Act: attempt to submit the form
+    // Attempt to submit the form
     viewModel.submitForm();
 
-    final containsExceptionState =
-        emittedStates.any((state) => state is ExceptionRequestState<void>);
-
-    // Wait a bit for async logic to resolve
+    // Wait a bit for async logic to resolve and check for exceptions
     await Future.delayed(const Duration(seconds: 1));
+    final containsExceptionState =
+    emittedStates.any((state) => state is ExceptionRequestState<void>);
 
     //Expect to contain the exception
     expectLater(containsExceptionState, true);
