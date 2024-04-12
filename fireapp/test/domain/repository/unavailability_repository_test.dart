@@ -1,21 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
-import 'package:fireapp/data/client/unavailability_form_client.dart';
+import 'package:fireapp/data/client/unavailability_client.dart';
 import 'package:fireapp/domain/repository/unavailability_repository.dart';
 import 'package:mockito/annotations.dart';
-@GenerateMocks([UnavailabilityFormClient])
+@GenerateMocks([UnavailabilityClient])
 import 'unavailability_repository_test.mocks.dart';
 
 
 void main() {
   group('UnavailabilityRepository', () {
-    late MockUnavailabilityFormClient mockUnavailabilityFormClient;
+    late MockUnavailabilityClient mockUnavailabilityClient;
     late UnavailabilityRepository unavailabilityRepository;
 
     setUp(() {
-      mockUnavailabilityFormClient = MockUnavailabilityFormClient();
-      unavailabilityRepository = UnavailabilityRepository(mockUnavailabilityFormClient);
+      mockUnavailabilityClient = MockUnavailabilityClient();
+      unavailabilityRepository = UnavailabilityRepository(mockUnavailabilityClient);
     });
 
     test('createUnavailabilityEvent sends a POST request to create an event', () async {
@@ -27,14 +27,14 @@ void main() {
           periodicity: 0
       );
 
-      when(mockUnavailabilityFormClient.createUnavailabilityEvent(userId, newEvent))
+      when(mockUnavailabilityClient.createUnavailabilityEvent(userId, newEvent))
           .thenAnswer((_) async => {});
 
       // Act
       await unavailabilityRepository.createUnavailabilityEvent(userId, newEvent);
 
       // Assert
-      verify(mockUnavailabilityFormClient.createUnavailabilityEvent(userId, newEvent)).called(1);
+      verify(mockUnavailabilityClient.createUnavailabilityEvent(userId, newEvent)).called(1);
     });
   });
 }

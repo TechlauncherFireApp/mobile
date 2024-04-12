@@ -1,21 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:fireapp/data/client/api/rest_client.dart';
-import 'package:fireapp/data/client/unavailability_form_client.dart';
+import 'package:fireapp/data/client/unavailability_client.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
 import 'package:mockito/annotations.dart';
 @GenerateMocks([RestClient])
-import 'unavailability_form_client_test.mocks.dart';
+import 'unavailability_client_test.mocks.dart';
 
 
 void main() {
   group('UnavailabilityFormClient', () {
     late MockRestClient mockRestClient;
-    late UnavailabilityFormClient unavailabilityFormClient;
+    late UnavailabilityClient unavailabilityClient;
 
     setUp(() {
       mockRestClient = MockRestClient();
-      unavailabilityFormClient = UnavailabilityFormClient(mockRestClient);
+      unavailabilityClient = UnavailabilityClient(mockRestClient);
     });
 
     test('createUnavailabilityEvent sends an HTTP request to create an event', () async {
@@ -32,7 +32,7 @@ void main() {
           .thenAnswer((_) async => {});
 
       // Act
-      await unavailabilityFormClient.createUnavailabilityEvent(userId, newEvent);
+      await unavailabilityClient.createUnavailabilityEvent(userId, newEvent);
 
       // Assert
       verify(mockRestClient.createUnavailabilityEvent(userId, newEvent)).called(1);
