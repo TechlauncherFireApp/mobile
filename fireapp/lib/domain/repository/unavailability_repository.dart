@@ -3,10 +3,10 @@ import 'package:fireapp/domain/models/unavailability/unavailability_event_post.d
 import 'package:injectable/injectable.dart';
 
 @injectable
-class UnavailabilityFormRepository {
+class UnavailabilityRepository {
   final UnavailabilityFormClient unavailabilityFormClient;
 
-  UnavailabilityFormRepository(this.unavailabilityFormClient);
+  UnavailabilityRepository(this.unavailabilityFormClient);
 
   // Send an http request to make a new unavailability event in the
   // corresponding userID calendar
