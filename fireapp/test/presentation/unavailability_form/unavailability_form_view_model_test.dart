@@ -9,10 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 // Generate Mocks
 @GenerateMocks([AuthenticationRepository, UnavailabilityFormRepository])
-
 import 'unavailability_form_view_model_test.mocks.dart';
 
 void main() {
