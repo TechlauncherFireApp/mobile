@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
-import 'package:fireapp/domain/repository/unavailability_form_repository.dart';
+import 'package:fireapp/domain/repository/unavailability_repository.dart';
 import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/presentation/unavailability_form/unavailability_form_view_model.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +10,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 // Generate Mocks
-@GenerateMocks([AuthenticationRepository, UnavailabilityFormRepository])
+@GenerateMocks([AuthenticationRepository, UnavailabilityRepository])
 import 'unavailability_form_view_model_test.mocks.dart';
 
 void main() {
   // Define the variables used across tests
   late MockAuthenticationRepository mockAuthenticationRepository;
-  late MockUnavailabilityFormRepository mockUnavailabilityFormRepository;
+  late MockUnavailabilityRepository mockUnavailabilityRepository;
   late UnavailabilityFormViewModel viewModel;
 
   // Set up function called before each test
   setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
-    mockUnavailabilityFormRepository = MockUnavailabilityFormRepository();
+    mockUnavailabilityRepository = MockUnavailabilityRepository();
     viewModel = UnavailabilityFormViewModel(
       mockAuthenticationRepository,
-      mockUnavailabilityFormRepository,
+      mockUnavailabilityRepository,
     );
   });
 
@@ -73,7 +73,7 @@ void main() {
     viewModel.updateEndDate(DateTime.now().add(const Duration(days: 1)));
     viewModel.updateEndTime(TimeOfDay.now());
 
-    when(mockUnavailabilityFormRepository.createUnavailabilityEvent(any, any))
+    when(mockUnavailabilityRepository.createUnavailabilityEvent(any, any))
         .thenAnswer((_) async => {});
 
     expectLater(

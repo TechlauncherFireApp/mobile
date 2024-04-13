@@ -5,7 +5,7 @@ import 'package:fireapp/presentation/constraint_form/constraint_form_view.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
-import '../pages/Calendar/calendar.dart';
+import '../presentation/calendar/calendar_widget.dart';
 
 Widget mainNav() {
   print(role);
@@ -30,7 +30,7 @@ class VolunteerRoute extends StatefulWidget {
 // Main Navigation Screens - For Volunteer (Will show on navbar)
 final volunteerScreens = [
   const VolunteerHome(),
-  const MyCalendarPage(),
+  const CalendarPage(),
   const Center(child: Text('Training', style: TextStyle(fontSize: 60))),
   SettingPage(email: userEmail),
 ];

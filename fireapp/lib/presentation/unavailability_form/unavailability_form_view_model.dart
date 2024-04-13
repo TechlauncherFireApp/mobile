@@ -9,14 +9,14 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../domain/request_state.dart';
 import '../../global/di.dart';
-import 'package:fireapp/domain/repository/unavailability_form_repository.dart';
+import 'package:fireapp/domain/repository/unavailability_repository.dart';
 
 @injectable
 class UnavailabilityFormViewModel extends FireAppViewModel
     implements NavigationViewModel<UnavailabilityFormNavigation> {
   //Load in authentication and unavailability actions
   late final AuthenticationRepository _authenticationRepository;
-  late final UnavailabilityFormRepository _unavailabilityFormRepository;
+  late final UnavailabilityRepository _unavailabilityRepository;
 
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -65,7 +65,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   Stream<UnavailabilityFormNavigation> get navigate => _navigate.stream;
 
   UnavailabilityFormViewModel(
-      this._authenticationRepository, this._unavailabilityFormRepository);
+      this._authenticationRepository, this._unavailabilityRepository);
 
   void submitForm() {
     _submissionState.add(RequestState.loading());
@@ -109,7 +109,7 @@ class UnavailabilityFormViewModel extends FireAppViewModel
             periodicity: periodicity);
 
         // Submit and navigate back to Calendar if successful.
-        await _unavailabilityFormRepository.createUnavailabilityEvent(
+        await _unavailabilityRepository.createUnavailabilityEvent(
             userID, newEvent);
         _submissionState.add(RequestState.success(null));
         _navigate.add(const UnavailabilityFormNavigation.calendar());
