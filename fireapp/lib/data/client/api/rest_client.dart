@@ -101,4 +101,16 @@ abstract class RestClient {
       @Body() UnavailabilityEventPost newEvent
       );
 
+  @DELETE("/v2/volunteers/{userId}/unavailability/{eventID}")
+  Future<void> deleteUnavailabilityEvent(
+      @Path("userId") int userId,
+      @Path("eventID") int eventID
+      );
+
+  @PUT("/v2/volunteers/{userId}/unavailability/{eventID}")
+  Future<void> editUnavailabilityEvent(
+      @Path("userId") int userId,
+      @Path("eventID") int eventID,
+      @Body() UnavailabilityEventPost event
+      );
 }

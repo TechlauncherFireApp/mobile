@@ -22,14 +22,14 @@ class UnavailabilityRepository {
     return;
   }
 
-  //TODO edit a user's specific unavailability event
-  void editUnavailabilityEvent(
-      int userId, int eventID, UnavailabilityTime event) {
-    return;
+  //Send packet to client to edit a user's specific unavailability event
+  Future <void> editUnavailabilityEvent(
+      int userId, int eventID, UnavailabilityEventPost event) {
+    return unavailabilityClient.editUnavailabilityEvent(userId, eventID, event);
   }
 
-  //TODO delete a user's specific unavailability event
-  void deleteUnavailabilityEvent(int userId, int eventID) {
-    return;
+  //Send packet to client to delete a user's specific unavailability event
+  Future<void> deleteUnavailabilityEvent(int userId, int eventID) {
+    return unavailabilityClient.deleteUnavailabilityEvent(userId, eventID);
   }
 }
