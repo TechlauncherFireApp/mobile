@@ -1,5 +1,6 @@
 import 'package:fireapp/data/client/unavailability_client.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../models/unavailability/unavailability_time.dart';
@@ -18,8 +19,8 @@ class UnavailabilityRepository {
   }
 
   //TODO get list of all unavailability events from user
-  void getUnavailabilityEvents(int userId) {
-    return;
+  JsonSerializable getUnavailabilityEvents(int userId) {
+    return unavailabilityClient.getUnavailabilityEvents(userId);
   }
 
   //Send packet to client to edit a user's specific unavailability event

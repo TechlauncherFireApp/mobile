@@ -113,4 +113,8 @@ abstract class RestClient {
       @Path("eventID") int eventID,
       @Body() UnavailabilityEventPost event
       );
+  @GET("/v2/volunteers/{userId}/unavailability")
+  JsonSerializable getUnavailabilityEvents(
+      @Path("userId") int userId
+      );
 }
