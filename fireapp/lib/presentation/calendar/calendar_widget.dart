@@ -8,10 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../../pages/Calendar/calendarForm.dart';
+import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
+
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,7 @@ class CalendarPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
+        //TODO navigation refactor - carried from old code
         onPressed: () async {
           await Navigator.push(
             context,
@@ -32,27 +36,36 @@ class CalendarPage extends StatelessWidget {
   }
 }
 
+
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
+
 
   @override
   State createState() => _CalendarState();
 }
 
+
 class _CalendarState extends FireAppState<CalendarView>
     with Navigable<CalendarNavigation, CalendarView>
     implements ViewModelHolder<CalendarViewModel> {
 
-  String _selectedMonth = DateFormat('MMMM').format(DateTime.now());
 
-  // 可选的月份列表
-  final List<String> _months = List.generate(12, (i) => DateFormat('MMMM').format(DateTime(0, i + 1)));
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
+  String _selectedMonth = DateFormat('MMM yyyy').format(DateTime.now());
+  DateTime _selectedDate = DateTime.now();
+
 
   @override
   void handleNavigationEvent(CalendarNavigation event) {
-
+    event.when(
+        eventDetail: (eventId) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UnavailabilityForm()
+          ));
+        }
+    );
   }
   Widget _buildEventCard(String title, String timeRange) {
     return Card(
@@ -61,10 +74,9 @@ class _CalendarState extends FireAppState<CalendarView>
         title: Text(title),
         subtitle: Text(timeRange),
         trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+          onSelected: (value) {},
+          itemBuilder: (BuildContext context) =>
+          <PopupMenuEntry<String>>[
             const PopupMenuItem<String>(
               value: 'Edit',
               child: Text('Edit'),
@@ -79,30 +91,23 @@ class _CalendarState extends FireAppState<CalendarView>
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: DropdownButton<String>(
-          underline: Container(),
-          value: _selectedMonth,
-          items: _months.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              if (newValue != null) {
-                _selectedMonth = newValue;
-              }
-            });
-          },
-          isExpanded: false,
-          iconSize: 24.0,
-          elevation: 16,
+        title: TextButton(
+          onPressed: () => _showMonthPicker(context),
+          child: Text(
+            _selectedMonth,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
         ),
+        backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: ListView(
@@ -114,10 +119,25 @@ class _CalendarState extends FireAppState<CalendarView>
                   flex: 1,
                   child: Padding(
                     padding: EdgeInsets.only(right: 15.0),
-                    child: Text(
-                      'April 27',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Apr', // Changed to lowercase abbreviated month
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          '27', // Display day in a larger font
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -133,10 +153,113 @@ class _CalendarState extends FireAppState<CalendarView>
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () async {
-          // Add your onPressed logic here
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => UnavailabilityFormPage())
+          );
         },
       ),
     );
   }
+
+
+
+
+  void _showMonthPicker(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            width: double.maxFinite,
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_left),
+                          onPressed: () {
+                            setState(() {
+                              _selectedDate = DateTime(
+                                  _selectedDate.year - 1, _selectedDate.month);
+                            });
+                          },
+                        ),
+                        Text(
+                          '${_selectedDate.year}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_right),
+                          onPressed: () {
+                            setState(() {
+                              _selectedDate = DateTime(
+                                  _selectedDate.year + 1, _selectedDate.month);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 220,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: 12,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          String month = DateFormat('MMM').format(
+                              DateTime(_selectedDate.year, index + 1));
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop(DateTime(
+                                  _selectedDate.year, index + 1));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Text(month.toUpperCase()),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    ).then((newDate) {
+      if (newDate != null) {
+        setState(() {
+          _selectedDate = newDate;
+          _selectedMonth = DateFormat('MMM yyyy').format(_selectedDate);
+        });
+      }
+    });
+  }
 }
+
+
+
+
+
+
+
+
+
+
