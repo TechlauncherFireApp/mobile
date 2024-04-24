@@ -19,7 +19,7 @@ class UnavailabilityRepository {
   }
 
   //TODO get list of all unavailability events from user
-  JsonSerializable getUnavailabilityEvents(int userId) {
+  Future<List<UnavailabilityTime>> getUnavailabilityEvents(int userId) {
     return unavailabilityClient.getUnavailabilityEvents(userId);
   }
 
