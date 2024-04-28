@@ -7,12 +7,12 @@ part 'unavailability_time.g.dart';
 @freezed
 class UnavailabilityTime with _$UnavailabilityTime{
   const factory UnavailabilityTime({
-    required int? eventId, // Only NULL when creating new instance
+    required int eventId,
     required int userId,
     required String title,
     required int periodicity, //Number of days between repeating event
-    required DateTime start,
-    required DateTime end,
+    required DateTime startTime,
+    required DateTime endTime,
   }) = _UnavailabilityTime;
 
   // Factory constructor to convert 'UnavailabilityTime' JSON to object

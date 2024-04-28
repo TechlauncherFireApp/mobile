@@ -71,9 +71,26 @@ class CalendarViewModel extends FireAppViewModel
     })();
   }
 
-  void filterEvents() {
-    // Go through each UnavailabilityTime
-    // and check if the selected month, selected year is part of start date and end date.
+
+  List filterEvents(
+      BehaviorSubject<RequestState<List<UnavailabilityTime>>> eventsStream) {
+    final eventsState = eventsStream.value;
+    // Assuming eventsState contains the list of UnavailabilityTime objects
+    if(eventsState is SuccessRequestState<List<UnavailabilityTime>>){
+      final unavailabilityList = eventsState.result;
+      // Filter by month and year
+      final filteredList = unavailabilityList.where((unavailability) {
+        final startMonth = unavailability.startTime.month;
+        final startYear = unavailability.startTime.year;
+        final endMonth = unavailability.endTime.month;
+        final endYear = unavailability.endTime.year;
+
+        return (startYear <= _selectedYear.value && startMonth <= _selectedMonth.value) ||
+            (endYear >= _selectedYear.value && endMonth >= _selectedMonth.value);
+      }).toList();
+      return filteredList;
+    }
+    return [];
   }
 
   void deleteUnavailability(int eventID) {
