@@ -19,20 +19,20 @@ class CalendarViewModel extends FireAppViewModel
   late final UnavailabilityRepository _unavailabilityRepository;
 
   final BehaviorSubject<int> _selectedMonth =
-      BehaviorSubject.seeded(DateTime.now().month);
+  BehaviorSubject.seeded(DateTime.now().month);
 
   final BehaviorSubject<int> _selectedYear =
-      BehaviorSubject.seeded(DateTime.now().year);
+  BehaviorSubject.seeded(DateTime.now().year);
 
   // List of Volunteer's unavailability events
   final BehaviorSubject<RequestState<List<UnavailabilityTime>>>
-      _unavailabilityEvents = BehaviorSubject.seeded(RequestState.initial());
+  _unavailabilityEvents = BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<UnavailabilityTime>>> get eventsStream =>
       _unavailabilityEvents.stream;
 
   // Loading State controllers
   final BehaviorSubject<RequestState<void>> _loadingState =
-      BehaviorSubject.seeded(RequestState.success(null));
+  BehaviorSubject.seeded(RequestState.success(null));
   Stream<RequestState<void>> get loadingState => _loadingState.stream;
 
   // Navigation handling
@@ -44,40 +44,41 @@ class CalendarViewModel extends FireAppViewModel
   CalendarViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
 
-
   void fetchUnavailabilityEvents() {
     _loadingState.add(RequestState.loading());
-    () async {
+    (() async {
       try {
         var userID =
             (await _authenticationRepository.getCurrentSession())?.userId;
-
         // Check if userId is null and throw an exception if it is
         if (userID == null) {
           throw Exception(
               'User ID is null. Cannot update roles without a valid user ID.');
         }
-        var events; //=
-        _unavailabilityRepository.getUnavailabilityEvents(userID);
+        print("Fetching..");
+        var events; //= await _unavailabilityRepository.getUnavailabilityEvents(userID);
         if (events.isEmpty) {
           events = [];
         }
+
         _unavailabilityEvents.add(RequestState.success(events));
-      } catch (e) {
-        // Handle errors here
+      } catch (e, stacktrace) {
+        logger.e(e, stackTrace: stacktrace);
+        print("FAILED");
         _unavailabilityEvents.add(RequestState.exception(e));
       }
-    };
+      print("done");
+    })();
   }
 
-  void filterEvents(){
-    // Go through each UnavalabilityTime
+  void filterEvents() {
+    // Go through each UnavailabilityTime
     // and check if the selected month, selected year is part of start date and end date.
   }
 
   void deleteUnavailability(int eventID) {
     _loadingState.add(RequestState.loading());
-    () async {
+    (() async {
       try {
         var userID =
             (await _authenticationRepository.getCurrentSession())?.userId;
@@ -87,16 +88,17 @@ class CalendarViewModel extends FireAppViewModel
           throw Exception(
               'User ID is null. Cannot update without a valid user ID.');
         }
-        //await _unavailabilityRepository.deleteUnavailabilityEvent(userID, eventID);
+        //await _unavailabilityRepository.deleteUnavailabilityEvent(
+        //    userID, eventID);
         _loadingState.add(RequestState.success(null));
       } catch (e, stacktrace) {
         logger.e(e, stackTrace: stacktrace);
         _loadingState.add(RequestState.exception(e));
       }
-    }();
+    })();
   }
 
-  void editEventNavigate(eventID){
+  void editEventNavigate(eventID) {
     //navigate.add()
   }
 
@@ -108,7 +110,7 @@ class CalendarViewModel extends FireAppViewModel
   }
 
   void updateSelectedYear(int year) {
-    if(year < 0){
+    if (year < 0) {
       return;
     }
     _selectedYear.value = year;
