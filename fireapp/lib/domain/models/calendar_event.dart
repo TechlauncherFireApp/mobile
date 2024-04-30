@@ -9,8 +9,6 @@ class CalendarEvent with _$CalendarEvent {
   const factory CalendarEvent({
     required UnavailabilityTime event,
     required String displayTime,
-    required DateTime startTime,
-    required DateTime endTime,
   }) = _CalendarEvent;
 
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fireapp/domain/models/calendar_event.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
@@ -19,20 +20,24 @@ class CalendarViewModel extends FireAppViewModel
   late final UnavailabilityRepository _unavailabilityRepository;
 
   final BehaviorSubject<int> _selectedMonth =
-  BehaviorSubject.seeded(DateTime.now().month);
+      BehaviorSubject.seeded(DateTime.now().month + 2);
 
   final BehaviorSubject<int> _selectedYear =
-  BehaviorSubject.seeded(DateTime.now().year);
+      BehaviorSubject.seeded(DateTime.now().year);
 
   // List of Volunteer's unavailability events
   final BehaviorSubject<RequestState<List<UnavailabilityTime>>>
-  _unavailabilityEvents = BehaviorSubject.seeded(RequestState.initial());
+      _unavailabilityEvents = BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<UnavailabilityTime>>> get eventsStream =>
       _unavailabilityEvents.stream;
 
+  final BehaviorSubject<List<CalendarEvent>> _displayEvents =
+      BehaviorSubject.seeded([]);
+  Stream<List<CalendarEvent>> get displayEventsStream => _displayEvents.stream;
+
   // Loading State controllers
   final BehaviorSubject<RequestState<void>> _loadingState =
-  BehaviorSubject.seeded(RequestState.success(null));
+      BehaviorSubject.seeded(RequestState.success(null));
   Stream<RequestState<void>> get loadingState => _loadingState.stream;
 
   // Navigation handling
@@ -44,53 +49,94 @@ class CalendarViewModel extends FireAppViewModel
   CalendarViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
 
-  void fetchUnavailabilityEvents() {
+  Future<void> fetchUnavailabilityEvents() async {
     _loadingState.add(RequestState.loading());
-    (() async {
-      try {
-        var userID =
-            (await _authenticationRepository.getCurrentSession())?.userId;
-        // Check if userId is null and throw an exception if it is
-        if (userID == null) {
-          throw Exception(
-              'User ID is null. Cannot update roles without a valid user ID.');
-        }
-        print("Fetching..");
-        var events = await _unavailabilityRepository.getUnavailabilityEvents(userID);
-        if (events.isEmpty) {
-          events = [];
-        }
-
-        _unavailabilityEvents.add(RequestState.success(events));
-      } catch (e, stacktrace) {
-        logger.e(e, stackTrace: stacktrace);
-        print("FAILED");
-        _unavailabilityEvents.add(RequestState.exception(e));
+    try {
+      var userID =
+          (await _authenticationRepository.getCurrentSession())?.userId;
+      // Check if userId is null and throw an exception if it is
+      if (userID == null) {
+        throw Exception(
+            'User ID is null. Cannot update roles without a valid user ID.');
       }
+      print("Fetching..");
+      var events =
+          await _unavailabilityRepository.getUnavailabilityEvents(userID);
+      if (events.isEmpty) {
+        events = [];
+      }
+
+      _unavailabilityEvents.add(RequestState.success(events));
+    } catch (e, stacktrace) {
+      logger.e(e, stackTrace: stacktrace);
+      print("FAILED");
+      _unavailabilityEvents.add(RequestState.exception(e));
+    } finally {
       print("done");
-    })();
+    }
   }
 
+  bool doPeriodsOverlap(DateTime start1, DateTime end1, DateTime start2, DateTime end2){
+    return start1.isBefore(end2) && start2.isBefore(end1);
+  }
 
   List filterEvents(
       BehaviorSubject<RequestState<List<UnavailabilityTime>>> eventsStream) {
     final eventsState = eventsStream.value;
     // Assuming eventsState contains the list of UnavailabilityTime objects
-    if(eventsState is SuccessRequestState<List<UnavailabilityTime>>){
+    if (eventsState is SuccessRequestState<List<UnavailabilityTime>>) {
       final unavailabilityList = eventsState.result;
       // Filter by month and year
       final filteredList = unavailabilityList.where((unavailability) {
-        final startMonth = unavailability.startTime.month;
-        final startYear = unavailability.startTime.year;
-        final endMonth = unavailability.endTime.month;
-        final endYear = unavailability.endTime.year;
-
-        return (startYear <= _selectedYear.value && startMonth <= _selectedMonth.value) ||
-            (endYear >= _selectedYear.value && endMonth >= _selectedMonth.value);
+        final selectedStartTime = DateTime(_selectedYear.value,_selectedMonth.value,1);
+        DateTime firstDayOfNextMonth = DateTime(_selectedYear.value,_selectedMonth.value+1,1);
+        final selectedEndTime = firstDayOfNextMonth.subtract(const Duration(days:1));
+        return doPeriodsOverlap(unavailability.startTime, unavailability.endTime,selectedStartTime , selectedEndTime);
       }).toList();
       return filteredList;
     }
     return [];
+  }
+
+  Future<void> loadAndSetDisplayEvents() async {
+    await fetchUnavailabilityEvents();
+
+    var filteredEvents = filterEvents(_unavailabilityEvents);
+    print("Filtered Events for ${_selectedMonth.value}");
+    print(filteredEvents);
+    if (filteredEvents.isNotEmpty) {
+      List<CalendarEvent> displayEventList = [];
+      for (var event in filteredEvents) {
+        final startDate = event.startTime;
+        final endDate = event.endTime;
+        final numDays = endDate.difference(startDate).inDays;
+
+        for (int i = 0; i <= numDays; i++) {
+          var currentDate = startDate.add(Duration(days: i));
+          String displayTimeLabel;
+          if (i == 0) {
+            // Start day
+            displayTimeLabel =
+                "${startDate.hour}:${startDate.minute} - Midnight";
+          } else if (i == numDays) {
+            // End day
+            displayTimeLabel = "Midnight - ${endDate.hour}:${endDate.minute}";
+          } else {
+            // All days in between
+            displayTimeLabel = "All day";
+          }
+          displayEventList
+              .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
+        }
+      }
+      _displayEvents.add(displayEventList);
+
+      for (int i = 0; i< displayEventList.length;i++){
+        print("${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
+      }
+    } else {
+      _displayEvents.add([]);
+    }
   }
 
   void deleteUnavailability(int eventID) {
