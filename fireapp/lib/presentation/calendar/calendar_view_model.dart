@@ -56,7 +56,7 @@ class CalendarViewModel extends FireAppViewModel
               'User ID is null. Cannot update roles without a valid user ID.');
         }
         print("Fetching..");
-        var events; //= await _unavailabilityRepository.getUnavailabilityEvents(userID);
+        var events = await _unavailabilityRepository.getUnavailabilityEvents(userID);
         if (events.isEmpty) {
           events = [];
         }
@@ -105,8 +105,8 @@ class CalendarViewModel extends FireAppViewModel
           throw Exception(
               'User ID is null. Cannot update without a valid user ID.');
         }
-        //await _unavailabilityRepository.deleteUnavailabilityEvent(
-        //    userID, eventID);
+        await _unavailabilityRepository.deleteUnavailabilityEvent(
+            userID, eventID);
         _loadingState.add(RequestState.success(null));
       } catch (e, stacktrace) {
         logger.e(e, stackTrace: stacktrace);
