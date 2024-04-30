@@ -20,7 +20,7 @@ class CalendarViewModel extends FireAppViewModel
   late final UnavailabilityRepository _unavailabilityRepository;
 
   final BehaviorSubject<int> _selectedMonth =
-      BehaviorSubject.seeded(DateTime.now().month + 2);
+      BehaviorSubject.seeded(DateTime.now().month);
 
   final BehaviorSubject<int> _selectedYear =
       BehaviorSubject.seeded(DateTime.now().year);
@@ -71,13 +71,17 @@ class CalendarViewModel extends FireAppViewModel
       logger.e(e, stackTrace: stacktrace);
       print("FAILED");
       _unavailabilityEvents.add(RequestState.exception(e));
-    } finally {
-      print("done");
-    }
+    } finally {}
   }
 
-  bool doPeriodsOverlap(DateTime start1, DateTime end1, DateTime start2, DateTime end2){
-    return start1.isBefore(end2) && start2.isBefore(end1);
+  bool doPeriodsOverlap(
+      DateTime start1, DateTime end1, DateTime start2, DateTime end2) {
+    return (start1.isBefore(end2) || isSameDay(start1, end2)) &&
+        (start2.isBefore(end1) || isSameDay(start2, end1));
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.difference(date2).inDays == 0;
   }
 
   List filterEvents(
@@ -88,10 +92,14 @@ class CalendarViewModel extends FireAppViewModel
       final unavailabilityList = eventsState.result;
       // Filter by month and year
       final filteredList = unavailabilityList.where((unavailability) {
-        final selectedStartTime = DateTime(_selectedYear.value,_selectedMonth.value,1);
-        DateTime firstDayOfNextMonth = DateTime(_selectedYear.value,_selectedMonth.value+1,1);
-        final selectedEndTime = firstDayOfNextMonth.subtract(const Duration(days:1));
-        return doPeriodsOverlap(unavailability.startTime, unavailability.endTime,selectedStartTime , selectedEndTime);
+        final selectedStartTime =
+            DateTime(_selectedYear.value, _selectedMonth.value, 1);
+        DateTime firstDayOfNextMonth =
+            DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
+        final selectedEndTime =
+            firstDayOfNextMonth.subtract(const Duration(days: 1));
+        return doPeriodsOverlap(unavailability.startTime,
+            unavailability.endTime, selectedStartTime, selectedEndTime);
       }).toList();
       return filteredList;
     }
@@ -100,30 +108,47 @@ class CalendarViewModel extends FireAppViewModel
 
   Future<void> loadAndSetDisplayEvents() async {
     await fetchUnavailabilityEvents();
-
     var filteredEvents = filterEvents(_unavailabilityEvents);
     print("Filtered Events for ${_selectedMonth.value}");
     print(filteredEvents);
     if (filteredEvents.isNotEmpty) {
       List<CalendarEvent> displayEventList = [];
       for (var event in filteredEvents) {
-        final startDate = event.startTime;
-        final endDate = event.endTime;
+        final firstDayOfMonth =
+            DateTime(_selectedYear.value, _selectedMonth.value, 1);
+        final startDate = (event.startTime.isBefore(firstDayOfMonth) &&
+                !isSameDay(event.startTime, firstDayOfMonth))
+            ? firstDayOfMonth
+            : event.startTime;
+        DateTime firstDayOfNextMonth =
+            DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
+        final lastDayOfMonth =
+            firstDayOfNextMonth.subtract(const Duration(days: 1));
+        final endDate = (event.endTime.isAfter(lastDayOfMonth) &&
+                !isSameDay(event.endTime, lastDayOfMonth))
+            ? lastDayOfMonth
+            : event.endTime;
         final numDays = endDate.difference(startDate).inDays;
 
         for (int i = 0; i <= numDays; i++) {
-          var currentDate = startDate.add(Duration(days: i));
           String displayTimeLabel;
-          if (i == 0) {
-            // Start day
+          // If a single day event
+          if (i == 0 && numDays == 0) {
+            displayTimeLabel =
+                "${startDate.hour}:${startDate.minute} - ${endDate.hour}:${endDate.minute} ";
+          }
+          // For first day in the event
+          else if (i == 0) {
             displayTimeLabel =
                 "${startDate.hour}:${startDate.minute} - Midnight";
-          } else if (i == numDays) {
-            // End day
+          }
+          // For the last day in the event
+          else if (i == numDays) {
             displayTimeLabel = "Midnight - ${endDate.hour}:${endDate.minute}";
-          } else {
-            // All days in between
-            displayTimeLabel = "All day";
+          }
+          // All days in between
+          else {
+            displayTimeLabel = "All Day";
           }
           displayEventList
               .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
@@ -131,8 +156,9 @@ class CalendarViewModel extends FireAppViewModel
       }
       _displayEvents.add(displayEventList);
 
-      for (int i = 0; i< displayEventList.length;i++){
-        print("${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
+      for (int i = 0; i < displayEventList.length; i++) {
+        print(
+            "${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
       }
     } else {
       _displayEvents.add([]);
