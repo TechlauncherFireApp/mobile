@@ -21,7 +21,7 @@ class CalendarViewModel extends FireAppViewModel
   late final UnavailabilityRepository _unavailabilityRepository;
 
   final BehaviorSubject<int> _selectedMonth =
-      BehaviorSubject.seeded(DateTime.now().month + 2);
+      BehaviorSubject.seeded(DateTime.now().month);
 
   final BehaviorSubject<int> _selectedYear =
       BehaviorSubject.seeded(DateTime.now().year);
@@ -62,7 +62,6 @@ class CalendarViewModel extends FireAppViewModel
         throw Exception(
             'User ID is null. Cannot update roles without a valid user ID.');
       }
-      print("Fetching..");
       var events =
           await _unavailabilityRepository.getUnavailabilityEvents(userID);
       if (events.isEmpty) {
@@ -93,32 +92,30 @@ class CalendarViewModel extends FireAppViewModel
 
   // Filter all unavailability events to the selected month period
   List<UnavailabilityTime> filterEvents(
-      BehaviorSubject<RequestState<List<UnavailabilityTime>>> eventsStream) {
-    final eventsState = eventsStream.value;
-    // Check if current state has successfully loaded events
-    if (eventsState is SuccessRequestState<List<UnavailabilityTime>>) {
-      final unavailabilityList = eventsState.result;
-      // Filter events that overlap between selected month and year
-      final filteredList = unavailabilityList.where((unavailability) {
-        final selectedStartTime =
-            DateTime(_selectedYear.value, _selectedMonth.value, 1);
-        DateTime firstDayOfNextMonth =
-            DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
-        final selectedEndTime =
-            firstDayOfNextMonth.subtract(const Duration(days: 1));
-        return doPeriodsOverlap(unavailability.startTime,
-            unavailability.endTime, selectedStartTime, selectedEndTime);
-      }).toList();
-      return filteredList;
-    }
-    return [];
+      List<UnavailabilityTime> unavailabilityList) {
+    // Filter events that overlap between selected month and year
+    final filteredList = unavailabilityList.where((unavailability) {
+      final selectedStartTime =
+          DateTime(_selectedYear.value, _selectedMonth.value, 1);
+      DateTime firstDayOfNextMonth =
+          DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
+      final selectedEndTime =
+          firstDayOfNextMonth.subtract(const Duration(days: 1));
+      return doPeriodsOverlap(unavailability.startTime, unavailability.endTime,
+          selectedStartTime, selectedEndTime);
+    }).toList();
+    return filteredList;
   }
 
   Future<void> loadAndSetDisplayEvents() async {
     await fetchUnavailabilityEvents();
-    //Filter the events to the selected month period
-    var filteredEvents = filterEvents(_unavailabilityEvents);
-    if (filteredEvents.isNotEmpty) {
+    final eventsState = _unavailabilityEvents.value;
+
+    // Check if current state has successfully loaded events
+    if (eventsState is SuccessRequestState<List<UnavailabilityTime>>) {
+      final unavailabilityList = eventsState.result;
+      var filteredEvents = filterEvents(unavailabilityList);
+      //Filter the events to the selected month period
       //Take unavailability events and turn them into UI information
       _displayEvents.add(mapToCalendarEvents(filteredEvents));
     } else {
@@ -155,10 +152,6 @@ class CalendarViewModel extends FireAppViewModel
         displayEventList
             .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
       }
-    }
-    for (int i = 0; i < displayEventList.length; i++) {
-      print(
-          "${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
     }
     return displayEventList;
   }
