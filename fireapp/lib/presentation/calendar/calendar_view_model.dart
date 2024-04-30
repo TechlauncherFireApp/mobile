@@ -187,8 +187,8 @@ class CalendarViewModel extends FireAppViewModel
     })();
   }
 
-  void editEventNavigate(eventID) {
-    //navigate.add()
+  void editEventNavigate(UnavailabilityTime event) {
+    _navigate.add(CalendarNavigation.eventDetail(event));
   }
 
   void updateSelectedMonth(int month) {
