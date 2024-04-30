@@ -5,6 +5,7 @@ import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../domain/request_state.dart';
 import 'package:fireapp/domain/repository/unavailability_repository.dart';
@@ -20,7 +21,7 @@ class CalendarViewModel extends FireAppViewModel
   late final UnavailabilityRepository _unavailabilityRepository;
 
   final BehaviorSubject<int> _selectedMonth =
-      BehaviorSubject.seeded(DateTime.now().month);
+      BehaviorSubject.seeded(DateTime.now().month + 2);
 
   final BehaviorSubject<int> _selectedYear =
       BehaviorSubject.seeded(DateTime.now().year);
@@ -31,6 +32,7 @@ class CalendarViewModel extends FireAppViewModel
   Stream<RequestState<List<UnavailabilityTime>>> get eventsStream =>
       _unavailabilityEvents.stream;
 
+  // List of restructured UI event data structures
   final BehaviorSubject<List<CalendarEvent>> _displayEvents =
       BehaviorSubject.seeded([]);
   Stream<List<CalendarEvent>> get displayEventsStream => _displayEvents.stream;
@@ -49,6 +51,7 @@ class CalendarViewModel extends FireAppViewModel
   CalendarViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
 
+  // Fetch the volunteer's unavailability events
   Future<void> fetchUnavailabilityEvents() async {
     _loadingState.add(RequestState.loading());
     try {
@@ -65,32 +68,37 @@ class CalendarViewModel extends FireAppViewModel
       if (events.isEmpty) {
         events = [];
       }
-
       _unavailabilityEvents.add(RequestState.success(events));
     } catch (e, stacktrace) {
       logger.e(e, stackTrace: stacktrace);
-      print("FAILED");
       _unavailabilityEvents.add(RequestState.exception(e));
     } finally {}
   }
 
+  // Check if two timeframes overlap
+  // (used to check if an event overlaps with selected month period)
   bool doPeriodsOverlap(
       DateTime start1, DateTime end1, DateTime start2, DateTime end2) {
     return (start1.isBefore(end2) || isSameDay(start1, end2)) &&
         (start2.isBefore(end1) || isSameDay(start2, end1));
   }
 
+  //Check if is same day
   bool isSameDay(DateTime date1, DateTime date2) {
-    return date1.difference(date2).inDays == 0;
+    //Restrict to days only (remove exact hour/minutes)
+    var d1 = DateTime(date1.year, date1.month, date1.day);
+    var d2 = DateTime(date2.year, date2.month, date2.day);
+    return d1.difference(d2).inDays == 0;
   }
 
-  List filterEvents(
+  // Filter all unavailability events to the selected month period
+  List<UnavailabilityTime> filterEvents(
       BehaviorSubject<RequestState<List<UnavailabilityTime>>> eventsStream) {
     final eventsState = eventsStream.value;
-    // Assuming eventsState contains the list of UnavailabilityTime objects
+    // Check if current state has successfully loaded events
     if (eventsState is SuccessRequestState<List<UnavailabilityTime>>) {
       final unavailabilityList = eventsState.result;
-      // Filter by month and year
+      // Filter events that overlap between selected month and year
       final filteredList = unavailabilityList.where((unavailability) {
         final selectedStartTime =
             DateTime(_selectedYear.value, _selectedMonth.value, 1);
@@ -108,63 +116,76 @@ class CalendarViewModel extends FireAppViewModel
 
   Future<void> loadAndSetDisplayEvents() async {
     await fetchUnavailabilityEvents();
+    //Filter the events to the selected month period
     var filteredEvents = filterEvents(_unavailabilityEvents);
-    print("Filtered Events for ${_selectedMonth.value}");
-    print(filteredEvents);
     if (filteredEvents.isNotEmpty) {
-      List<CalendarEvent> displayEventList = [];
-      for (var event in filteredEvents) {
-        final firstDayOfMonth =
-            DateTime(_selectedYear.value, _selectedMonth.value, 1);
-        final startDate = (event.startTime.isBefore(firstDayOfMonth) &&
-                !isSameDay(event.startTime, firstDayOfMonth))
-            ? firstDayOfMonth
-            : event.startTime;
-        DateTime firstDayOfNextMonth =
-            DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
-        final lastDayOfMonth =
-            firstDayOfNextMonth.subtract(const Duration(days: 1));
-        final endDate = (event.endTime.isAfter(lastDayOfMonth) &&
-                !isSameDay(event.endTime, lastDayOfMonth))
-            ? lastDayOfMonth
-            : event.endTime;
-        final numDays = endDate.difference(startDate).inDays;
-
-        for (int i = 0; i <= numDays; i++) {
-          String displayTimeLabel;
-          // If a single day event
-          if (i == 0 && numDays == 0) {
-            displayTimeLabel =
-                "${startDate.hour}:${startDate.minute} - ${endDate.hour}:${endDate.minute} ";
-          }
-          // For first day in the event
-          else if (i == 0) {
-            displayTimeLabel =
-                "${startDate.hour}:${startDate.minute} - Midnight";
-          }
-          // For the last day in the event
-          else if (i == numDays) {
-            displayTimeLabel = "Midnight - ${endDate.hour}:${endDate.minute}";
-          }
-          // All days in between
-          else {
-            displayTimeLabel = "All Day";
-          }
-          displayEventList
-              .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
-        }
-      }
-      _displayEvents.add(displayEventList);
-
-      for (int i = 0; i < displayEventList.length; i++) {
-        print(
-            "${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
-      }
+      //Take unavailability events and turn them into UI information
+      _displayEvents.add(mapToCalendarEvents(filteredEvents));
     } else {
+      // No events to be displayed
       _displayEvents.add([]);
     }
   }
 
+  // Convert list of unavailability events to displayable calendar events
+  List<CalendarEvent> mapToCalendarEvents(List<UnavailabilityTime> events) {
+    List<CalendarEvent> displayEventList = [];
+    for (var event in events) {
+      final firstDayOfMonth =
+          DateTime(_selectedYear.value, _selectedMonth.value, 1);
+      //Fix start date
+      final startDate = (event.startTime.isBefore(firstDayOfMonth) &&
+              !isSameDay(event.startTime, firstDayOfMonth))
+          ? firstDayOfMonth
+          : event.startTime;
+      DateTime firstDayOfNextMonth =
+          DateTime(_selectedYear.value, _selectedMonth.value + 1, 1, 23, 59);
+      final lastDayOfMonth =
+          firstDayOfNextMonth.subtract(const Duration(days: 1));
+      //Fix end date
+      final endDate = (event.endTime.isAfter(lastDayOfMonth) &&
+              !isSameDay(event.endTime, lastDayOfMonth))
+          ? lastDayOfMonth
+          : event.endTime;
+      final numDays = endDate.difference(startDate).inDays;
+      // For each day in the event
+      for (int i = 0; i <= numDays; i++) {
+        String displayTimeLabel =
+            getDisplayTimeLabel(i, numDays, startDate, endDate);
+        displayEventList
+            .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
+      }
+    }
+    for (int i = 0; i < displayEventList.length; i++) {
+      print(
+          "${displayEventList[i].displayTime} |${displayEventList[i].event.eventId}");
+    }
+    return displayEventList;
+  }
+
+  // Construct the display time label for an event
+  String getDisplayTimeLabel(
+      int i, int numDays, DateTime startDate, DateTime endDate) {
+    final timeFormat = DateFormat('h:mm a');
+    // If a single day event
+    if (i == 0 && numDays == 0) {
+      return "${timeFormat.format(startDate)} - ${timeFormat.format(endDate)}";
+    }
+    // Event spans multiple days, and this is the first day
+    else if (i == 0 && numDays > 1) {
+      return "${timeFormat.format(startDate)} - 11:59 PM";
+    }
+    // Event spans multiple days, and this is the last day
+    else if (i == numDays) {
+      return "12:00 AM - ${timeFormat.format(endDate)}";
+    }
+    // All days in between
+    else {
+      return "All Day";
+    }
+  }
+
+  // Delete a volunteers event from calendar
   void deleteUnavailability(int eventID) {
     _loadingState.add(RequestState.loading());
     (() async {
@@ -191,6 +212,7 @@ class CalendarViewModel extends FireAppViewModel
     _navigate.add(CalendarNavigation.eventDetail(event));
   }
 
+  //
   void updateSelectedMonth(int month) {
     if (month < 1 && month > 12) {
       return;
@@ -211,5 +233,7 @@ class CalendarViewModel extends FireAppViewModel
     _selectedYear.close();
     _navigate.close();
     _loadingState.close();
+    _displayEvents.close();
+    _unavailabilityEvents.close();
   }
 }
