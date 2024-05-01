@@ -6,6 +6,7 @@ import 'package:fireapp/domain/models/role_response.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/models/volunteer_listing.dart';
 import 'package:fireapp/domain/models/dto/volunteer_information_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -101,4 +102,20 @@ abstract class RestClient {
       @Body() UnavailabilityEventPost newEvent
       );
 
+  @DELETE("/v2/volunteers/{userId}/unavailability/{eventID}")
+  Future<void> deleteUnavailabilityEvent(
+      @Path("userId") int userId,
+      @Path("eventID") int eventID
+      );
+
+  @PUT("/v2/volunteers/{userId}/unavailability/{eventID}")
+  Future<void> editUnavailabilityEvent(
+      @Path("userId") int userId,
+      @Path("eventID") int eventID,
+      @Body() UnavailabilityEventPost event
+      );
+  @GET("/v2/volunteers/{userId}/unavailability")
+  Future<List<UnavailabilityTime>> getUnavailabilityEvents(
+      @Path("userId") int userId
+      );
 }
