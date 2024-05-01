@@ -147,11 +147,18 @@ class CalendarViewModel extends FireAppViewModel
       final numDays = endDate.difference(startDate).inDays;
       // For each day in the event
       for (int i = 0; i <= numDays; i++) {
+        var currentDate = startDate;
+        currentDate = currentDate.add(Duration(days: i));
         String displayTimeLabel =
             getDisplayTimeLabel(i, numDays, startDate, endDate);
-        displayEventList
-            .add(CalendarEvent(event: event, displayTime: displayTimeLabel));
+        displayEventList.add(CalendarEvent(
+            event: event,
+            displayTime: displayTimeLabel,
+            displayDate: currentDate));
       }
+    }
+    for (int i = 0; i < displayEventList.length; i++){
+      print(displayEventList[i]);
     }
     return displayEventList;
   }
