@@ -1,5 +1,6 @@
 import 'package:fireapp/data/client/unavailability_client.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../models/unavailability/unavailability_time.dart';
@@ -18,18 +19,18 @@ class UnavailabilityRepository {
   }
 
   //TODO get list of all unavailability events from user
-  void getUnavailabilityEvents(int userId) {
-    return;
+  Future<List<UnavailabilityTime>> getUnavailabilityEvents(int userId) {
+    return unavailabilityClient.getUnavailabilityEvents(userId);
   }
 
-  //TODO edit a user's specific unavailability event
-  void editUnavailabilityEvent(
-      int userId, int eventID, UnavailabilityTime event) {
-    return;
+  //Send packet to client to edit a user's specific unavailability event
+  Future <void> editUnavailabilityEvent(
+      int userId, int eventID, UnavailabilityEventPost event) {
+    return unavailabilityClient.editUnavailabilityEvent(userId, eventID, event);
   }
 
-  //TODO delete a user's specific unavailability event
-  void deleteUnavailabilityEvent(int userId, int eventID) {
-    return;
+  //Send packet to client to delete a user's specific unavailability event
+  Future<void> deleteUnavailabilityEvent(int userId, int eventID) {
+    return unavailabilityClient.deleteUnavailabilityEvent(userId, eventID);
   }
 }
