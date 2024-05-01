@@ -157,9 +157,6 @@ class CalendarViewModel extends FireAppViewModel
             displayDate: currentDate));
       }
     }
-    for (int i = 0; i < displayEventList.length; i++){
-      print(displayEventList[i]);
-    }
     return displayEventList;
   }
 
