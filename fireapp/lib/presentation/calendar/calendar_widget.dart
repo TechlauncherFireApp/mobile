@@ -7,6 +7,7 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import '../../domain/models/calendar_event.dart';
 import '../../pages/Calendar/calendarForm.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
@@ -56,6 +57,11 @@ class _CalendarState extends FireAppState<CalendarView>
   String _selectedMonth = DateFormat('MMM yyyy').format(DateTime.now());
   DateTime _selectedDate = DateTime.now();
 
+  @override
+  void initState() {
+    super.initState();
+    viewModel.loadAndSetDisplayEvents();
+  }
 
   @override
   void handleNavigationEvent(CalendarNavigation event) {
@@ -67,6 +73,7 @@ class _CalendarState extends FireAppState<CalendarView>
         }
     );
   }
+
   Widget _buildEventCard(String title, String timeRange) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -110,45 +117,23 @@ class _CalendarState extends FireAppState<CalendarView>
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-        child: ListView(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Apr', // Changed to lowercase abbreviated month
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Text(
-                          '27', // Display day in a larger font
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: _buildEventCard('Meeting', '2pm - 4pm'),
-                ),
-              ],
-            ),
-            // Add more event rows here
-          ],
+        child: StreamBuilder<List<CalendarEvent>>(
+          stream: viewModel.displayEventsStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text("No events to display"));
+            }
+            return ListView(
+              children: snapshot.data!.map((event) =>
+                  _buildEventCard(event.event.title,
+                      "${DateFormat('h:mm a').format(
+                          event.event.startTime)} - ${DateFormat('h:mm a')
+                          .format(event.event.endTime)}")).toList(),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -163,8 +148,6 @@ class _CalendarState extends FireAppState<CalendarView>
   }
 
 
-
-
   void _showMonthPicker(BuildContext context) {
     showDialog(
       context: context,
@@ -173,7 +156,7 @@ class _CalendarState extends FireAppState<CalendarView>
           content: SizedBox(
             width: double.maxFinite,
             child: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+              builder: (BuildContext context, StateSetter dialogSetState) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -183,7 +166,7 @@ class _CalendarState extends FireAppState<CalendarView>
                         IconButton(
                           icon: const Icon(Icons.arrow_left),
                           onPressed: () {
-                            setState(() {
+                            dialogSetState(() {
                               _selectedDate = DateTime(
                                   _selectedDate.year - 1, _selectedDate.month);
                             });
@@ -197,7 +180,7 @@ class _CalendarState extends FireAppState<CalendarView>
                         IconButton(
                           icon: const Icon(Icons.arrow_right),
                           onPressed: () {
-                            setState(() {
+                            dialogSetState(() {
                               _selectedDate = DateTime(
                                   _selectedDate.year + 1, _selectedDate.month);
                             });
@@ -243,23 +226,17 @@ class _CalendarState extends FireAppState<CalendarView>
           ),
         );
       },
-    ).then((newDate) {
-      if (newDate != null) {
+    ).then((selectedDate) {
+      if (selectedDate != null) {
         setState(() {
-          _selectedDate = newDate;
+          _selectedDate = selectedDate as DateTime;
           _selectedMonth = DateFormat('MMM yyyy').format(_selectedDate);
+          viewModel.updateSelectedYear(_selectedDate.year);
+          viewModel.updateSelectedMonth(_selectedDate.month);
+          viewModel
+              .loadAndSetDisplayEvents(); // Ensure events are reloaded when new date is selected
         });
       }
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
