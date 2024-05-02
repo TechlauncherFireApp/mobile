@@ -68,36 +68,83 @@ class _CalendarState extends FireAppState<CalendarView>
     event.when(
         eventDetail: (eventId) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => UnavailabilityForm()
+              builder: (context) => const UnavailabilityForm()
           ));
         }
     );
   }
 
-  Widget _buildEventCard(String title, String timeRange) {
+  Map<DateTime, List<CalendarEvent>> groupEventsByDate(List<CalendarEvent> events) {
+    Map<DateTime, List<CalendarEvent>> groupedEvents = {};
+    for (var event in events) {
+      DateTime dateOnly = DateTime(event.displayDate.year, event.displayDate.month, event.displayDate.day);
+      groupedEvents.putIfAbsent(dateOnly, () => []).add(event);
+    }
+    return groupedEvents;
+  }
+
+  Widget buildEvents(List<CalendarEvent> events) {
+    var groupedEvents = groupEventsByDate(events);
+    List<Widget> eventWidgets = [];
+    bool isFirstGroup = true;
+
+    for (var entry in groupedEvents.entries) {
+      if (!isFirstGroup) {
+        eventWidgets.add(const SizedBox(height: 20));
+      }
+      isFirstGroup = false;
+      List<Widget> dayEvents = [
+        for (var event in entry.value) _buildEventCard(event)
+      ];
+
+      eventWidgets.add(Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 60,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat('MMM').format(entry.key).toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  DateFormat('d').format(entry.key),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(children: dayEvents),
+          ),
+        ],
+      ));
+    }
+
+    return Column(children: eventWidgets);
+  }
+
+  Widget _buildEventCard(CalendarEvent event) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: ListTile(
-        title: Text(title),
-        subtitle: Text(timeRange),
+        title: Text(event.event.title),
+        subtitle: Text(event.displayTime),
         trailing: PopupMenuButton<String>(
-          onSelected: (value) {},
-          itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<String>>[
-            const PopupMenuItem<String>(
-              value: 'Edit',
-              child: Text('Edit'),
-            ),
-            const PopupMenuItem<String>(
-              value: 'Delete',
-              child: Text('Delete'),
-            ),
+          onSelected: (value) {
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
+            const PopupMenuItem<String>(value: 'Delete', child: Text('Delete')),
           ],
         ),
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +154,7 @@ class _CalendarState extends FireAppState<CalendarView>
           onPressed: () => _showMonthPicker(context),
           child: Text(
             _selectedMonth,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           ),
         ),
         backgroundColor: Colors.white,
@@ -126,12 +169,48 @@ class _CalendarState extends FireAppState<CalendarView>
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text("No events to display"));
             }
-            return ListView(
-              children: snapshot.data!.map((event) =>
-                  _buildEventCard(event.event.title,
-                      "${DateFormat('h:mm a').format(
-                          event.event.startTime)} - ${DateFormat('h:mm a')
-                          .format(event.event.endTime)}")).toList(),
+            // Sort events by date
+            var sortedEvents = snapshot.data!
+              ..sort((a, b) => a.displayDate.compareTo(b.displayDate));
+
+            var groupedEvents = groupEventsByDate(sortedEvents);
+
+            return ListView.builder(
+              itemCount: groupedEvents.length,
+              itemBuilder: (context, index) {
+                var entry = groupedEvents.entries.elementAt(index);
+                return Container(
+                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 60,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              DateFormat('MMM').format(entry.key).toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              DateFormat('d').format(entry.key),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: entry.value.map((event) => _buildEventCard(event)).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           },
         ),
@@ -140,12 +219,14 @@ class _CalendarState extends FireAppState<CalendarView>
         child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => UnavailabilityFormPage())
+              MaterialPageRoute(builder: (context) => const UnavailabilityFormPage())
           );
         },
       ),
     );
   }
+
+
 
 
   void _showMonthPicker(BuildContext context) {
