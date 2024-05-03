@@ -12,10 +12,8 @@ import '../../pages/Calendar/calendarForm.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
 
-
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +35,16 @@ class CalendarPage extends StatelessWidget {
   }
 }
 
-
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
-
 
   @override
   State createState() => _CalendarState();
 }
 
-
 class _CalendarState extends FireAppState<CalendarView>
     with Navigable<CalendarNavigation, CalendarView>
     implements ViewModelHolder<CalendarViewModel> {
-
-
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
   String _selectedMonth = DateFormat('MMM yyyy').format(DateTime.now());
@@ -65,19 +58,18 @@ class _CalendarState extends FireAppState<CalendarView>
 
   @override
   void handleNavigationEvent(CalendarNavigation event) {
-    event.when(
-        eventDetail: (eventId) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const UnavailabilityForm()
-          ));
-        }
-    );
+    event.when(eventDetail: (eventId) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const UnavailabilityForm()));
+    });
   }
 
-  Map<DateTime, List<CalendarEvent>> groupEventsByDate(List<CalendarEvent> events) {
+  Map<DateTime, List<CalendarEvent>> groupEventsByDate(
+      List<CalendarEvent> events) {
     Map<DateTime, List<CalendarEvent>> groupedEvents = {};
     for (var event in events) {
-      DateTime dateOnly = DateTime(event.displayDate.year, event.displayDate.month, event.displayDate.day);
+      DateTime dateOnly = DateTime(event.displayDate.year,
+          event.displayDate.month, event.displayDate.day);
       groupedEvents.putIfAbsent(dateOnly, () => []).add(event);
     }
     return groupedEvents;
@@ -108,7 +100,8 @@ class _CalendarState extends FireAppState<CalendarView>
                 Text(
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
@@ -129,17 +122,24 @@ class _CalendarState extends FireAppState<CalendarView>
   }
 
   Widget _buildEventCard(CalendarEvent event) {
+    final title = event.event.title;
+    final displayTime = event.displayTime;
+    final eventID = event.event.eventId;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: ListTile(
-        title: Text(event.event.title),
-        subtitle: Text(event.displayTime),
+        title: Text(title),
+        subtitle: Text(displayTime),
         trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-          },
+          onSelected: (value) {},
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
-            const PopupMenuItem<String>(value: 'Delete', child: Text('Delete')),
+            PopupMenuItem<String>(
+              value: 'Delete',
+              child: Text('Delete'),
+              onTap: () => viewModel.deleteUnavailability(eventID),
+            ),
           ],
         ),
       ),
@@ -154,7 +154,8 @@ class _CalendarState extends FireAppState<CalendarView>
           onPressed: () => _showMonthPicker(context),
           child: Text(
             _selectedMonth,
-            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           ),
         ),
         backgroundColor: Colors.white,
@@ -180,7 +181,8 @@ class _CalendarState extends FireAppState<CalendarView>
               itemBuilder: (context, index) {
                 var entry = groupedEvents.entries.elementAt(index);
                 return Container(
-                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: 10),
+                  margin:
+                      EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -192,7 +194,8 @@ class _CalendarState extends FireAppState<CalendarView>
                             Text(
                               DateFormat('MMM').format(entry.key).toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               DateFormat('d').format(entry.key),
@@ -204,7 +207,9 @@ class _CalendarState extends FireAppState<CalendarView>
                       ),
                       Expanded(
                         child: Column(
-                          children: entry.value.map((event) => _buildEventCard(event)).toList(),
+                          children: entry.value
+                              .map((event) => _buildEventCard(event))
+                              .toList(),
                         ),
                       ),
                     ],
@@ -218,16 +223,12 @@ class _CalendarState extends FireAppState<CalendarView>
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const UnavailabilityFormPage())
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const UnavailabilityFormPage()));
         },
       ),
     );
   }
-
-
-
 
   void _showMonthPicker(BuildContext context) {
     showDialog(
@@ -274,18 +275,19 @@ class _CalendarState extends FireAppState<CalendarView>
                       child: GridView.builder(
                         shrinkWrap: true,
                         itemCount: 12,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          String month = DateFormat('MMM').format(
-                              DateTime(_selectedDate.year, index + 1));
+                          String month = DateFormat('MMM')
+                              .format(DateTime(_selectedDate.year, index + 1));
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pop(DateTime(
-                                  _selectedDate.year, index + 1));
+                              Navigator.of(context)
+                                  .pop(DateTime(_selectedDate.year, index + 1));
                             },
                             child: Container(
                               padding: const EdgeInsets.all(8),
