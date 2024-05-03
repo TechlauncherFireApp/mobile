@@ -142,27 +142,24 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
     // Check if this card is the last one in the list
     final bool isLastCard = index == totalEvents - 1;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16), // Add default bottom margin
-      child: Card(
-        color: cardColor,
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        child: ListTile(
-          title: Text(title),
-          subtitle: Text(displayTime),
-          trailing: PopupMenuButton<String>(
-            onSelected: (value) {},
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
-              PopupMenuItem<String>(
-                value: 'Delete',
-                child: const Text('Delete'),
-                onTap: () {
-                  viewModel.deleteUnavailability(eventId);
-                },
-              ),
-            ],
-          ),
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text(displayTime),
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) {},
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
+            PopupMenuItem<String>(
+              value: 'Delete',
+              child: const Text('Delete'),
+              onTap: () {
+                viewModel.deleteUnavailability(eventId);
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -203,11 +200,11 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
               itemBuilder: (context, index) {
                 var entry = groupedEvents.entries.elementAt(index);
                 return Container(
-                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: index == groupedEvents.length - 1 ? 70 : 10), // 在最后一张卡片下方添加额外的空间
+                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: index == groupedEvents.length - 1 ? 70 : 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 60,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
