@@ -1,4 +1,5 @@
 import 'package:fireapp/base/widget.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/calendar/calendar_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/style/theme.dart';
@@ -17,19 +18,9 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const SafeArea(
+    return const Scaffold(
+      body: SafeArea(
         child: CalendarView(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        //TODO navigation refactor - carried from old code
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CalendarFormRoute()),
-          );
-        },
       ),
     );
   }
@@ -77,10 +68,10 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
   }
 
   @override
-  void handleNavigationEvent(CalendarNavigation event) {
-    event.when(eventDetail: (eventId) {
+  void handleNavigationEvent(CalendarNavigation navEvent) {
+    navEvent.when(eventDetail: (event) {
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const UnavailabilityForm()));
+          MaterialPageRoute(builder: (context) => UnavailabilityFormPage(event: event)));
     });
   }
 
@@ -253,8 +244,8 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const UnavailabilityFormPage()));
+          var event = UnavailabilityTime(eventId: -1, userId: -1, title: "", periodicity: 0, startTime: DateTime.now(), endTime: DateTime.now());
+          viewModel.editEventNavigate(event);
         },
       ),
     );

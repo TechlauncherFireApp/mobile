@@ -13,10 +13,12 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import '../../domain/models/unavailability/unavailability_time.dart';
 import '../../domain/request_state.dart';
 
 class UnavailabilityFormPage extends StatelessWidget {
-  const UnavailabilityFormPage({super.key});
+  final UnavailabilityTime event;
+  const UnavailabilityFormPage({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
