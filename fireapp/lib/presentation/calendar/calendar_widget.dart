@@ -42,11 +42,31 @@ class CalendarView extends StatefulWidget {
   State createState() => _CalendarState();
 }
 
-class _CalendarState extends FireAppState<CalendarView>
-    with Navigable<CalendarNavigation, CalendarView>
-    implements ViewModelHolder<CalendarViewModel> {
+class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarNavigation, CalendarView> implements ViewModelHolder<CalendarViewModel> {
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
+  final List<Color> colorPalette = [
+    const Color(0xFFB9DEEC), // Light Blue
+    const Color(0xFFCBCBEA), // Lavender
+    const Color(0xFFFDD2D7), // Pink
+    const Color(0xFFFCFCDC), // Light Yellow
+    const Color(0xFFEFEFEF), // Light Gray
+    const Color(0xFFF6CEBC),  // Light Orange
+    const Color(0xFFCFDEE3),
+    const Color(0xFFCBE4F1),
+  ];
+  int _nextColorIndex = 0;
+
+  final Map<String, Color> eventColorMap = {};
+
+  Color? getColorForEvent(String eventId) {
+    if (!eventColorMap.containsKey(eventId)) {
+      eventColorMap[eventId] = colorPalette[_nextColorIndex];
+      _nextColorIndex = (_nextColorIndex + 1) % colorPalette.length;
+    }
+    return eventColorMap[eventId];
+  }
+
   String _selectedMonth = DateFormat('MMM yyyy').format(DateTime.now());
   DateTime _selectedDate = DateTime.now();
 
@@ -101,12 +121,12 @@ class _CalendarState extends FireAppState<CalendarView>
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -124,9 +144,11 @@ class _CalendarState extends FireAppState<CalendarView>
   Widget _buildEventCard(CalendarEvent event) {
     final title = event.event.title;
     final displayTime = event.displayTime;
-    final eventID = event.event.eventId;
+    final eventId = event.event.eventId;
+    final cardColor = getColorForEvent(eventId.toString());
 
     return Card(
+      color: cardColor,
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: ListTile(
         title: Text(title),
@@ -137,8 +159,10 @@ class _CalendarState extends FireAppState<CalendarView>
             const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
             PopupMenuItem<String>(
               value: 'Delete',
-              child: Text('Delete'),
-              onTap: () => viewModel.deleteUnavailability(eventID),
+              child: const Text('Delete'),
+              onTap: () {
+                viewModel.deleteUnavailability(eventId);
+              },
             ),
           ],
         ),

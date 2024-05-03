@@ -190,13 +190,16 @@ class CalendarViewModel extends FireAppViewModel
         var userID =
             (await _authenticationRepository.getCurrentSession())?.userId;
 
-        // Check if userId is null and throw an exception if it is
         if (userID == null) {
           throw Exception(
               'User ID is null. Cannot update without a valid user ID.');
         }
         await _unavailabilityRepository.deleteUnavailabilityEvent(
             userID, eventID);
+
+        // Remove the deleted event from the display events
+        _displayEvents.add(_displayEvents.value.where((event) => event.event.eventId != eventID).toList());
+
         _loadingState.add(RequestState.success(null));
       } catch (e, stacktrace) {
         logger.e(e, stackTrace: stacktrace);
@@ -204,6 +207,7 @@ class CalendarViewModel extends FireAppViewModel
       }
     })();
   }
+
 
   void editEventNavigate(UnavailabilityTime event) {
     _navigate.add(CalendarNavigation.eventDetail(event));
