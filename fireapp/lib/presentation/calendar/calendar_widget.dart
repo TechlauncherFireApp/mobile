@@ -106,7 +106,8 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
       }
       isFirstGroup = false;
       List<Widget> dayEvents = [
-        for (var event in entry.value) _buildEventCard(event)
+        for (int i = 0; i < entry.value.length; i++)
+          _buildEventCard(entry.value[i], i, entry.value.length)
       ];
 
       eventWidgets.add(Row(
@@ -141,30 +142,36 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
     return Column(children: eventWidgets);
   }
 
-  Widget _buildEventCard(CalendarEvent event) {
+  Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
     final title = event.event.title;
     final displayTime = event.displayTime;
     final eventId = event.event.eventId;
     final cardColor = getColorForEvent(eventId.toString());
 
-    return Card(
-      color: cardColor,
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: ListTile(
-        title: Text(title),
-        subtitle: Text(displayTime),
-        trailing: PopupMenuButton<String>(
-          onSelected: (value) {},
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
-            PopupMenuItem<String>(
-              value: 'Delete',
-              child: const Text('Delete'),
-              onTap: () {
-                viewModel.deleteUnavailability(eventId);
-              },
-            ),
-          ],
+    // Check if this card is the last one in the list
+    final bool isLastCard = index == totalEvents - 1;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16), // Add default bottom margin
+      child: Card(
+        color: cardColor,
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        child: ListTile(
+          title: Text(title),
+          subtitle: Text(displayTime),
+          trailing: PopupMenuButton<String>(
+            onSelected: (value) {},
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
+              PopupMenuItem<String>(
+                value: 'Delete',
+                child: const Text('Delete'),
+                onTap: () {
+                  viewModel.deleteUnavailability(eventId);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -205,8 +212,7 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
               itemBuilder: (context, index) {
                 var entry = groupedEvents.entries.elementAt(index);
                 return Container(
-                  margin:
-                      EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: 10),
+                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: index == groupedEvents.length - 1 ? 70 : 10), // 在最后一张卡片下方添加额外的空间
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -231,9 +237,9 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
                       ),
                       Expanded(
                         child: Column(
-                          children: entry.value
-                              .map((event) => _buildEventCard(event))
-                              .toList(),
+                          children: List.generate(entry.value.length, (eventIndex) {
+                            return _buildEventCard(entry.value[eventIndex], eventIndex, entry.value.length);
+                          }),
                         ),
                       ),
                     ],
@@ -253,6 +259,7 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
       ),
     );
   }
+
 
   void _showMonthPicker(BuildContext context) {
     showDialog(
