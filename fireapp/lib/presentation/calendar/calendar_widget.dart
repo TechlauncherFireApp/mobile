@@ -3,7 +3,6 @@ import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/calendar/calendar_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
 import 'package:fireapp/style/theme.dart';
-import 'package:fireapp/widgets/fill_width.dart';
 import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +11,7 @@ import '../../domain/models/calendar_event.dart';
 import '../../pages/Calendar/calendarForm.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
@@ -33,7 +33,9 @@ class CalendarView extends StatefulWidget {
   State createState() => _CalendarState();
 }
 
-class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarNavigation, CalendarView> implements ViewModelHolder<CalendarViewModel> {
+class _CalendarState extends FireAppState<CalendarView>
+    with Navigable<CalendarNavigation, CalendarView>
+    implements ViewModelHolder<CalendarViewModel> {
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
   final List<Color> colorPalette = [
@@ -42,7 +44,7 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
     const Color(0xFFFDD2D7), // Pink
     const Color(0xFFFCFCDC), // Light Yellow
     const Color(0xFFEFEFEF), // Light Gray
-    const Color(0xFFF6CEBC),  // Light Orange
+    const Color(0xFFF6CEBC), // Light Orange
     const Color(0xFFCFDEE3),
     const Color(0xFFCBE4F1),
   ];
@@ -70,8 +72,8 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
   @override
   void handleNavigationEvent(CalendarNavigation navEvent) {
     navEvent.when(eventDetail: (event) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => UnavailabilityFormPage(event: event)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => UnavailabilityFormPage(event: event)));
     });
   }
 
@@ -93,7 +95,7 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
 
     for (var entry in groupedEvents.entries) {
       if (!isFirstGroup) {
-        eventWidgets.add(const SizedBox(height: 20));
+        eventWidgets.add(const SizedBox(height: 16));
       }
       isFirstGroup = false;
       List<Widget> dayEvents = [
@@ -118,7 +120,8 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -134,9 +137,10 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
   }
 
   Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
-    final title = event.event.title;
+    final unavailabilityEvent = event.event;
+    final title = unavailabilityEvent.title;
     final displayTime = event.displayTime;
-    final eventId = event.event.eventId;
+    final eventId = unavailabilityEvent.eventId;
     final cardColor = getColorForEvent(eventId.toString());
 
     // Check if this card is the last one in the list
@@ -151,10 +155,17 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
         trailing: PopupMenuButton<String>(
           onSelected: (value) {},
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
+            PopupMenuItem<String>(
+                value: 'Edit',
+            onTap: () {
+              viewModel.editEventNavigate(unavailabilityEvent);
+            },
+                child: Text(
+                    AppLocalizations.of(context)?.calendarItemEdit ?? "Edit")),
             PopupMenuItem<String>(
               value: 'Delete',
-              child: const Text('Delete'),
+              child: Text(
+                  AppLocalizations.of(context)?.calendarItemDelete ?? "Delete"),
               onTap: () {
                 viewModel.deleteUnavailability(eventId);
               },
@@ -200,7 +211,9 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
               itemBuilder: (context, index) {
                 var entry = groupedEvents.entries.elementAt(index);
                 return Container(
-                  margin: EdgeInsets.only(top: index == 0 ? 10 : 20, bottom: index == groupedEvents.length - 1 ? 70 : 10),
+                  margin: EdgeInsets.only(
+                      top: index == 0 ? 10 : 20,
+                      bottom: index == groupedEvents.length - 1 ? 70 : 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -225,8 +238,10 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
                       ),
                       Expanded(
                         child: Column(
-                          children: List.generate(entry.value.length, (eventIndex) {
-                            return _buildEventCard(entry.value[eventIndex], eventIndex, entry.value.length);
+                          children:
+                              List.generate(entry.value.length, (eventIndex) {
+                            return _buildEventCard(entry.value[eventIndex],
+                                eventIndex, entry.value.length);
                           }),
                         ),
                       ),
@@ -241,13 +256,18 @@ class _CalendarState extends FireAppState<CalendarView> with Navigable<CalendarN
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          var event = UnavailabilityTime(eventId: -1, userId: -1, title: "", periodicity: 0, startTime: DateTime.now(), endTime: DateTime.now());
+          var event = UnavailabilityTime(
+              eventId: -1,
+              userId: -1,
+              title: "",
+              periodicity: 0,
+              startTime: DateTime.now(),
+              endTime: DateTime.now());
           viewModel.editEventNavigate(event);
         },
       ),
     );
   }
-
 
   void _showMonthPicker(BuildContext context) {
     showDialog(
