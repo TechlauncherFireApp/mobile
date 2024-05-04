@@ -134,6 +134,7 @@
 
 "calendarItemDelete": "Delete",
 "calendarItemEdit" : "Edit",
+"calendarNoItemsLabel": "No events to display",
 
 
   "addUnavailabilityTitle" : "Add Unavailability",

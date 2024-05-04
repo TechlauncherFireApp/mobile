@@ -2,13 +2,10 @@ import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/calendar/calendar_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
-import 'package:fireapp/style/theme.dart';
-import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../../domain/models/calendar_event.dart';
-import '../../pages/Calendar/calendarForm.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -143,9 +140,6 @@ class _CalendarState extends FireAppState<CalendarView>
     final eventId = unavailabilityEvent.eventId;
     final cardColor = getColorForEvent(eventId.toString());
 
-    // Check if this card is the last one in the list
-    final bool isLastCard = index == totalEvents - 1;
-
     return Card(
       color: cardColor,
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -198,7 +192,7 @@ class _CalendarState extends FireAppState<CalendarView>
               return const Center(child: CircularProgressIndicator());
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("No events to display"));
+              return Center(child: Text(AppLocalizations.of(context)?.calendarNoItemsLabel ?? "No events to display"));
             }
             // Sort events by date
             var sortedEvents = snapshot.data!
