@@ -73,14 +73,13 @@ class _CalendarState extends FireAppState<CalendarView>
   @override
   void handleNavigationEvent(CalendarNavigation navEvent) {
     // //Navigate to the form, and reload when return
-    navEvent.when(eventDetail: (event) {
-      Navigator.of(context)
-          .push(
+    navEvent.when(
+        eventDetail: (event) {
+      Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => UnavailabilityFormPage(event: event),
         ),
-      )
-          .then((result) {
+      ).then((result) {
         if (result == 'reload') {
           viewModel.loadAndSetDisplayEvents();
         }
@@ -91,12 +90,14 @@ class _CalendarState extends FireAppState<CalendarView>
 // Group all filtered display events to their day
   Map<DateTime, List<CalendarEvent>> groupEventsByDate(
       List<CalendarEvent> events) {
+
     Map<DateTime, List<CalendarEvent>> groupedEvents = {};
     for (var event in events) {
       DateTime dateOnly = DateTime(event.displayDate.year,
           event.displayDate.month, event.displayDate.day);
       groupedEvents.putIfAbsent(dateOnly, () => []).add(event);
     }
+
     return groupedEvents;
   }
 
@@ -206,7 +207,9 @@ class _CalendarState extends FireAppState<CalendarView>
           stream: viewModel.displayEventsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator()
+              );
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
