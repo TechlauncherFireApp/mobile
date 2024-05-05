@@ -14,11 +14,11 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import '../../domain/models/unavailability/unavailability_time.dart';
 import '../../domain/request_state.dart';
 
 class UnavailabilityFormPage extends StatelessWidget {
   final UnavailabilityTime event;
-
   const UnavailabilityFormPage({super.key, required this.event});
 
   @override
@@ -60,7 +60,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
   @override
   void handleNavigationEvent(UnavailabilityFormNavigation event) {
     if (event is Calendar) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop("reload");
       return;
     }
   }
