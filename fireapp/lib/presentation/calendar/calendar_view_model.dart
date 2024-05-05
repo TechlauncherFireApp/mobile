@@ -169,7 +169,7 @@ class CalendarViewModel extends FireAppViewModel
       return "${timeFormat.format(startDate)} - ${timeFormat.format(endDate)}";
     }
     // Event spans multiple days, and this is the first day
-    else if (i == 0 && numDays > 1) {
+    else if (i == 0 && numDays > 0) {
       return "${timeFormat.format(startDate)} - 11:59 PM";
     }
     // Event spans multiple days, and this is the last day
