@@ -129,13 +129,15 @@ class _CalendarState extends FireAppState<CalendarView>
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
               ],
             ),
@@ -197,7 +199,8 @@ class _CalendarState extends FireAppState<CalendarView>
           child: Text(
             _selectedMonthLabel,
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24
+            ),
           ),
         ),
         backgroundColor: Colors.white,
@@ -215,7 +218,9 @@ class _CalendarState extends FireAppState<CalendarView>
               return Center(
                   child: Text(
                       AppLocalizations.of(context)?.calendarNoItemsLabel ??
-                          "No events to display"));
+                          "No events to display"
+                  )
+              );
             }
             // Sort events by date
             var sortedEvents = snapshot.data!
@@ -230,7 +235,8 @@ class _CalendarState extends FireAppState<CalendarView>
                 return Container(
                   margin: EdgeInsets.only(
                       top: index == 0 ? 10 : 20,
-                      bottom: index == groupedEvents.length - 1 ? 70 : 10),
+                      bottom: index == groupedEvents.length - 1 ? 70 : 10
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -243,7 +249,8 @@ class _CalendarState extends FireAppState<CalendarView>
                               DateFormat('MMM').format(entry.key).toUpperCase(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontSize: 16, fontWeight: FontWeight.bold
+                              ),
                             ),
                             Text(
                               DateFormat('d').format(entry.key),
@@ -280,7 +287,8 @@ class _CalendarState extends FireAppState<CalendarView>
               title: "",
               periodicity: 0,
               startTime: DateTime.now(),
-              endTime: DateTime.now());
+              endTime: DateTime.now()
+          );
           viewModel.editEventNavigate(newEvent);
         },
       ),
@@ -308,21 +316,24 @@ class _CalendarState extends FireAppState<CalendarView>
                           onPressed: () {
                             dialogSetState(() {
                               _selectedDate = DateTime(
-                                  _selectedDate.year - 1, _selectedDate.month);
+                                  _selectedDate.year - 1, _selectedDate.month
+                              );
                             });
                           },
                         ),
                         Text(
                           '${_selectedDate.year}',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                              fontWeight: FontWeight.bold, fontSize: 20
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.arrow_right),
                           onPressed: () {
                             dialogSetState(() {
                               _selectedDate = DateTime(
-                                  _selectedDate.year + 1, _selectedDate.month);
+                                  _selectedDate.year + 1, _selectedDate.month
+                              );
                             });
                           },
                         ),
