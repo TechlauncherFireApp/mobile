@@ -48,7 +48,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
   @override
   void handleNavigationEvent(UnavailabilityFormNavigation event) {
     if (event is Calendar) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop("reload");
       return;
     }
   }

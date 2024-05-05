@@ -69,10 +69,18 @@ class _CalendarState extends FireAppState<CalendarView>
   @override
   void handleNavigationEvent(CalendarNavigation navEvent) {
     navEvent.when(eventDetail: (event) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UnavailabilityFormPage(event: event)));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => UnavailabilityFormPage(event: event),
+        ),
+      ).then((result) {
+        if (result == 'reload') {
+          viewModel.loadAndSetDisplayEvents();
+        }
+      });
     });
   }
+
 
   Map<DateTime, List<CalendarEvent>> groupEventsByDate(
       List<CalendarEvent> events) {
