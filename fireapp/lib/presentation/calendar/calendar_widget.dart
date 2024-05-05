@@ -1,3 +1,4 @@
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/calendar/calendar_navigation.dart';
@@ -81,16 +82,12 @@ class _CalendarState extends FireAppState<CalendarView>
   }
 
   // Construct the list of events for selected month
+  // Construct the list of events for selected month
   Widget buildEvents(List<CalendarEvent> events) {
     var groupedEvents = groupEventsByDate(events);
     List<Widget> eventWidgets = [];
-    bool isFirstGroup = true;
 
     for (var entry in groupedEvents.entries) {
-      if (!isFirstGroup) {
-        eventWidgets.add(const SizedBox(height: 16));
-      }
-      isFirstGroup = false;
       List<Widget> dayEvents = [
         for (int i = 0; i < entry.value.length; i++)
           _buildEventCard(entry.value[i], i, entry.value.length)
@@ -108,15 +105,13 @@ class _CalendarState extends FireAppState<CalendarView>
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold
-                  ),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold
-                  ),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -128,8 +123,10 @@ class _CalendarState extends FireAppState<CalendarView>
       ));
     }
 
-    return Column(children: eventWidgets);
+    return Column(children: eventWidgets.spacedBy(16));
   }
+
+
 
   Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
     // Parse parameters from event
