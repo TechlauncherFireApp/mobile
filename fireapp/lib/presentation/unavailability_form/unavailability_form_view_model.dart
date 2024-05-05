@@ -47,6 +47,9 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   final BehaviorSubject<bool> _isFormValid = BehaviorSubject.seeded(false);
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
+  // Determine if in edit mode
+  bool isEditMode = false;
+
 // Method to check form validity (if form has all fields filled)
   void checkFormValidity() {
     bool isFormValid = titleController.text.isNotEmpty &&
@@ -67,8 +70,10 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   UnavailabilityFormViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
 
- loadForm(UnavailabilityTime event) async {
-    if (event.eventId >= 0) {
+  loadForm(UnavailabilityTime event) async {
+    isEditMode = event.eventId >= 0;
+    if (isEditMode) {
+      eventID = event.eventId;
       updateEventTitle(event.title);
       updateStartDate(event.startTime);
       updateEndDate(event.endTime);
@@ -78,9 +83,6 @@ class UnavailabilityFormViewModel extends FireAppViewModel
           TimeOfDay(hour: event.endTime.hour, minute: event.endTime.minute);
       updateStartTime(startTime);
       updateEndTime(endTime);
-
-    //   TODO: change to edit mode
-      eventID = event.eventId;
     }
   }
 
@@ -119,15 +121,22 @@ class UnavailabilityFormViewModel extends FireAppViewModel
           throw Exception('The start time must be before the end time.');
         }
 
-        var newEvent = UnavailabilityEventPost(
+        var event = UnavailabilityEventPost(
             title: titleController.text,
             start: startDateTime,
             end: endDateTime,
             periodicity: periodicity);
 
-        // Submit and navigate back to Calendar if successful.
-        await _unavailabilityRepository.createUnavailabilityEvent(
-            userID, newEvent);
+        if (isEditMode) {
+          print("EDITING");
+          await _unavailabilityRepository.editUnavailabilityEvent(
+              userID, eventID, event);
+        } else {
+          // Submit and navigate back to Calendar if successful.
+          await _unavailabilityRepository.createUnavailabilityEvent(
+              userID, event);
+        }
+
         _submissionState.add(RequestState.success(null));
         _navigate.add(const UnavailabilityFormNavigation.calendar());
       } catch (e, stacktrace) {
