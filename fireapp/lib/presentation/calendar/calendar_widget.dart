@@ -57,13 +57,16 @@ class _CalendarState extends FireAppState<CalendarView>
     return eventColorMap[eventId];
   }
 
-  String _selectedMonth = DateFormat('MMM yyyy').format(DateTime.now());
-  DateTime _selectedDate = DateTime.now();
+  late DateTime _selectedDate; //= DateTime.now();
+  late String _selectedMonthLabel; //= DateFormat('MMM yyyy').format(DateTime.now());
+
 
   @override
   void initState() {
     super.initState();
     viewModel.loadAndSetDisplayEvents();
+    _selectedDate = DateTime(viewModel.selectedYear.value,viewModel.selectedMonth.value);
+    _selectedMonthLabel = DateFormat('MMM yyyy').format(_selectedDate);
   }
 
   @override
@@ -185,7 +188,7 @@ class _CalendarState extends FireAppState<CalendarView>
         title: TextButton(
           onPressed: () => _showMonthPicker(context),
           child: Text(
-            _selectedMonth,
+            _selectedMonthLabel,
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           ),
@@ -354,7 +357,7 @@ class _CalendarState extends FireAppState<CalendarView>
       if (selectedDate != null) {
         setState(() {
           _selectedDate = selectedDate as DateTime;
-          _selectedMonth = DateFormat('MMM yyyy').format(_selectedDate);
+          _selectedMonthLabel = DateFormat('MMM yyyy').format(_selectedDate);
           viewModel.updateSelectedYear(_selectedDate.year);
           viewModel.updateSelectedMonth(_selectedDate.month);
           viewModel
