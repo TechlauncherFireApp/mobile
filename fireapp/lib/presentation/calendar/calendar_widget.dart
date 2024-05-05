@@ -35,27 +35,6 @@ class _CalendarState extends FireAppState<CalendarView>
     implements ViewModelHolder<CalendarViewModel> {
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
-  final List<Color> colorPalette = [
-    const Color(0xFFB9DEEC), // Light Blue
-    const Color(0xFFCBCBEA), // Lavender
-    const Color(0xFFFDD2D7), // Pink
-    const Color(0xFFFCFCDC), // Light Yellow
-    const Color(0xFFEFEFEF), // Light Gray
-    const Color(0xFFF6CEBC), // Light Orange
-    const Color(0xFFCFDEE3),
-    const Color(0xFFCBE4F1),
-  ];
-  int _nextColorIndex = 0;
-
-  final Map<String, Color> eventColorMap = {};
-  // Map a colour for the corresponding event
-  Color? getColorForEvent(String eventId) {
-    if (!eventColorMap.containsKey(eventId)) {
-      eventColorMap[eventId] = colorPalette[_nextColorIndex];
-      _nextColorIndex = (_nextColorIndex + 1) % colorPalette.length;
-    }
-    return eventColorMap[eventId];
-  }
 
   late DateTime _selectedDate;
   late String _selectedMonthLabel;
@@ -158,7 +137,7 @@ class _CalendarState extends FireAppState<CalendarView>
     final title = unavailabilityEvent.title;
     final displayTime = event.displayTime;
     final eventId = unavailabilityEvent.eventId;
-    final cardColor = getColorForEvent(eventId.toString());
+    final cardColor = viewModel.getColorForEvent(eventId.toString());
 
     return Card(
       color: cardColor,
