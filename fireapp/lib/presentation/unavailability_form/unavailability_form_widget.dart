@@ -14,7 +14,6 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import '../../domain/models/unavailability/unavailability_time.dart';
 import '../../domain/request_state.dart';
 
 class UnavailabilityFormPage extends StatelessWidget {
@@ -36,7 +35,6 @@ class UnavailabilityFormPage extends StatelessWidget {
 class UnavailabilityForm extends StatefulWidget {
   final UnavailabilityTime event;
 
-
   const UnavailabilityForm({super.key, required this.event});
 
   @override
@@ -48,11 +46,12 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
     implements ViewModelHolder<UnavailabilityFormViewModel> {
   @override
   UnavailabilityFormViewModel viewModel = GetIt.instance.get();
-
+  bool isEditMode = false;
   @override
   void initState() {
     super.initState();
     viewModel.loadForm(widget.event);
+    isEditMode = viewModel.isEditMode;
     // _viewModel = getIt<UnavailabilityFormViewModel>();
     // _
   }
@@ -78,6 +77,13 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                       stream: viewModel.submissionState,
                       builder: (context, data) {
                         final isFormValid = isFormValidSnapshot.data ?? false;
+                        final submitButtonLabel = !isEditMode
+                            ? (AppLocalizations.of(context)
+                                    ?.addUnavailabilityButton ??
+                                "Add Schedule")
+                            : (AppLocalizations.of(context)
+                            ?.editUnavailabilityButton ??
+                            "Add Edit");
                         return ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(40),
@@ -86,9 +92,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(AppLocalizations.of(context)
-                                      ?.addUnavailabilityButton ??
-                                  "Add Schedule"),
+                              Text(submitButtonLabel),
                               if (data is LoadingRequestState)
                                 SizedBox(
                                   height: 8,
@@ -98,16 +102,14 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                                               .primaryTextTheme
                                               .titleLarge
                                               ?.color ??
-                                          Colors.white)
-                                  ),
+                                          Colors.white)),
                                 )
                             ],
                           ),
                         );
                       },
                     );
-                  })
-          )
+                  }))
         ],
         children: [
           Form(
@@ -140,8 +142,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)
                                 ?.enterUnavailabilityStartDate,
-                          )
-                      );
+                          ));
                     }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedStartTime,
@@ -167,8 +168,7 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                             prefixIcon: const Icon(Icons.calendar_today),
                             labelText: AppLocalizations.of(context)
                                 ?.enterUnavailabilityEndDate,
-                          )
-                      );
+                          ));
                     }),
                 StreamFormField<TimeOfDay?>(
                     stream: viewModel.selectedEndTime,
