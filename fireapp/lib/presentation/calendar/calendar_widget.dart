@@ -105,13 +105,15 @@ class _CalendarState extends FireAppState<CalendarView>
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
               ],
             ),
