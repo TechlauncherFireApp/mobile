@@ -48,7 +48,7 @@ class _CalendarState extends FireAppState<CalendarView>
   int _nextColorIndex = 0;
 
   final Map<String, Color> eventColorMap = {};
-
+  // Map a colour for the corresponding event
   Color? getColorForEvent(String eventId) {
     if (!eventColorMap.containsKey(eventId)) {
       eventColorMap[eventId] = colorPalette[_nextColorIndex];
@@ -57,26 +57,30 @@ class _CalendarState extends FireAppState<CalendarView>
     return eventColorMap[eventId];
   }
 
-  late DateTime _selectedDate; //= DateTime.now();
-  late String _selectedMonthLabel; //= DateFormat('MMM yyyy').format(DateTime.now());
-
+  late DateTime _selectedDate;
+  late String _selectedMonthLabel;
 
   @override
   void initState() {
     super.initState();
+    // Load events and selected month
     viewModel.loadAndSetDisplayEvents();
-    _selectedDate = DateTime(viewModel.selectedYear.value,viewModel.selectedMonth.value);
+    _selectedDate =
+        DateTime(viewModel.selectedYear.value, viewModel.selectedMonth.value);
     _selectedMonthLabel = DateFormat('MMM yyyy').format(_selectedDate);
   }
 
   @override
   void handleNavigationEvent(CalendarNavigation navEvent) {
+    // //Navigate to the form, and reload when return
     navEvent.when(eventDetail: (event) {
-      Navigator.of(context).push(
+      Navigator.of(context)
+          .push(
         MaterialPageRoute(
           builder: (context) => UnavailabilityFormPage(event: event),
         ),
-      ).then((result) {
+      )
+          .then((result) {
         if (result == 'reload') {
           viewModel.loadAndSetDisplayEvents();
         }
@@ -84,7 +88,7 @@ class _CalendarState extends FireAppState<CalendarView>
     });
   }
 
-
+// Group all filtered display events to their day
   Map<DateTime, List<CalendarEvent>> groupEventsByDate(
       List<CalendarEvent> events) {
     Map<DateTime, List<CalendarEvent>> groupedEvents = {};
@@ -96,6 +100,7 @@ class _CalendarState extends FireAppState<CalendarView>
     return groupedEvents;
   }
 
+  // Construct the list of events for selected month
   Widget buildEvents(List<CalendarEvent> events) {
     var groupedEvents = groupEventsByDate(events);
     List<Widget> eventWidgets = [];
@@ -145,6 +150,7 @@ class _CalendarState extends FireAppState<CalendarView>
   }
 
   Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
+    // Parse parameters from event
     final unavailabilityEvent = event.event;
     final title = unavailabilityEvent.title;
     final displayTime = event.displayTime;
@@ -162,9 +168,9 @@ class _CalendarState extends FireAppState<CalendarView>
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             PopupMenuItem<String>(
                 value: 'Edit',
-            onTap: () {
-              viewModel.editEventNavigate(unavailabilityEvent);
-            },
+                onTap: () {
+                  viewModel.editEventNavigate(unavailabilityEvent);
+                },
                 child: Text(
                     AppLocalizations.of(context)?.calendarItemEdit ?? "Edit")),
             PopupMenuItem<String>(
@@ -203,7 +209,10 @@ class _CalendarState extends FireAppState<CalendarView>
               return const Center(child: CircularProgressIndicator());
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text(AppLocalizations.of(context)?.calendarNoItemsLabel ?? "No events to display"));
+              return Center(
+                  child: Text(
+                      AppLocalizations.of(context)?.calendarNoItemsLabel ??
+                          "No events to display"));
             }
             // Sort events by date
             var sortedEvents = snapshot.data!
@@ -261,19 +270,21 @@ class _CalendarState extends FireAppState<CalendarView>
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          var event = UnavailabilityTime(
+          // Make temp placeholder event and navigate to form
+          var newEvent = UnavailabilityTime(
               eventId: -1,
               userId: -1,
               title: "",
               periodicity: 0,
               startTime: DateTime.now(),
               endTime: DateTime.now());
-          viewModel.editEventNavigate(event);
+          viewModel.editEventNavigate(newEvent);
         },
       ),
     );
   }
 
+  // Month picker modal for selecting month and year
   void _showMonthPicker(BuildContext context) {
     showDialog(
       context: context,
