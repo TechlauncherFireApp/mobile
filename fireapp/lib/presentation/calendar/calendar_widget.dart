@@ -9,7 +9,7 @@ import '../../domain/models/calendar_event.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fireapp/base/date_contants.dart';
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
 
@@ -67,7 +67,7 @@ class _CalendarState extends FireAppState<CalendarView>
     viewModel.loadAndSetDisplayEvents();
     _selectedDate =
         DateTime(viewModel.selectedYear.value, viewModel.selectedMonth.value);
-    _selectedMonthLabel = DateFormat('MMM yyyy').format(_selectedDate);
+    _selectedMonthLabel = DateFormat(calendarAppBarPresentableDate).format(_selectedDate);
   }
 
   @override
