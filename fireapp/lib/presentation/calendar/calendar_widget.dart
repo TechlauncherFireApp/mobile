@@ -1,3 +1,4 @@
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/calendar/calendar_navigation.dart';
@@ -9,7 +10,7 @@ import '../../domain/models/calendar_event.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fireapp/base/date_contants.dart';
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
 
@@ -35,27 +36,6 @@ class _CalendarState extends FireAppState<CalendarView>
     implements ViewModelHolder<CalendarViewModel> {
   @override
   CalendarViewModel viewModel = GetIt.instance.get();
-  final List<Color> colorPalette = [
-    const Color(0xFFB9DEEC), // Light Blue
-    const Color(0xFFCBCBEA), // Lavender
-    const Color(0xFFFDD2D7), // Pink
-    const Color(0xFFFCFCDC), // Light Yellow
-    const Color(0xFFEFEFEF), // Light Gray
-    const Color(0xFFF6CEBC), // Light Orange
-    const Color(0xFFCFDEE3),
-    const Color(0xFFCBE4F1),
-  ];
-  int _nextColorIndex = 0;
-
-  final Map<String, Color> eventColorMap = {};
-  // Map a colour for the corresponding event
-  Color? getColorForEvent(String eventId) {
-    if (!eventColorMap.containsKey(eventId)) {
-      eventColorMap[eventId] = colorPalette[_nextColorIndex];
-      _nextColorIndex = (_nextColorIndex + 1) % colorPalette.length;
-    }
-    return eventColorMap[eventId];
-  }
 
   late DateTime _selectedDate;
   late String _selectedMonthLabel;
@@ -67,20 +47,19 @@ class _CalendarState extends FireAppState<CalendarView>
     viewModel.loadAndSetDisplayEvents();
     _selectedDate =
         DateTime(viewModel.selectedYear.value, viewModel.selectedMonth.value);
-    _selectedMonthLabel = DateFormat('MMM yyyy').format(_selectedDate);
+    _selectedMonthLabel = DateFormat(calendarAppBarPresentableDate).format(_selectedDate);
   }
 
   @override
   void handleNavigationEvent(CalendarNavigation navEvent) {
     // //Navigate to the form, and reload when return
-    navEvent.when(eventDetail: (event) {
-      Navigator.of(context)
-          .push(
+    navEvent.when(
+        eventDetail: (event) {
+      Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => UnavailabilityFormPage(event: event),
         ),
-      )
-          .then((result) {
+      ).then((result) {
         if (result == 'reload') {
           viewModel.loadAndSetDisplayEvents();
         }
@@ -91,26 +70,24 @@ class _CalendarState extends FireAppState<CalendarView>
 // Group all filtered display events to their day
   Map<DateTime, List<CalendarEvent>> groupEventsByDate(
       List<CalendarEvent> events) {
+
     Map<DateTime, List<CalendarEvent>> groupedEvents = {};
     for (var event in events) {
       DateTime dateOnly = DateTime(event.displayDate.year,
           event.displayDate.month, event.displayDate.day);
       groupedEvents.putIfAbsent(dateOnly, () => []).add(event);
     }
+
     return groupedEvents;
   }
 
   // Construct the list of events for selected month
+  // Construct the list of events for selected month
   Widget buildEvents(List<CalendarEvent> events) {
     var groupedEvents = groupEventsByDate(events);
     List<Widget> eventWidgets = [];
-    bool isFirstGroup = true;
 
     for (var entry in groupedEvents.entries) {
-      if (!isFirstGroup) {
-        eventWidgets.add(const SizedBox(height: 16));
-      }
-      isFirstGroup = false;
       List<Widget> dayEvents = [
         for (int i = 0; i < entry.value.length; i++)
           _buildEventCard(entry.value[i], i, entry.value.length)
@@ -128,13 +105,15 @@ class _CalendarState extends FireAppState<CalendarView>
                   DateFormat('MMM').format(entry.key).toUpperCase(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
                 Text(
                   DateFormat('d').format(entry.key),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold
+                  ),
                 ),
               ],
             ),
@@ -146,8 +125,10 @@ class _CalendarState extends FireAppState<CalendarView>
       ));
     }
 
-    return Column(children: eventWidgets);
+    return Column(children: eventWidgets.spacedBy(16));
   }
+
+
 
   Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
     // Parse parameters from event
@@ -155,7 +136,7 @@ class _CalendarState extends FireAppState<CalendarView>
     final title = unavailabilityEvent.title;
     final displayTime = event.displayTime;
     final eventId = unavailabilityEvent.eventId;
-    final cardColor = getColorForEvent(eventId.toString());
+    final cardColor = viewModel.getColorForEvent(eventId.toString());
 
     return Card(
       color: cardColor,
@@ -196,7 +177,8 @@ class _CalendarState extends FireAppState<CalendarView>
           child: Text(
             _selectedMonthLabel,
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24
+            ),
           ),
         ),
         backgroundColor: Colors.white,
@@ -206,13 +188,17 @@ class _CalendarState extends FireAppState<CalendarView>
           stream: viewModel.displayEventsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator()
+              );
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
                   child: Text(
                       AppLocalizations.of(context)?.calendarNoItemsLabel ??
-                          "No events to display"));
+                          "No events to display"
+                  )
+              );
             }
             // Sort events by date
             var sortedEvents = snapshot.data!
@@ -227,7 +213,8 @@ class _CalendarState extends FireAppState<CalendarView>
                 return Container(
                   margin: EdgeInsets.only(
                       top: index == 0 ? 10 : 20,
-                      bottom: index == groupedEvents.length - 1 ? 70 : 10),
+                      bottom: index == groupedEvents.length - 1 ? 70 : 10
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -240,7 +227,8 @@ class _CalendarState extends FireAppState<CalendarView>
                               DateFormat('MMM').format(entry.key).toUpperCase(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontSize: 16, fontWeight: FontWeight.bold
+                              ),
                             ),
                             Text(
                               DateFormat('d').format(entry.key),
@@ -277,7 +265,8 @@ class _CalendarState extends FireAppState<CalendarView>
               title: "",
               periodicity: 0,
               startTime: DateTime.now(),
-              endTime: DateTime.now());
+              endTime: DateTime.now()
+          );
           viewModel.editEventNavigate(newEvent);
         },
       ),
@@ -305,21 +294,24 @@ class _CalendarState extends FireAppState<CalendarView>
                           onPressed: () {
                             dialogSetState(() {
                               _selectedDate = DateTime(
-                                  _selectedDate.year - 1, _selectedDate.month);
+                                  _selectedDate.year - 1, _selectedDate.month
+                              );
                             });
                           },
                         ),
                         Text(
                           '${_selectedDate.year}',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                              fontWeight: FontWeight.bold, fontSize: 20
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.arrow_right),
                           onPressed: () {
                             dialogSetState(() {
                               _selectedDate = DateTime(
-                                  _selectedDate.year + 1, _selectedDate.month);
+                                  _selectedDate.year + 1, _selectedDate.month
+                              );
                             });
                           },
                         ),

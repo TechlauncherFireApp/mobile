@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:fireapp/domain/models/calendar_event.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
+import 'package:fireapp/style/colors.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
@@ -47,6 +49,19 @@ class CalendarViewModel extends FireAppViewModel
 
   @override
   Stream<CalendarNavigation> get navigate => _navigate.stream;
+
+  final List<Color> colorPalette = calendarEventColourPalette;
+  int _nextColorIndex = 0;
+
+  final Map<String, Color> eventColorMap = {};
+  // Map a colour for the corresponding event
+  Color? getColorForEvent(String eventId) {
+    if (!eventColorMap.containsKey(eventId)) {
+      eventColorMap[eventId] = colorPalette[_nextColorIndex];
+      _nextColorIndex = (_nextColorIndex + 1) % colorPalette.length;
+    }
+    return eventColorMap[eventId];
+  }
 
   CalendarViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
@@ -212,6 +227,7 @@ class CalendarViewModel extends FireAppViewModel
   void editEventNavigate(UnavailabilityTime event) {
     _navigate.add(CalendarNavigation.eventDetail(event));
   }
+
 
   //
   void updateSelectedMonth(int month) {
