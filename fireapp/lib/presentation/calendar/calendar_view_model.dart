@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:fireapp/domain/models/calendar_event.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
+import 'package:fireapp/style/colors.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,10 +22,10 @@ class CalendarViewModel extends FireAppViewModel
   late final AuthenticationRepository _authenticationRepository;
   late final UnavailabilityRepository _unavailabilityRepository;
 
-  final BehaviorSubject<int> _selectedMonth =
+  final BehaviorSubject<int> selectedMonth =
       BehaviorSubject.seeded(DateTime.now().month);
 
-  final BehaviorSubject<int> _selectedYear =
+  final BehaviorSubject<int> selectedYear =
       BehaviorSubject.seeded(DateTime.now().year);
 
   // List of Volunteer's unavailability events
@@ -47,6 +49,19 @@ class CalendarViewModel extends FireAppViewModel
 
   @override
   Stream<CalendarNavigation> get navigate => _navigate.stream;
+
+  final List<Color> colorPalette = calendarEventColourPalette;
+  int _nextColorIndex = 0;
+
+  final Map<String, Color> eventColorMap = {};
+  // Map a colour for the corresponding event
+  Color? getColorForEvent(String eventId) {
+    if (!eventColorMap.containsKey(eventId)) {
+      eventColorMap[eventId] = colorPalette[_nextColorIndex];
+      _nextColorIndex = (_nextColorIndex + 1) % colorPalette.length;
+    }
+    return eventColorMap[eventId];
+  }
 
   CalendarViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
@@ -96,9 +111,9 @@ class CalendarViewModel extends FireAppViewModel
     // Filter events that overlap between selected month and year
     final filteredList = unavailabilityList.where((unavailability) {
       final selectedStartTime =
-          DateTime(_selectedYear.value, _selectedMonth.value, 1);
+          DateTime(selectedYear.value, selectedMonth.value, 1);
       DateTime firstDayOfNextMonth =
-          DateTime(_selectedYear.value, _selectedMonth.value + 1, 1);
+          DateTime(selectedYear.value, selectedMonth.value + 1, 1);
       final selectedEndTime =
           firstDayOfNextMonth.subtract(const Duration(days: 1));
       return doPeriodsOverlap(unavailability.startTime, unavailability.endTime,
@@ -129,14 +144,14 @@ class CalendarViewModel extends FireAppViewModel
     List<CalendarEvent> displayEventList = [];
     for (var event in events) {
       final firstDayOfMonth =
-          DateTime(_selectedYear.value, _selectedMonth.value, 1);
+          DateTime(selectedYear.value, selectedMonth.value, 1);
       //Fix start date
       final startDate = (event.startTime.isBefore(firstDayOfMonth) &&
               !isSameDay(event.startTime, firstDayOfMonth))
           ? firstDayOfMonth
           : event.startTime;
       DateTime firstDayOfNextMonth =
-          DateTime(_selectedYear.value, _selectedMonth.value + 1, 1, 23, 59);
+          DateTime(selectedYear.value, selectedMonth.value + 1, 1, 23, 59);
       final lastDayOfMonth =
           firstDayOfNextMonth.subtract(const Duration(days: 1));
       //Fix end date
@@ -190,13 +205,16 @@ class CalendarViewModel extends FireAppViewModel
         var userID =
             (await _authenticationRepository.getCurrentSession())?.userId;
 
-        // Check if userId is null and throw an exception if it is
         if (userID == null) {
           throw Exception(
               'User ID is null. Cannot update without a valid user ID.');
         }
         await _unavailabilityRepository.deleteUnavailabilityEvent(
             userID, eventID);
+
+        // Remove the deleted event from the display events
+        _displayEvents.add(_displayEvents.value.where((event) => event.event.eventId != eventID).toList());
+
         _loadingState.add(RequestState.success(null));
       } catch (e, stacktrace) {
         logger.e(e, stackTrace: stacktrace);
@@ -205,29 +223,31 @@ class CalendarViewModel extends FireAppViewModel
     })();
   }
 
+
   void editEventNavigate(UnavailabilityTime event) {
     _navigate.add(CalendarNavigation.eventDetail(event));
   }
+
 
   //
   void updateSelectedMonth(int month) {
     if (month < 1 && month > 12) {
       return;
     }
-    _selectedMonth.value = month;
+    selectedMonth.value = month;
   }
 
   void updateSelectedYear(int year) {
     if (year < 0) {
       return;
     }
-    _selectedYear.value = year;
+    selectedYear.value = year;
   }
 
   @override
   Future<void> dispose() async {
-    _selectedMonth.close();
-    _selectedYear.close();
+    selectedMonth.close();
+    selectedYear.close();
     _navigate.close();
     _loadingState.close();
     _displayEvents.close();

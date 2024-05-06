@@ -132,6 +132,10 @@
   "enterStartTime" : "Schedule Start Time",
   "addSchedule" : "Add schedule",
 
+  "calendarItemDelete": "Delete",
+  "calendarItemEdit" : "Edit",
+  "calendarNoItemsLabel": "No events to display",
+
   "addUnavailabilityTitle" : "Add Unavailability",
   "enterUnavailabilityTitle" : "Event",
   "addUnavailabilityButton" : "Add Unavailability",

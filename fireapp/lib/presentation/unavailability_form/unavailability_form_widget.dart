@@ -1,5 +1,6 @@
 import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/base/widget.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/presentation/unavailability_form/unavailability_form_view_model.dart';
 import 'package:fireapp/presentation/unavailability_form/unavailability_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_page.dart';
@@ -13,25 +14,30 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import '../../domain/models/unavailability/unavailability_time.dart';
 import '../../domain/request_state.dart';
 
 class UnavailabilityFormPage extends StatelessWidget {
-  const UnavailabilityFormPage({super.key});
+  final UnavailabilityTime event;
+  const UnavailabilityFormPage({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: fireAppAppBar(
           context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
-      body: const SafeArea(
-        child: UnavailabilityForm(),
+      body: SafeArea(
+        child: UnavailabilityForm(event: event),
       ),
     );
   }
 }
 
 class UnavailabilityForm extends StatefulWidget {
-  const UnavailabilityForm({super.key});
+  final UnavailabilityTime event;
+
+
+  const UnavailabilityForm({super.key, required this.event});
 
   @override
   State createState() => _UnavailabilityFormState();
@@ -44,9 +50,17 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
   UnavailabilityFormViewModel viewModel = GetIt.instance.get();
 
   @override
+  void initState() {
+    super.initState();
+    viewModel.loadForm(widget.event);
+    // _viewModel = getIt<UnavailabilityFormViewModel>();
+    // _
+  }
+
+  @override
   void handleNavigationEvent(UnavailabilityFormNavigation event) {
     if (event is Calendar) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop("reload");
       return;
     }
   }
@@ -117,9 +131,9 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
                 ),
                 StreamFormField<DateTime?>(
                     stream: viewModel.selectedStartDate,
-                    builder: (context, value) {
+                    builder: (context, selectedStartDate) {
                       return DateFormField(
-                          currentValue: value,
+                          currentValue: selectedStartDate,
                           onValueChanged: viewModel.updateStartDate,
                           decoration:
                               textFieldStylePositioned(context).copyWith(

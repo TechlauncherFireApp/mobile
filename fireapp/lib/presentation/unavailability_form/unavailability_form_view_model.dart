@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
+import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/presentation/unavailability_form/unavailability_form_navigation.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
@@ -20,12 +21,11 @@ class UnavailabilityFormViewModel extends FireAppViewModel
 
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //TODO load in event ID and existing information
-  final eventId = null;
-
+  var eventID;
   // Editing Controllers
   final TextEditingController titleController = TextEditingController();
 
+  //final _selectedStartDate = StreamController<DateTime?>.broadcast();
   final BehaviorSubject<DateTime?> _selectedStartDate = BehaviorSubject();
   Stream<DateTime?> get selectedStartDate => _selectedStartDate.stream;
 
@@ -47,6 +47,9 @@ class UnavailabilityFormViewModel extends FireAppViewModel
   final BehaviorSubject<bool> _isFormValid = BehaviorSubject.seeded(false);
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
+  // Determine if in edit mode
+  bool isEditMode = false;
+
 // Method to check form validity (if form has all fields filled)
   void checkFormValidity() {
     bool isFormValid = titleController.text.isNotEmpty &&
@@ -66,6 +69,22 @@ class UnavailabilityFormViewModel extends FireAppViewModel
 
   UnavailabilityFormViewModel(
       this._authenticationRepository, this._unavailabilityRepository);
+
+  loadForm(UnavailabilityTime event) async {
+    isEditMode = event.eventId >= 0;
+    if (isEditMode) {
+      eventID = event.eventId;
+      updateEventTitle(event.title);
+      updateStartDate(event.startTime);
+      updateEndDate(event.endTime);
+      final startTime =
+          TimeOfDay(hour: event.startTime.hour, minute: event.startTime.minute);
+      final endTime =
+          TimeOfDay(hour: event.endTime.hour, minute: event.endTime.minute);
+      updateStartTime(startTime);
+      updateEndTime(endTime);
+    }
+  }
 
   void submitForm() {
     _submissionState.add(RequestState.loading());
@@ -102,15 +121,22 @@ class UnavailabilityFormViewModel extends FireAppViewModel
           throw Exception('The start time must be before the end time.');
         }
 
-        var newEvent = UnavailabilityEventPost(
+        var event = UnavailabilityEventPost(
             title: titleController.text,
             start: startDateTime,
             end: endDateTime,
             periodicity: periodicity);
 
-        // Submit and navigate back to Calendar if successful.
-        await _unavailabilityRepository.createUnavailabilityEvent(
-            userID, newEvent);
+        if (isEditMode) {
+          print("EDITING");
+          await _unavailabilityRepository.editUnavailabilityEvent(
+              userID, eventID, event);
+        } else {
+          // Submit and navigate back to Calendar if successful.
+          await _unavailabilityRepository.createUnavailabilityEvent(
+              userID, event);
+        }
+
         _submissionState.add(RequestState.success(null));
         _navigate.add(const UnavailabilityFormNavigation.calendar());
       } catch (e, stacktrace) {
