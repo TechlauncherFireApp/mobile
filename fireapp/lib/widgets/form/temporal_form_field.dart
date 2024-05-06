@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Based on InputDatePickerFormField
@@ -72,7 +71,6 @@ class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
   }
 
   void _updateValueForSelectedTime() {
-    if (_selectedValue != null) {
     if (widget.currentValue != null) {
       _inputText = widget.formatTime(context, widget.currentValue!);
       TextEditingValue textEditingValue = TextEditingValue(text: _inputText!);
