@@ -37,6 +37,12 @@ class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
   }
 
   @override
+  void didUpdateWidget(TemporalFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateValueForSelectedTime();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _updateValueForSelectedTime();
