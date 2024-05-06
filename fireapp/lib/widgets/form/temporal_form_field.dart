@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Based on InputDatePickerFormField
@@ -27,13 +26,18 @@ abstract class TemporalFormField<T> extends StatefulWidget {
 class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
 
   final TextEditingController _controller = TextEditingController();
-  T? _selectedValue;
   String? _inputText;
   
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.currentValue;
+    _updateValueForSelectedTime();
+  }
+
+  @override
+  void didUpdateWidget(TemporalFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateValueForSelectedTime();
   }
 
   @override
@@ -67,8 +71,8 @@ class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
   }
 
   void _updateValueForSelectedTime() {
-    if (_selectedValue != null) {
-      _inputText = widget.formatTime(context, _selectedValue!);
+    if (widget.currentValue != null) {
+      _inputText = widget.formatTime(context, widget.currentValue!);
       TextEditingValue textEditingValue = TextEditingValue(text: _inputText!);
       textEditingValue = textEditingValue.copyWith(selection: TextSelection(
         baseOffset: 0,
@@ -83,9 +87,7 @@ class _TemporalFormFieldState<T> extends State<TemporalFormField<T>> {
 
   Future<void> _onTapCallback() async {
     var value = await widget.onTap(context);
-    _selectedValue = value;
     if (value != null) widget.onValueChanged(value);
-    _updateValueForSelectedTime();
   }
 
 }

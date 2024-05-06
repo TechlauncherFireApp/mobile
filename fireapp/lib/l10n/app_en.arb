@@ -137,8 +137,10 @@
   "calendarNoItemsLabel": "No events to display",
 
   "addUnavailabilityTitle" : "Add Unavailability",
+  "editUnavailabilityTitle": "Edit Unavailability",
   "enterUnavailabilityTitle" : "Event",
   "addUnavailabilityButton" : "Add Unavailability",
+  "editUnavailabilityButton": "Edit Unavailability",
   "enterUnavailabilityStartDate": "Start Date",
   "enterUnavailabilityStartTime" : "Start Time",
   "enterUnavailabilityEndDate": "End Date",

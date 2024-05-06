@@ -14,47 +14,28 @@ import 'package:fireapp/widgets/scroll_view_bottom_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import '../../domain/models/unavailability/unavailability_time.dart';
 import '../../domain/request_state.dart';
 
-class UnavailabilityFormPage extends StatelessWidget {
+class UnavailabilityFormPage extends StatefulWidget {
   final UnavailabilityTime event;
   const UnavailabilityFormPage({super.key, required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: fireAppAppBar(
-          context, AppLocalizations.of(context)?.addUnavailabilityTitle ?? ''),
-      body: SafeArea(
-        child: UnavailabilityForm(event: event),
-      ),
-    );
-  }
-}
-
-class UnavailabilityForm extends StatefulWidget {
-  final UnavailabilityTime event;
-
-
-  const UnavailabilityForm({super.key, required this.event});
 
   @override
   State createState() => _UnavailabilityFormState();
 }
 
-class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
-    with Navigable<UnavailabilityFormNavigation, UnavailabilityForm>
+class _UnavailabilityFormState extends FireAppState<UnavailabilityFormPage>
+    with Navigable<UnavailabilityFormNavigation, UnavailabilityFormPage>
     implements ViewModelHolder<UnavailabilityFormViewModel> {
   @override
   UnavailabilityFormViewModel viewModel = GetIt.instance.get();
+  bool isEditMode = false;
 
   @override
   void initState() {
     super.initState();
     viewModel.loadForm(widget.event);
-    // _viewModel = getIt<UnavailabilityFormViewModel>();
-    // _
+    isEditMode = viewModel.isEditMode;
   }
 
   @override
@@ -67,125 +48,142 @@ class _UnavailabilityFormState extends FireAppState<UnavailabilityForm>
 
   @override
   Widget build(BuildContext context) {
-    return ScrollViewBottomContent(
-        padding: EdgeInsets.all(1.rdp()),
-        bottomChildren: [
-          FillWidth(
-              child: StreamBuilder<bool>(
-                  stream: viewModel.isFormValidStream,
-                  builder: (context, isFormValidSnapshot) {
-                    return StreamBuilder(
-                      stream: viewModel.submissionState,
-                      builder: (context, data) {
-                        final isFormValid = isFormValidSnapshot.data ?? false;
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: isFormValid ? viewModel.submitForm : null,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(AppLocalizations.of(context)
+    // Make label
+    String appBarLabel = !isEditMode
+        ? (AppLocalizations.of(context)?.addUnavailabilityTitle ?? '')
+        : (AppLocalizations.of(context)?.editUnavailabilityTitle ?? '');
+    return Scaffold(
+      appBar: fireAppAppBar(context, appBarLabel),
+      body: SafeArea(
+          child: ScrollViewBottomContent(
+              padding: EdgeInsets.all(1.rdp()),
+              bottomChildren: [
+            FillWidth(
+                child: StreamBuilder<bool>(
+                    stream: viewModel.isFormValidStream,
+                    builder: (context, isFormValidSnapshot) {
+                      return StreamBuilder(
+                        stream: viewModel.submissionState,
+                        builder: (context, data) {
+                          final isFormValid = isFormValidSnapshot.data ?? false;
+                          final submitButtonLabel = !isEditMode
+                              ? (AppLocalizations.of(context)
                                       ?.addUnavailabilityButton ??
-                                  "Add Schedule"),
-                              if (data is LoadingRequestState)
-                                SizedBox(
-                                  height: 8,
-                                  width: 8,
-                                  child: CircularProgressIndicator(
-                                      color: (Theme.of(context)
-                                              .primaryTextTheme
-                                              .titleLarge
-                                              ?.color ??
-                                          Colors.white)
-                                  ),
-                                )
-                            ],
+                                  "Add Schedule")
+                              : (AppLocalizations.of(context)
+                                      ?.editUnavailabilityButton ??
+                                  "Add Edit");
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(40),
+                            ),
+                            onPressed:
+                                isFormValid ? viewModel.submitForm : null,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(submitButtonLabel),
+                                if (data is LoadingRequestState)
+                                  SizedBox(
+                                    height: 8,
+                                    width: 8,
+                                    child: CircularProgressIndicator(
+                                        color: (Theme.of(context)
+                                                .primaryTextTheme
+                                                .titleLarge
+                                                ?.color ??
+                                            Colors.white)
+                                    ),
+                                  )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    })
+            )
+          ],
+              children: [
+            Form(
+              key: viewModel.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    controller: viewModel.titleController,
+                    decoration: textFieldStylePositioned(
+                      context,
+                    ).copyWith(
+                        labelText: AppLocalizations.of(context)
+                                ?.enterUnavailabilityTitle ??
+                            "",
+                        prefixIcon: const Icon(Icons.event_note)),
+                    style: Theme.of(context).textTheme.labelLarge,
+                    validator: (v) => v!.isEmpty
+                        ? AppLocalizations.of(context)?.eventTitleEmptyError
+                        : null,
+                  ),
+                  StreamFormField<DateTime?>(
+                      stream: viewModel.selectedStartDate,
+                      builder: (context, selectedStartDate) {
+                        return DateFormField(
+                            currentValue: selectedStartDate,
+                            onValueChanged: viewModel.updateStartDate,
+                            decoration:
+                                textFieldStylePositioned(context).copyWith(
+                              prefixIcon: const Icon(Icons.calendar_today),
+                              labelText: AppLocalizations.of(context)
+                                  ?.enterUnavailabilityStartDate,
+                            )
+                        );
+                      }),
+                  StreamFormField<TimeOfDay?>(
+                      stream: viewModel.selectedStartTime,
+                      builder: (context, value) {
+                        return TimeFormField(
+                          currentValue: value,
+                          onValueChanged: viewModel.updateStartTime,
+                          decoration:
+                              textFieldStylePositioned(context).copyWith(
+                            prefixIcon: const Icon(Icons.hourglass_top),
+                            labelText: AppLocalizations.of(context)
+                                ?.enterUnavailabilityStartTime,
                           ),
                         );
-                      },
-                    );
-                  })
-          )
-        ],
-        children: [
-          Form(
-            key: viewModel.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: viewModel.titleController,
-                  decoration: textFieldStylePositioned(
-                    context,
-                  ).copyWith(
-                      labelText: AppLocalizations.of(context)
-                              ?.enterUnavailabilityTitle ??
-                          "",
-                      prefixIcon: const Icon(Icons.event_note)),
-                  style: Theme.of(context).textTheme.labelLarge,
-                  validator: (v) => v!.isEmpty
-                      ? AppLocalizations.of(context)?.eventTitleEmptyError
-                      : null,
-                ),
-                StreamFormField<DateTime?>(
-                    stream: viewModel.selectedStartDate,
-                    builder: (context, selectedStartDate) {
-                      return DateFormField(
-                          currentValue: selectedStartDate,
-                          onValueChanged: viewModel.updateStartDate,
-                          decoration:
-                              textFieldStylePositioned(context).copyWith(
-                            prefixIcon: const Icon(Icons.calendar_today),
-                            labelText: AppLocalizations.of(context)
-                                ?.enterUnavailabilityStartDate,
-                          )
-                      );
-                    }),
-                StreamFormField<TimeOfDay?>(
-                    stream: viewModel.selectedStartTime,
-                    builder: (context, value) {
-                      return TimeFormField(
-                        currentValue: value,
-                        onValueChanged: viewModel.updateStartTime,
-                        decoration: textFieldStylePositioned(context).copyWith(
-                          prefixIcon: const Icon(Icons.hourglass_top),
-                          labelText: AppLocalizations.of(context)
-                              ?.enterUnavailabilityStartTime,
-                        ),
-                      );
-                    }),
-                StreamFormField<DateTime?>(
-                    stream: viewModel.selectedEndDate,
-                    builder: (context, value) {
-                      return DateFormField(
+                      }),
+                  StreamFormField<DateTime?>(
+                      stream: viewModel.selectedEndDate,
+                      builder: (context, value) {
+                        return DateFormField(
+                            currentValue: value,
+                            onValueChanged: viewModel.updateEndDate,
+                            decoration:
+                                textFieldStylePositioned(context).copyWith(
+                              prefixIcon: const Icon(Icons.calendar_today),
+                              labelText: AppLocalizations.of(context)
+                                  ?.enterUnavailabilityEndDate,
+                            )
+                        );
+                      }),
+                  StreamFormField<TimeOfDay?>(
+                      stream: viewModel.selectedEndTime,
+                      builder: (context, value) {
+                        return TimeFormField(
                           currentValue: value,
-                          onValueChanged: viewModel.updateEndDate,
+                          onValueChanged: viewModel.updateEndTime,
                           decoration:
                               textFieldStylePositioned(context).copyWith(
-                            prefixIcon: const Icon(Icons.calendar_today),
+                            prefixIcon: const Icon(Icons.hourglass_bottom),
                             labelText: AppLocalizations.of(context)
-                                ?.enterUnavailabilityEndDate,
-                          )
-                      );
-                    }),
-                StreamFormField<TimeOfDay?>(
-                    stream: viewModel.selectedEndTime,
-                    builder: (context, value) {
-                      return TimeFormField(
-                        currentValue: value,
-                        onValueChanged: viewModel.updateEndTime,
-                        decoration: textFieldStylePositioned(context).copyWith(
-                          prefixIcon: const Icon(Icons.hourglass_bottom),
-                          labelText: AppLocalizations.of(context)
-                              ?.enterUnavailabilityEndTime,
-                        ),
-                      );
-                    }),
-              ].spacedBy(1.rdp()),
-            ),
-          )
-        ]);
+                                ?.enterUnavailabilityEndTime,
+                          ),
+                        );
+                      }),
+                ].spacedBy(1.rdp()),
+              ),
+            )
+          ])
+      ),
+    );
   }
 }
