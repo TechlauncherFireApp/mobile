@@ -1,9 +1,9 @@
 #!/bin/bash
 
-flutter pub get
+fvm exec flutter pub get
 if [ ! -f ./lib/environment_config.dart ]
 then
   dart run environment_config:generate
 fi
-flutter gen-l10n
+fvm exec flutter gen-l10n
 dart run build_runner build
