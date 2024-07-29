@@ -48,6 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
         actions: write
+        pull-requests: write
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
     steps:
     - uses: actions/checkout@v3
