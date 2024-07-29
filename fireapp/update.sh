@@ -6,4 +6,4 @@ then
   dart run environment_config:generate
 fi
 fvm exec flutter gen-l10n
-dart run build_runner build
+fvm exec dart run build_runner build
