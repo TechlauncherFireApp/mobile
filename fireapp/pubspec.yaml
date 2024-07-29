@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.17.0 <=3.3.0'
+  sdk: '>=2.17.0 <=3.5.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,7 +43,7 @@ dependencies:
   fluttertoast: ^8.0.6
   settings_ui: ^2.0.2
   flutter_settings_screens: 0.3.3-null-safety+2
-  retrofit: '>=4.0.0 <5.0.0'
+  retrofit: ^4.0.1
   logger: any  #for logging purpose
   freezed: ^2.3.2
   rxdart: ^0.27.7
