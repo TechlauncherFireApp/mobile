@@ -1,4 +1,4 @@
-flutter pub get
-dart run environment_config:generate
-flutter gen-l10n
-dart run build_runner build
+fvm exec flutter pub get
+fvm exec dart run environment_config:generate
+fvm exec flutter gen-l10n
+fvm exec dart run build_runner build
