@@ -25,17 +25,19 @@ class HomeView extends StatefulWidget {
   State createState() => _HomeState();
 }
 
-
 class _HomeState extends FireAppState<HomeView>
     // with Navigable<CalendarNavigation, HomeView>
-    implements ViewModelHolder<VolunteerHomeViewModel> {
+    implements
+        ViewModelHolder<VolunteerHomeViewModel> {
   @override
   VolunteerHomeViewModel viewModel = GetIt.instance.get();
 
-
-
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return const SizedBox.expand( // Ensures the child takes up all available space
+      child: Placeholder(
+        child: Center(child: Text("Some text")),
+      ),
+    );
   }
-  }
+}
