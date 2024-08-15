@@ -26,6 +26,8 @@ class VolunteerHomeViewModel extends FireAppViewModel {
   VolunteerHomeViewModel(
       this._authenticationRepository, this._shiftsRepository);
 
+  // write your functions and logic etc
+
   //TODO retrieve shifts
   Future<void> fetchShifts() async {
     return;
