@@ -133,7 +133,6 @@ class _HomeState extends FireAppState<HomeView>
               ],
             ),
             const SizedBox(height: 8),
-            Text('Location: TBD'),
             const SizedBox(height: 8,),
             Text('${timeFormat.format(shift.startTime)} - ${timeFormat.format(shift.endTime)}')
           ]
