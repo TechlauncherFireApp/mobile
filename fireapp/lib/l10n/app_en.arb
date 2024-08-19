@@ -197,7 +197,7 @@
   "@upcoming_shift": {
     "description": "Label for upcoming shift"
   },
-  "no_shift_avail": "No Shift Available",
+  "no_shift_avail": "You're all caught up! No shifts scheduled.",
   "@no_shift_avail": {
     "description": "Label for when there is no shift available"
   },
