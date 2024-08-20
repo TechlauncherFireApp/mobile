@@ -52,51 +52,56 @@ class _VolunteerHomePageState extends FireAppState<VolunteerHomePage>
 
             final nextShift = shifts.first;
 
-            return SingleChildScrollView(
-                child: Padding(
-                    padding: EdgeInsets.all(1.5.rdp()),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations
-                                  .of(context)
-                                  ?.next_shift ?? "",
-                              style: textTheme.titleLarge,
-                            ),
-                            _buildShiftCard(nextShift, isNextShift: true),
-                          ].spacedBy(1.0.rdp()),
-                        ),
+            return Container(
+              height: double.infinity,
+              child: SingleChildScrollView(
+                  child: Padding(
+                      padding: EdgeInsets.all(1.5.rdp()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations
+                                    .of(context)
+                                    ?.next_shift ?? "",
+                                style: textTheme.titleLarge,
+                              ),
+                              _buildShiftCard(nextShift, isNextShift: true),
+                            ].spacedBy(1.0.rdp()),
+                          ),
 
-                        // Upcoming Shifts section
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations
-                                  .of(context)
-                                  ?.upcoming_shift ?? "",
-                              style: textTheme.titleLarge,
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: shifts.length - 1,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: _buildShiftCard(shifts[index + 1])
-                                );
-                              },
+                          if (shifts.length > 1)
+                          // Upcoming Shifts section
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      ?.upcoming_shift ?? "",
+                                  style: textTheme.titleLarge,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: shifts.length - 1,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: _buildShiftCard(shifts[index + 1])
+                                    );
+                                  },
+                                )
+                              ].spacedBy(1.0.rdp()),
                             )
-                          ].spacedBy(1.0.rdp()),
-                        )
-                      ].spacedBy(1.5.rdp()),
-                    )
-                )
+                        ].spacedBy(1.5.rdp()),
+                      )
+                  )
+              ),
             );
           })
         )
