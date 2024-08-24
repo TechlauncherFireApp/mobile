@@ -6,6 +6,8 @@ import '../../domain/models/shift.dart';
 import '../../domain/repository/authentication_repository.dart';
 import '../../domain/request_state.dart';
 import '../fireapp_view_model.dart';
+import '../../global/di.dart';
+
 
 @injectable
 class VolunteerHomeViewModel extends FireAppViewModel {
@@ -17,6 +19,9 @@ class VolunteerHomeViewModel extends FireAppViewModel {
   final BehaviorSubject<RequestState<List<Shift>>> _shifts =
       BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<Shift>>> get shiftsStream => _shifts.stream;
+
+  final BehaviorSubject<List<Shift>> _displayShifts = BehaviorSubject.seeded([]);
+  Stream<List<Shift>> get displayShiftsStream => _displayShifts.stream;
 
   // Loading State controllers
   final BehaviorSubject<RequestState<void>> _loadingState =
@@ -30,12 +35,42 @@ class VolunteerHomeViewModel extends FireAppViewModel {
 
   //TODO retrieve shifts
   Future<void> fetchShifts() async {
+    _loadingState.add(RequestState.loading());
+    try {
+      var userID =
+          (await _authenticationRepository.getCurrentSession())?.userId;
+      // Check if userId is null and throw an exception if it is
+      if (userID == null) {
+        throw Exception(
+            'User ID is null. Cannot fetch shift without a valid user ID.');
+      }
+      var shifts =
+      await _shiftsRepository.getVolunteerShifts(userID);
+      _shifts.add(RequestState.success(shifts));
+    } catch (e, stacktrace) {
+      logger.e(e, stackTrace: stacktrace);
+      _shifts.add(RequestState.exception(e));
+    }
     return;
+  }
+  Future<void> fetchAndSetShifts() async {
+    await fetchShifts();
+    final eventState = _shifts.value;
+    if (eventState is SuccessRequestState<List<Shift>>) {
+      final shiftList = eventState.result;
+      _displayShifts.add(shiftList);
+    } else {
+      _displayShifts.add([]);
+    }
+
   }
 
   @override
   Future<void> dispose() {
     // TODO: implement dispose
+    _shifts.close();
+    _displayShifts.close();
+    _loadingState.close();
     throw UnimplementedError();
   }
 }
