@@ -20,9 +20,6 @@ class VolunteerHomeViewModel extends FireAppViewModel {
       BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<Shift>>> get shiftsStream => _shifts.stream;
 
-  final BehaviorSubject<List<Shift>> _displayShifts = BehaviorSubject.seeded([]);
-  Stream<List<Shift>> get displayShiftsStream => _displayShifts.stream;
-
   // Loading State controllers
   final BehaviorSubject<RequestState<void>> _loadingState =
       BehaviorSubject.seeded(RequestState.success(null));
@@ -30,10 +27,6 @@ class VolunteerHomeViewModel extends FireAppViewModel {
 
   VolunteerHomeViewModel(
       this._authenticationRepository, this._shiftsRepository);
-
-  // write your functions and logic etc
-
-  //TODO retrieve shifts
   Future<void> fetchShifts() async {
     _loadingState.add(RequestState.loading());
     try {
@@ -53,24 +46,9 @@ class VolunteerHomeViewModel extends FireAppViewModel {
     }
     return;
   }
-  Future<void> fetchAndSetShifts() async {
-    await fetchShifts();
-    final eventState = _shifts.value;
-    if (eventState is SuccessRequestState<List<Shift>>) {
-      final shiftList = eventState.result;
-      _displayShifts.add(shiftList);
-    } else {
-      _displayShifts.add([]);
-    }
-
-  }
-
   @override
-  Future<void> dispose() {
-    // TODO: implement dispose
+  Future<void> dispose() async {
     _shifts.close();
-    _displayShifts.close();
     _loadingState.close();
-    throw UnimplementedError();
   }
 }
