@@ -1,153 +1,139 @@
-import 'package:fireapp/domain/models/shift.dart';
+import 'package:fireapp/base/spaced_by.dart';
 import 'package:fireapp/presentation/volunteer_home/volunteer_home_view_model.dart';
+import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/widgets/request_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../base/widget.dart';
+import '../../domain/models/shift.dart';
+import '../../domain/request_state.dart';
 import '../fireapp_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../style/typography.dart';
+import '../../style/colors.dart';
+import '../../base/date_contants.dart';
 
-class VolunteerHome extends StatelessWidget {
-  const VolunteerHome({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: HomeView(),
-      ),
-    );
-  }
-}
-
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class VolunteerHomePage extends StatefulWidget {
+  const VolunteerHomePage({super.key});
 
   @override
-  State createState() => _HomeState();
+  State createState() => _VolunteerHomePageState();
 }
 
-class _HomeState extends FireAppState<HomeView>
+class _VolunteerHomePageState extends FireAppState<VolunteerHomePage>
     // with Navigable<CalendarNavigation, HomeView>
     implements
         ViewModelHolder<VolunteerHomeViewModel> {
   @override
   VolunteerHomeViewModel viewModel = GetIt.instance.get();
+
   @override
   void initState() {
     super.initState();
-    viewModel.fetchAndSetShifts();
+    print('Initializing HomeView');
+    viewModel.fetchShifts();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: StreamBuilder<List<Shift>>(
-          stream: viewModel.displayShiftsStream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(
-                child: Text("No Shift to display"),
-              );
+      return Scaffold(
+        body: SafeArea (
+          child: RequestStateWidget.stream<List<Shift>>
+          (state: viewModel.shiftsStream,
+          retry: () => viewModel.fetchShifts(),
+          child: (context, shifts) {
+            if (shifts.isEmpty) {
+              return Center(child: Text(AppLocalizations
+                  .of(context)
+                  ?.no_shift_avail ?? ""));
             }
 
-            // If data is available, group shifts by date
-            var groupedShifts = groupShiftsByDate(snapshot.data!);
+            final nextShift = shifts.first;
 
-            return ListView.builder(
-              itemCount: groupedShifts.length,
-              itemBuilder: (context, index) {
-                var entry = groupedShifts.entries.elementAt(index);
-                return Container(
-                  margin: EdgeInsets.only(
-                    top: index == 0 ? 10 : 20,
-                    bottom: index == groupedShifts.length - 1 ? 70 : 10,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 60,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              DateFormat('MMM').format(entry.key).toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              DateFormat('d').format(entry.key),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: List.generate(entry.value.length, (shiftIndex) {
-                            return _buildShiftCard(
-                                entry.value[shiftIndex], shiftIndex, entry.value.length);
-                          }),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+            return Container(
+              height: double.infinity,
+              child: SingleChildScrollView(
+                  child: Padding(
+                      padding: EdgeInsets.all(1.5.rdp()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations
+                                    .of(context)
+                                    ?.next_shift ?? "",
+                                style: textTheme.titleLarge,
+                              ),
+                              _buildShiftCard(nextShift, isNextShift: true),
+                            ].spacedBy(1.0.rdp()),
+                          ),
+
+                          if (shifts.length > 1)
+                          // Upcoming Shifts section
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      ?.upcoming_shift ?? "",
+                                  style: textTheme.titleLarge,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: shifts.length - 1,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: _buildShiftCard(shifts[index + 1])
+                                    );
+                                  },
+                                )
+                              ].spacedBy(1.0.rdp()),
+                            )
+                        ].spacedBy(1.5.rdp()),
+                      )
+                  )
+              ),
             );
-          },
-        ),
-      ),
-    );
+          })
+        )
+      );
   }
 
-// Helper method to group shifts by date
-  Map<DateTime, List<Shift>> groupShiftsByDate(List<Shift> shifts) {
-    Map<DateTime, List<Shift>> groupedShifts = {};
-    for (var shift in shifts) {
-      DateTime dateOnly = DateTime(shift.startTime.year, shift.startTime.month, shift.startTime.day);
-      groupedShifts.putIfAbsent(dateOnly, () => []).add(shift);
-    }
-    return groupedShifts;
-  }
-
-// Helper method to build a shift card
-  Widget _buildShiftCard(Shift shift, int index, int totalShifts) {
-    final shiftStartTime = DateFormat('h:mm a').format(shift.startTime);
-    final shiftEndTime = DateFormat('h:mm a').format(shift.endTime);
-    final shiftDuration = "$shiftStartTime - $shiftEndTime";
+  Widget _buildShiftCard(Shift shift, {bool isNextShift = false}) {
+    final dateFormat = DateFormat(homeDate);
+    final timeFormat = DateFormat(homeTime);
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: ListTile(
-        title: Text('Shift ID: ${shift.shiftId}'),
-        subtitle: Text(shiftDuration),
-        trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-            // Handle actions like edit or delete
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            const PopupMenuItem<String>(
-              value: 'Edit',
-              child: Text("Edit"),
+      color: isNextShift ? homeRedColor : homeBlueColor,
+      child: Padding(
+        padding: EdgeInsets.all(1.0.rdp()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(dateFormat.format(shift.startTime),
+                      style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+                Text(AppLocalizations.of(context)!.shift_id_display_home(shift.shiftId))
+              ].spacedBy(1.0.rdp()),
             ),
-            const PopupMenuItem<String>(
-              value: 'Delete',
-              child: Text("Delete"),
-            ),
-          ],
+            Text(AppLocalizations.of(context)!.shift_time_range(
+                timeFormat.format(shift.startTime),
+                timeFormat.format(shift.endTime)
+            ))
+          ].spacedBy(1.0.rdp())
         ),
       ),
     );
   }
-
 }

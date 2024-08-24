@@ -29,7 +29,7 @@ class VolunteerRoute extends StatefulWidget {
 
 // Main Navigation Screens - For Volunteer (Will show on navbar)
 final volunteerScreens = [
-  const VolunteerHome(),
+  const VolunteerHomePage(),
   const CalendarPage(),
   const Center(child: Text('Training', style: TextStyle(fontSize: 60))),
   SettingPage(email: userEmail),
