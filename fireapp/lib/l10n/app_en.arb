@@ -188,5 +188,30 @@
   },
   "@status": {
     "description": "Label for Status"
+  },
+  "next_shift": "Your Next Shift:",
+  "@next_shift": {
+    "description": "Label for next shift"
+  },
+  "upcoming_shift": "Upcoming Shifts:",
+  "@upcoming_shift": {
+    "description": "Label for upcoming shift"
+  },
+  "no_shift_avail": "You're all caught up! No shifts scheduled.",
+  "@no_shift_avail": {
+    "description": "Label for when there is no shift available"
+  },
+  "unknown_shift": "Unknown shift",
+  "@unknown_shift": {
+    "description": "Label for unknown shift"
+  },
+  "shift_id_display_home": "Shift ID: {shiftID}",
+  "@shift_id_display_home": {
+    "description": "Label for Shift ID in Home Page"
+  },
+  "shift_time_range": "{startTime} - {endTime}",
+  "@shift_time_range": {
+    "description": "Label for shift time range"
   }
+
 }

@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 const List<Color> calendarEventColourPalette = [
   Color(0xFFB9DEEC), // Light Blue
   Color(0xFFCBCBEA), // Lavender
@@ -10,3 +12,6 @@ const List<Color> calendarEventColourPalette = [
   Color(0xFFCFDEE3),
   Color(0xFFCBE4F1),
 ];
+
+final homeRedColor = Colors.red[200];
+final homeBlueColor = Colors.blue[200];
