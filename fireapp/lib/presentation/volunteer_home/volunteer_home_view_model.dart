@@ -19,16 +19,10 @@ class VolunteerHomeViewModel extends FireAppViewModel {
   final BehaviorSubject<RequestState<List<Shift>>> _shifts =
       BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<Shift>>> get shiftsStream => _shifts.stream;
-
-  // Loading State controllers
-  final BehaviorSubject<RequestState<void>> _loadingState =
-      BehaviorSubject.seeded(RequestState.success(null));
-  Stream<RequestState<void>> get loadingState => _loadingState.stream;
-
   VolunteerHomeViewModel(
       this._authenticationRepository, this._shiftsRepository);
   Future<void> fetchShifts() async {
-    _loadingState.add(RequestState.loading());
+    _shifts.add(RequestState.loading());
     try {
       var userID =
           (await _authenticationRepository.getCurrentSession())?.userId;
@@ -37,9 +31,9 @@ class VolunteerHomeViewModel extends FireAppViewModel {
         throw Exception(
             'User ID is null. Cannot fetch shift without a valid user ID.');
       }
-      var shifts =
-      await _shiftsRepository.getVolunteerShifts(userID);
-      _shifts.add(RequestState.success(shifts));
+        var shifts =
+        await _shiftsRepository.getVolunteerShifts(userID);
+        _shifts.add(RequestState.success(shifts));
     } catch (e, stacktrace) {
       logger.e(e, stackTrace: stacktrace);
       _shifts.add(RequestState.exception(e));
@@ -49,6 +43,5 @@ class VolunteerHomeViewModel extends FireAppViewModel {
   @override
   Future<void> dispose() async {
     _shifts.close();
-    _loadingState.close();
   }
 }
