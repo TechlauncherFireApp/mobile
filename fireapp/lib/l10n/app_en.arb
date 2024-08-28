@@ -211,7 +211,17 @@
   },
   "shift_time_range": "{startTime} - {endTime}",
   "@shift_time_range": {
-    "description": "Label for shift time range"
+    "description": "Label for shift time range",
+    "placeholders": {
+      "startTime": {
+        "type": "String",
+        "example": "10:30"
+      },
+      "endTime": {
+        "type": "String",
+        "example": "15:30"
+      }
+    }
   }
 
 }
