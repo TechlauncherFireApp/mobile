@@ -31,7 +31,7 @@ class VolunteerHomeViewModel extends FireAppViewModel {
         throw Exception(
             'User ID is null. Cannot fetch shift without a valid user ID.');
       }
-        var shifts =
+      var shifts =
         await _shiftsRepository.getVolunteerShifts(userID);
         _shifts.add(RequestState.success(shifts));
     } catch (e, stacktrace) {
