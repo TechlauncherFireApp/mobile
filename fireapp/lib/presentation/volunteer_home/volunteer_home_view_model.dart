@@ -33,7 +33,7 @@ class VolunteerHomeViewModel extends FireAppViewModel {
       }
       var shifts =
         await _shiftsRepository.getVolunteerShifts(userID);
-        _shifts.add(RequestState.success(shifts));
+      _shifts.add(RequestState.success(shifts));
     } catch (e, stacktrace) {
       logger.e(e, stackTrace: stacktrace);
       _shifts.add(RequestState.exception(e));
