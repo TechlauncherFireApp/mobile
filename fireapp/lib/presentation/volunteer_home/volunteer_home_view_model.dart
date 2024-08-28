@@ -6,6 +6,8 @@ import '../../domain/models/shift.dart';
 import '../../domain/repository/authentication_repository.dart';
 import '../../domain/request_state.dart';
 import '../fireapp_view_model.dart';
+import '../../global/di.dart';
+
 
 @injectable
 class VolunteerHomeViewModel extends FireAppViewModel {
@@ -17,25 +19,29 @@ class VolunteerHomeViewModel extends FireAppViewModel {
   final BehaviorSubject<RequestState<List<Shift>>> _shifts =
       BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<Shift>>> get shiftsStream => _shifts.stream;
-
-  // Loading State controllers
-  final BehaviorSubject<RequestState<void>> _loadingState =
-      BehaviorSubject.seeded(RequestState.success(null));
-  Stream<RequestState<void>> get loadingState => _loadingState.stream;
-
   VolunteerHomeViewModel(
       this._authenticationRepository, this._shiftsRepository);
-
-  // write your functions and logic etc
-
-  //TODO retrieve shifts
   Future<void> fetchShifts() async {
+    _shifts.add(RequestState.loading());
+    try {
+      var userID =
+          (await _authenticationRepository.getCurrentSession())?.userId;
+      // Check if userId is null and throw an exception if it is
+      if (userID == null) {
+        throw Exception(
+            'User ID is null. Cannot fetch shift without a valid user ID.');
+      }
+      var shifts =
+        await _shiftsRepository.getVolunteerShifts(userID);
+      _shifts.add(RequestState.success(shifts));
+    } catch (e, stacktrace) {
+      logger.e(e, stackTrace: stacktrace);
+      _shifts.add(RequestState.exception(e));
+    }
     return;
   }
-
   @override
-  Future<void> dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
+  Future<void> dispose() async {
+    _shifts.close();
   }
 }
