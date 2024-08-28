@@ -3,6 +3,7 @@ import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
 import 'package:fireapp/domain/models/role_response.dart';
+import 'package:fireapp/domain/models/shift.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_event_post.dart';
@@ -116,6 +117,10 @@ abstract class RestClient {
       );
   @GET("/v2/volunteers/{userId}/unavailability")
   Future<List<UnavailabilityTime>> getUnavailabilityEvents(
+      @Path("userId") int userId
+      );
+  @GET("/v2/volunteers/{userId}/shift")
+  Future<List<Shift>> getShifts(
       @Path("userId") int userId
       );
 }
