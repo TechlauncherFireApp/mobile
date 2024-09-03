@@ -122,14 +122,14 @@ class _VolunteerHomePageState extends FireAppState<VolunteerHomePage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(dateFormat.format(shift.startTime),
+                Text(dateFormat.format(shift.start),
                       style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
                 Text(AppLocalizations.of(context)!.shift_id_display_home(shift.shiftId))
               ].spacedBy(1.0.rdp()),
             ),
             Text(AppLocalizations.of(context)!.shift_time_range(
-                timeFormat.format(shift.startTime),
-                timeFormat.format(shift.endTime)
+                timeFormat.format(shift.start),
+                timeFormat.format(shift.end)
             ))
           ].spacedBy(1.0.rdp())
         ),
