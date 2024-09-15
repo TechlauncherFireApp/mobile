@@ -1,4 +1,5 @@
 import 'package:fireapp/domain/repository/authentication_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_tokens_repository.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';
@@ -37,7 +38,9 @@ class _SettingsState extends State<SettingBox> {
 
   // Add modern concept to legacy stuff
   final AuthenticationRepository _authenticationRepository =
-    GetIt.instance.get();
+      GetIt.instance.get();
+  final NotificationFCMTokensRepository _fcmTokensRepository =
+      GetIt.instance.get();
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +48,9 @@ class _SettingsState extends State<SettingBox> {
       appBar: fireAppAppBar(context, 'Settings'),
       body: SettingsList(
         lightTheme: SettingsThemeData(
-          settingsListBackground: Theme.of(context).colorScheme.background,
-          titleTextColor: Theme.of(context).colorScheme.onBackground,
-          leadingIconsColor: Theme.of(context).colorScheme.primary
-        ),
+            settingsListBackground: Theme.of(context).colorScheme.background,
+            titleTextColor: Theme.of(context).colorScheme.onBackground,
+            leadingIconsColor: Theme.of(context).colorScheme.primary),
         sections: [
           SettingsSection(
             title: Text('Application Settings'),
@@ -92,14 +94,14 @@ class _SettingsState extends State<SettingBox> {
                     );
                   }),
               SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                title: const Text('Sign Out'),
-                onPressed: (_) {
-                  _authenticationRepository.logout();
-                  Navigator.popUntil(context, (route) => true);
-                  Navigator.pushNamed(context, "/login");
-                }
-              ),
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Sign Out'),
+                  onPressed: (_) async {
+                    unregisterFcmTokens();
+                    _authenticationRepository.logout();
+                    Navigator.popUntil(context, (route) => true);
+                    Navigator.pushNamed(context, "/login");
+                  }),
             ],
           ),
           SettingsSection(
@@ -144,5 +146,13 @@ class _SettingsState extends State<SettingBox> {
 
       ),
     );
+  }
+
+  Future<void> unregisterFcmTokens() async {
+    var userID = (await _authenticationRepository.getCurrentSession())?.userId;
+    if (userID == null) {
+      throw Exception('User Id cannot be null');
+    }
+    _fcmTokensRepository.unregisterToken(userID);
   }
 }

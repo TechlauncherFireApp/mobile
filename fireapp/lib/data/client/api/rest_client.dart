@@ -1,3 +1,4 @@
+import 'package:fireapp/domain/models/fcm_tokens.dart';
 import 'package:fireapp/domain/models/new/vehicle_request.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
@@ -123,4 +124,13 @@ abstract class RestClient {
   Future<List<Shift>> getShifts(
       @Path("userId") int userId
       );
+  @POST("/v2/register-token")
+  Future<void> registerFCMTokens(
+      @Body() FCMTokens tokens
+      );
+  @POST("/v2/unregister-token")
+  Future<void> unregisterFCMTokens(
+      @Body() FCMTokens tokens
+      );
+
 }
