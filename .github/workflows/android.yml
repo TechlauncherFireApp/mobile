@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.gitversion.outputs.semVer }}
-      versionCode: ${{ steps.run_number.outputs.versionCode }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -40,7 +39,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
+    - name: Inject .env
+      run: echo "$DEV_ENV_FILE" >> fireapp/.env
+      env:
+        DEV_ENV_FILE: ${{secrets.DEV_ENV_FILE}}
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.19.0'
@@ -59,15 +61,12 @@ jobs:
         name: ${{github.run_number}}-apk
         path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
 
-      
-      
   publish-pre:
     needs:
       - build
       - version
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Get current date
         id: date
@@ -95,13 +94,13 @@ jobs:
           asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
           asset_name: app-debug.apk
           asset_content_type: application/vnd.android.package-archive
+  
   publish-release:
     needs:
       - build
       - version
     if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Get current date
         id: date
