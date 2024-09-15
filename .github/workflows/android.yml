@@ -42,6 +42,14 @@ jobs:
       run: echo "$DEV_ENV_FILE" >> fireapp/.env
       env:
         DEV_ENV_FILE: ${{secrets.DEV_ENV_FILE}}
+    - name: Inject google-services.json
+      run: echo "$DEV_ANDROID_GOOGLE_SERVICES" >> fireapp/android/app/src/google-services.json
+      env:
+        DEV_ANDROID_GOOGLE_SERVICES: ${{secrets.DEV_ANDROID_GOOGLE_SERVICES}}
+    - name: Inject GoogleService-Info.plist
+      run: echo "$DEV_IOS_GOOGLE_SERVICES" >> fireapp/ios/GoogleService-Info.plist
+      env:
+        DEV_IOS_GOOGLE_SERVICES: ${{secrets.DEV_IOS_GOOGLE_SERVICES}}
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.19.0'
