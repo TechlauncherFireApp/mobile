@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main", "release" ]
   pull_request:
-    branches: [ "main", "release" ]
   merge_group:
 
 jobs:
@@ -12,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.gitversion.outputs.semVer }}
-      versionCode: ${{ steps.run_number.outputs.versionCode }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -40,7 +38,18 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
+    - name: Inject .env
+      run: echo "$DEV_ENV_FILE" >> fireapp/.env
+      env:
+        DEV_ENV_FILE: ${{secrets.DEV_ENV_FILE}}
+    - name: Inject google-services.json
+      run: echo "$DEV_ANDROID_GOOGLE_SERVICES" >> fireapp/android/app/src/google-services.json
+      env:
+        DEV_ANDROID_GOOGLE_SERVICES: ${{secrets.DEV_ANDROID_GOOGLE_SERVICES}}
+    - name: Inject GoogleService-Info.plist
+      run: echo "$DEV_IOS_GOOGLE_SERVICES" >> fireapp/ios/GoogleService-Info.plist
+      env:
+        DEV_IOS_GOOGLE_SERVICES: ${{secrets.DEV_IOS_GOOGLE_SERVICES}}
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.19.0'
@@ -59,15 +68,12 @@ jobs:
         name: ${{github.run_number}}-apk
         path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
 
-      
-      
   publish-pre:
     needs:
       - build
       - version
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Get current date
         id: date
@@ -95,13 +101,13 @@ jobs:
           asset_path: ./fireapp/build/app/outputs/flutter-apk/app-release.apk
           asset_name: app-debug.apk
           asset_content_type: application/vnd.android.package-archive
+  
   publish-release:
     needs:
       - build
       - version
     if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Get current date
         id: date

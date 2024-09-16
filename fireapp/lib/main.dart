@@ -14,8 +14,12 @@ import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:fireapp/widgets/fireapp_app_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 //INTERNAL
+import 'firebase/firebase_api.dart';
+import 'firebase/firebase_options.dart';
 import 'layout/wrapper.dart';
 import 'layout/navigation.dart';
 import 'package:fireapp/global/theme.dart';
@@ -25,9 +29,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Main Function
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
