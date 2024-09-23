@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
+import 'package:fireapp/domain/repository/notification_fcm_tokens_repository.dart';
 import 'package:fireapp/environment_config.dart';
 import 'package:fireapp/global/di.dart';
+import 'package:fireapp/main_view_model.dart';
 import 'package:fireapp/presentation/server_url/server_url_page.dart';
 import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view.dart';
@@ -17,8 +19,10 @@ import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 //INTERNAL
+import 'domain/repository/authentication_repository.dart';
 import 'firebase_options.dart';
 import 'layout/wrapper.dart';
 import 'layout/navigation.dart';
@@ -44,17 +48,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<void> setupToken() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-
+  MainViewModel viewModel = GetIt.instance.get();
   @override
   void initState() {
     super.initState();
-    setupToken();
+    viewModel.setupTokenListener();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,17 +69,23 @@ class _MyAppState extends State<MyApp> {
         Locale('en'),
       ],
       title: 'FireApp',
-      initialRoute: (EnvironmentConfig.serviceUrl.isEmpty) ? '/server_url_page' : '/login',
+      initialRoute: (EnvironmentConfig.serviceUrl.isEmpty)
+          ? '/server_url_page'
+          : '/login',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart
-        '/login': (context) => const LoginPage(), // See Authentication/Login.dart
-        '/register': (context) => const RegisterPage(), //See Authentication/register.dart
+        '/login': (context) =>
+            const LoginPage(), // See Authentication/Login.dart
+        '/register': (context) =>
+            const RegisterPage(), //See Authentication/register.dart
         '/reset_password': (context) => const ResetPage(),
         '/volunteer_list': (context) => const VolunteerList(),
-        '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
+        '/dietary_requirements/update': (context) =>
+            const DietaryRequirementsPage(),
         '/server_url_page': (context) => const ServerUrlPage(),
-        '/shift_request/{id}': (context) => const ShiftRequestView(requestId: "1"),
+        '/shift_request/{id}': (context) =>
+            const ShiftRequestView(requestId: "1"),
         '/constraint_form': (context) => const SchedulerConstraintPage(),
       },
     );

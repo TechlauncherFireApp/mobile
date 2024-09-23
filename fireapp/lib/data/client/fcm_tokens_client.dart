@@ -3,15 +3,15 @@ import 'package:injectable/injectable.dart';
 import '../../domain/models/fcm_tokens.dart';
 
 @injectable
-class FCMTokensClient {
+class FCMTokenClient {
   final RestClient restClient;
 
-  FCMTokensClient(this.restClient);
+  FCMTokenClient(this.restClient);
 
-  Future<void> registerFCMTokens(FCMTokens tokens) async {
-    restClient.registerFCMTokens(tokens);
+  Future<void> registerFCMToken(FCMToken tokens) async {
+    restClient.registerFCMToken(tokens.userId, tokens);
   }
-  Future<void> unregisterFCMTokens(FCMTokens tokens) async {
-    restClient.unregisterFCMTokens(tokens);
+  Future<void> unregisterFCMToken(FCMToken tokens) async {
+    restClient.unregisterFCMToken(tokens.userId, tokens);
   }
 }

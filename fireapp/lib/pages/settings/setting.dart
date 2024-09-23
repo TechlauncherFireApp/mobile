@@ -4,6 +4,7 @@ import 'package:fireapp/global/access.dart';
 import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';
 import 'package:fireapp/pages/settings/reset_pw_simple.dart';
+import 'package:fireapp/pages/settings/setting_view_model.dart';
 import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -35,12 +36,10 @@ class SettingBox extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingBox> {
-
   // Add modern concept to legacy stuff
   final AuthenticationRepository _authenticationRepository =
       GetIt.instance.get();
-  final NotificationFCMTokensRepository _fcmTokensRepository =
-      GetIt.instance.get();
+  final SettingViewModel viewModel = GetIt.instance.get();
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +96,7 @@ class _SettingsState extends State<SettingBox> {
                   leading: const Icon(Icons.logout),
                   title: const Text('Sign Out'),
                   onPressed: (_) async {
-                    unregisterFcmTokens();
+                    await viewModel.unregisterFcmToken();
                     _authenticationRepository.logout();
                     Navigator.popUntil(context, (route) => true);
                     Navigator.pushNamed(context, "/login");
@@ -143,16 +142,7 @@ class _SettingsState extends State<SettingBox> {
             ],
           ),
         ],
-
       ),
     );
-  }
-
-  Future<void> unregisterFcmTokens() async {
-    var userID = (await _authenticationRepository.getCurrentSession())?.userId;
-    if (userID == null) {
-      throw Exception('User Id cannot be null');
-    }
-    _fcmTokensRepository.unregisterToken(userID);
   }
 }

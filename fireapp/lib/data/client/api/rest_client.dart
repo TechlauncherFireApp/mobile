@@ -124,13 +124,14 @@ abstract class RestClient {
   Future<List<Shift>> getShifts(
       @Path("userId") int userId
       );
-  @POST("/v2/register-token")
-  Future<void> registerFCMTokens(
-      @Body() FCMTokens tokens
+  @POST("/v2/user/{userId}/token")
+  Future<void> registerFCMToken(
+      @Path("userId") int userId,
+      @Body() FCMToken token
       );
-  @POST("/v2/unregister-token")
-  Future<void> unregisterFCMTokens(
-      @Body() FCMTokens tokens
+  @POST("/v2/user/{userId}/token")
+  Future<void> unregisterFCMToken(
+      @Path("userId") int userId,
+      @Body() FCMToken token
       );
-
 }
