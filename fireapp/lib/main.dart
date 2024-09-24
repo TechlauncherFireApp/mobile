@@ -69,23 +69,17 @@ class _MyAppState extends State<MyApp> {
         Locale('en'),
       ],
       title: 'FireApp',
-      initialRoute: (EnvironmentConfig.serviceUrl.isEmpty)
-          ? '/server_url_page'
-          : '/login',
+      initialRoute: (EnvironmentConfig.serviceUrl.isEmpty) ? '/server_url_page' : '/login',
       routes: {
         //  (You can change it to the page you develop in the beginning)
         '/nav': (context) => mainNav(), // See Layout/Navigation.dart
-        '/login': (context) =>
-            const LoginPage(), // See Authentication/Login.dart
-        '/register': (context) =>
-            const RegisterPage(), //See Authentication/register.dart
+        '/login': (context) => const LoginPage(), // See Authentication/Login.dart
+        '/register': (context) => const RegisterPage(), //See Authentication/register.dart
         '/reset_password': (context) => const ResetPage(),
         '/volunteer_list': (context) => const VolunteerList(),
-        '/dietary_requirements/update': (context) =>
-            const DietaryRequirementsPage(),
+        '/dietary_requirements/update': (context) => const DietaryRequirementsPage(),
         '/server_url_page': (context) => const ServerUrlPage(),
-        '/shift_request/{id}': (context) =>
-            const ShiftRequestView(requestId: "1"),
+        '/shift_request/{id}': (context) => const ShiftRequestView(requestId: "1"),
         '/constraint_form': (context) => const SchedulerConstraintPage(),
       },
     );

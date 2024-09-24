@@ -1,4 +1,4 @@
-import 'package:fireapp/domain/models/fcm_tokens.dart';
+import 'package:fireapp/domain/models/fcm_token.dart';
 import 'package:fireapp/domain/models/new/vehicle_request.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';

@@ -1,6 +1,6 @@
 import 'package:fireapp/data/client/api/rest_client.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/models/fcm_tokens.dart';
+import '../../domain/models/fcm_token.dart';
 
 @injectable
 class FCMTokenClient {

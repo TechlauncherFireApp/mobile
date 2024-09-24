@@ -47,9 +47,10 @@ class _SettingsState extends State<SettingBox> {
       appBar: fireAppAppBar(context, 'Settings'),
       body: SettingsList(
         lightTheme: SettingsThemeData(
-            settingsListBackground: Theme.of(context).colorScheme.background,
-            titleTextColor: Theme.of(context).colorScheme.onBackground,
-            leadingIconsColor: Theme.of(context).colorScheme.primary),
+          settingsListBackground: Theme.of(context).colorScheme.background,
+          titleTextColor: Theme.of(context).colorScheme.onBackground,
+          leadingIconsColor: Theme.of(context).colorScheme.primary
+        ),
         sections: [
           SettingsSection(
             title: Text('Application Settings'),

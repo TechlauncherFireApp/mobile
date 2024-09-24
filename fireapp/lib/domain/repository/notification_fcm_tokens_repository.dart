@@ -1,5 +1,5 @@
-import 'package:fireapp/data/client/fcm_tokens_client.dart';
-import 'package:fireapp/domain/models/fcm_tokens.dart';
+import 'package:fireapp/data/client/fcm_token_client.dart';
+import 'package:fireapp/domain/models/fcm_token.dart';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:io';
