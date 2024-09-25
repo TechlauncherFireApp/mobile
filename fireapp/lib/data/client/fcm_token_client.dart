@@ -13,6 +13,6 @@ class FCMTokenClient {
     restClient.registerFCMToken(userId, token);
   }
   Future<void> unregisterFCMToken(int userId, FCMTokenUnregister token) async {
-    restClient.unregisterFCMToken(userId, token);
+    await restClient.unregisterFCMToken(userId, token);
   }
 }

@@ -20,6 +20,6 @@ class SettingViewModel {
     if (curToken == null) {
       throw Exception('FCM token cannot be null');
     }
-    _fcmTokenRepository.unregisterToken(curToken);
+    await _fcmTokenRepository.unregisterToken(curToken);
   }
 }

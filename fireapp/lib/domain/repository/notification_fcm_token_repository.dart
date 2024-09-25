@@ -23,7 +23,7 @@ class NotificationFCMTokenRepository {
 
   Future<void> unregisterToken(String token) async {
     int userId = await getUserId();
-    tokenClient.unregisterFCMToken(
+    await tokenClient.unregisterFCMToken(
         userId, FCMTokenUnregister(fcmToken: token));
   }
 
