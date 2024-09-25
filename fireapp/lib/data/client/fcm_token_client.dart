@@ -1,6 +1,7 @@
 import 'package:fireapp/data/client/api/rest_client.dart';
+import 'package:fireapp/domain/models/notification/fcm_token_unregister.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/models/fcm_token.dart';
+import '../../domain/models/notification/fcm_token.dart';
 
 @injectable
 class FCMTokenClient {
@@ -8,10 +9,10 @@ class FCMTokenClient {
 
   FCMTokenClient(this.restClient);
 
-  Future<void> registerFCMToken(FCMToken tokens) async {
-    restClient.registerFCMToken(tokens.userId, tokens);
+  Future<void> registerFCMToken(int userId, FCMToken token) async {
+    restClient.registerFCMToken(userId, token);
   }
-  Future<void> unregisterFCMToken(FCMToken tokens) async {
-    restClient.unregisterFCMToken(tokens.userId, tokens);
+  Future<void> unregisterFCMToken(int userId, FCMTokenUnregister token) async {
+    restClient.unregisterFCMToken(userId, token);
   }
 }

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
-import 'package:fireapp/domain/repository/notification_fcm_tokens_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/environment_config.dart';
 import 'package:fireapp/global/di.dart';
 import 'package:fireapp/main_view_model.dart';

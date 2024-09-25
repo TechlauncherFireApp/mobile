@@ -1,5 +1,5 @@
 import 'package:fireapp/domain/repository/authentication_repository.dart';
-import 'package:fireapp/domain/repository/notification_fcm_tokens_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';

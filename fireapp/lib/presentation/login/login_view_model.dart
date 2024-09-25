@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:fireapp/domain/repository/authentication_repository.dart';
-import 'package:fireapp/domain/repository/notification_fcm_tokens_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/global/di.dart';
@@ -10,6 +10,8 @@ import 'package:fireapp/presentation/login/login_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../domain/use_cases/register_token_use_case.dart';
 
 @injectable
 class LoginViewModel
