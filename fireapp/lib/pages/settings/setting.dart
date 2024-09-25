@@ -97,10 +97,7 @@ class _SettingsState extends State<SettingBox> {
                   leading: const Icon(Icons.logout),
                   title: const Text('Sign Out'),
                   onPressed: (_) async {
-                    await viewModel.unregisterFcmToken();
-                    _authenticationRepository.logout();
-                    Navigator.popUntil(context, (route) => true);
-                    Navigator.pushNamed(context, "/login");
+                    await viewModel.signOut(context);
                   }),
             ],
           ),
