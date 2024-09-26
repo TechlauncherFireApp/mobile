@@ -16,24 +16,14 @@ class NotificationFCMTokenRepository {
 
   Future<void> registerFCMToken(String token) async {
     String deviceType = 'android';
-    var userId = await getUserId();
+    var userId = await _authenticationRepository.getUserId();
     var curToken = FCMToken(fcmToken: token, deviceType: deviceType);
     tokenClient.registerFCMToken(userId, curToken);
   }
 
   Future<void> unregisterToken(String token) async {
-    int userId = await getUserId();
+    int userId = await _authenticationRepository.getUserId();
     await tokenClient.unregisterFCMToken(
         userId, FCMTokenUnregister(fcmToken: token));
-  }
-
-  Future<int> getUserId() async {
-    final session = await _authenticationRepository.getCurrentSession();
-    final userId = session?.userId;
-
-    if (userId == null) {
-      throw Exception('User ID is null. Cannot register FCM Token.');
-    }
-    return userId;
   }
 }

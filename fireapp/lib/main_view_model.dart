@@ -25,7 +25,7 @@ class MainViewModel {
     );
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       var userID =
-          (await _authenticationRepository.getCurrentSession())?.userId;
+          await _authenticationRepository.getUserId();
       if (userID != null) {
         _fcmTokenRepository
             .registerFCMToken(newToken);
