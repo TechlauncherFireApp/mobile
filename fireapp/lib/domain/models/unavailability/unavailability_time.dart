@@ -13,6 +13,7 @@ class UnavailabilityTime with _$UnavailabilityTime{
     required int periodicity, //Number of days between repeating event
     required DateTime startTime,
     required DateTime endTime,
+    @Default(false) bool isShift,
   }) = _UnavailabilityTime;
 
   // Factory constructor to convert 'UnavailabilityTime' JSON to object
