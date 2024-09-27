@@ -137,6 +137,7 @@ class _CalendarState extends FireAppState<CalendarView>
     final displayTime = event.displayTime;
     final eventId = unavailabilityEvent.eventId;
     final cardColor = viewModel.getColorForEvent(eventId.toString());
+    final isShift = unavailabilityEvent.isShift;
 
     return Card(
       color: cardColor,
@@ -144,7 +145,7 @@ class _CalendarState extends FireAppState<CalendarView>
       child: ListTile(
         title: Text(title),
         subtitle: Text(displayTime),
-        trailing: PopupMenuButton<String>(
+        trailing: !isShift ? PopupMenuButton<String>(
           onSelected: (value) {},
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             PopupMenuItem<String>(
@@ -163,7 +164,7 @@ class _CalendarState extends FireAppState<CalendarView>
               },
             ),
           ],
-        ),
+        ) : null,
       ),
     );
   }
