@@ -17,9 +17,9 @@ class SettingViewModel extends FireAppViewModel
   final AuthenticationRepository _authenticationRepository;
   final NotificationFCMTokenRepository _fcmTokenRepository;
 
-  final BehaviorSubject<RequestState<void>> _state =
+  final BehaviorSubject<RequestState<void>> _signOutState =
       BehaviorSubject.seeded(RequestState.initial());
-  Stream<RequestState<void>> get state => _state.stream;
+  Stream<RequestState<void>> get signOutState => _signOutState.stream;
 
   final BehaviorSubject<SettingNavigation> _navigate = BehaviorSubject();
   @override
@@ -36,21 +36,21 @@ class SettingViewModel extends FireAppViewModel
   }
 
   Future<void> signOut() async {
-    _state.add(RequestState.loading());
+    _signOutState.add(RequestState.loading());
     try {
       await unregisterFcmToken();
       await _authenticationRepository.logout();
-      _state.add(RequestState.success(null));
-      _navigate.add(SettingNavigation.signOut());
+      _signOutState.add(RequestState.success(null));
+      _navigate.add(SettingNavigation.login());
     } catch (e, stacktrace) {
       logger.e("$e $stacktrace");
-      _state.add(RequestState.exception(e));
+      _signOutState.add(RequestState.exception(e));
     }
   }
 
   @override
   Future<void> dispose() async {
     await _navigate.close();
-    await _state.close();
+    await _signOutState.close();
   }
 }

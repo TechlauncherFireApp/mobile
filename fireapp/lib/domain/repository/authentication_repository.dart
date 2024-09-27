@@ -2,7 +2,6 @@
 import 'package:fireapp/data/client/authentication_client.dart';
 import 'package:fireapp/data/persistence/authentication_persistence.dart';
 import 'package:fireapp/domain/models/token_response.dart';
-import 'package:fireapp/exception/signed_out_exception.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:injectable/injectable.dart';
 
@@ -61,12 +60,9 @@ class AuthenticationRepository {
     _authenticationPersistence.logout();
   }
 
-  Future<int> getUserId() async {
+  Future<int?> getUserId() async {
     final session = await _authenticationPersistence.get();
     final userId = session?.userId;
-    if (userId == null) {
-      throw SignedOutException('User ID cannot be null.');
-    }
     return userId;
   }
 

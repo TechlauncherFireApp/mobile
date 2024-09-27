@@ -1,11 +1,11 @@
 abstract class SettingNavigation {
   SettingNavigation._();
 
-  factory SettingNavigation.signOut() {
-    return SignOutNavigation();
+  factory SettingNavigation.login() {
+    return LoginSettingNavigation();
   }
 }
 
-class SignOutNavigation extends SettingNavigation {
-  SignOutNavigation() : super._();
+class LoginSettingNavigation extends SettingNavigation {
+  LoginSettingNavigation() : super._();
 }

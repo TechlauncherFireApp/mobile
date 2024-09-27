@@ -53,7 +53,7 @@ class _SettingsState extends FireAppState<SettingPage>
 
   @override
   void handleNavigationEvent(SettingNavigation event) {
-    if (event is SignOutNavigation) {
+    if (event is LoginSettingNavigation) {
       Navigator.of(context).pushNamedAndRemoveUntil("/login", (route) => false);
       return;
     }
