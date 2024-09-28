@@ -22,9 +22,6 @@ class MainViewModel {
   MainViewModel(this._authenticationRepository, this._fcmTokenRepository);
 
   Future<void> setupTokenListener() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       var userID =
           await _authenticationRepository.getUserId();
