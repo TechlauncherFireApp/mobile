@@ -18,7 +18,9 @@ import 'firebase_options.dart';
 class MainViewModel {
   late final AuthenticationRepository _authenticationRepository;
   late final NotificationFCMTokenRepository _fcmTokenRepository;
+
   MainViewModel(this._authenticationRepository, this._fcmTokenRepository);
+
   Future<void> setupTokenListener() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
