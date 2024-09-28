@@ -22,7 +22,6 @@ import 'package:logger/logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 //INTERNAL
 import 'firebase/firebase_api.dart';
-import 'firebase/firebase_options.dart';
 import 'domain/repository/authentication_repository.dart';
 import 'firebase_options.dart';
 import 'layout/wrapper.dart';
@@ -33,10 +32,15 @@ import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'main_view_model.dart';
+
 // Main Function
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -49,6 +53,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  MainViewModel viewModel = GetIt.instance.get();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel.setupTokenListener();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
