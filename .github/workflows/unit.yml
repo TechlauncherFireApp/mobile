@@ -24,7 +24,7 @@ jobs:
       env:
         DEV_ENV_FILE: ${{secrets.DEV_ENV_FILE}}
     - name: Inject firebase-options.dart
-      run: echo "$DEV_FIREBASE_OPTIONS" >> fireapp/lib/firebase-options.dart
+      run: echo "$DEV_FIREBASE_OPTIONS" >> fireapp/lib/firebase_options.dart
       env:
         DEV_FIREBASE_OPTIONS: ${{secrets.DEV_FIREBASE_OPTIONS}}
     - uses: subosito/flutter-action@v2
