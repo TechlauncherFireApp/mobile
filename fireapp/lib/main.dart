@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 // EXTERNAL
-import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/environment_config.dart';
 import 'package:fireapp/global/di.dart';
-import 'package:fireapp/main_view_model.dart';
 import 'package:fireapp/presentation/server_url/server_url_page.dart';
 import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view.dart';
@@ -21,7 +19,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 //INTERNAL
+import 'firebase/firebase_api.dart';
+import 'firebase/firebase_options.dart';
 import 'domain/repository/authentication_repository.dart';
 import 'firebase_options.dart';
 import 'layout/wrapper.dart';
@@ -48,13 +49,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MainViewModel viewModel = GetIt.instance.get();
-  @override
-  void initState() {
-    super.initState();
-    viewModel.setupTokenListener();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
   merge_group:
 
 jobs:
@@ -20,7 +19,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
+    - name: Inject .env
+      run: echo "$DEV_ENV_FILE" >> fireapp/.env
+      env:
+        DEV_ENV_FILE: ${{secrets.DEV_ENV_FILE}}
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.19.0'
