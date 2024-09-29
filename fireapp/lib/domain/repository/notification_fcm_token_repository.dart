@@ -7,16 +7,20 @@ import 'dart:io';
 import '../../exception/signed_out_exception.dart';
 import '../models/notification/fcm_token.dart';
 import 'authentication_repository.dart';
+import 'device_repository.dart';
 
 @injectable
 class NotificationFCMTokenRepository {
+
   final FCMTokenClient tokenClient;
   final AuthenticationRepository _authenticationRepository;
+  final DeviceRepository _deviceRepository;
+
   NotificationFCMTokenRepository(
-      this.tokenClient, this._authenticationRepository);
+      this.tokenClient, this._authenticationRepository, this._deviceRepository);
 
   Future<void> registerFCMToken(String token) async {
-    String deviceType = 'android';
+    String deviceType = (await _deviceRepository.getDeviceType()).name;
     int? userId = await _authenticationRepository.getUserId();
     if (userId == null) {
       throw SignedOutException('A user ID cannot be null.');
