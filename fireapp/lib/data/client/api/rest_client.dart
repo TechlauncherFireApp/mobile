@@ -1,4 +1,5 @@
 import 'package:fireapp/domain/models/new/vehicle_request.dart';
+import 'package:fireapp/domain/models/notification/fcm_token_unregister.dart';
 import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
@@ -15,6 +16,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../domain/models/notification/fcm_token.dart';
 import '../../../domain/models/reference/asset_type.dart';
 import '../../../domain/models/role_request.dart';
 import '../../../domain/models/scheduler/new_request.dart';
@@ -122,5 +124,15 @@ abstract class RestClient {
   @GET("/v2/volunteers/{userId}/shift")
   Future<List<Shift>> getShifts(
       @Path("userId") int userId
+      );
+  @POST("/v2/user/{userId}/token")
+  Future<void> registerFCMToken(
+      @Path("userId") int userId,
+      @Body() FCMToken token
+      );
+  @DELETE("/v2/user/{userId}/token")
+  Future<void> unregisterFCMToken(
+      @Path("userId") int userId,
+      @Body() FCMTokenUnregister token
       );
 }

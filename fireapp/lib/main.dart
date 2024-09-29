@@ -14,12 +14,15 @@ import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:fireapp/presentation/dietary_requirements/dietary_requirements_page.dart';
 import 'package:fireapp/style/theme.dart';
 import 'package:fireapp/widgets/fireapp_app_bar.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 //INTERNAL
 import 'firebase/firebase_api.dart';
-import 'firebase/firebase_options.dart';
+import 'domain/repository/authentication_repository.dart';
+import 'firebase_options.dart';
 import 'layout/wrapper.dart';
 import 'layout/navigation.dart';
 import 'package:fireapp/global/theme.dart';
@@ -28,12 +31,15 @@ import 'package:fireapp/pages/settings/setting.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'main_view_model.dart';
+
 // Main Function
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
@@ -47,6 +53,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  MainViewModel viewModel = GetIt.instance.get();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel.setupTokenListener();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

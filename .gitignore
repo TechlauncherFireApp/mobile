@@ -57,3 +57,4 @@ fireapp/lib/global/di.config.dart
 *.h
 
 fireapp/lib/environment_config.dart
+/fireapp/lib/firebase_options.dart
