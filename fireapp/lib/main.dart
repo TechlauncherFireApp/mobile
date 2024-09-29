@@ -19,7 +19,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 //INTERNAL
 import 'firebase/firebase_api.dart';
 import 'domain/repository/authentication_repository.dart';
