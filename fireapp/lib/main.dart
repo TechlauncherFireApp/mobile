@@ -17,12 +17,13 @@ import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 //INTERNAL
 import 'firebase/firebase_api.dart';
 import 'domain/repository/authentication_repository.dart';
-import 'firebase_options.dart';
+import 'firebase/firebase_options.dart';
 import 'layout/wrapper.dart';
 import 'layout/navigation.dart';
 import 'package:fireapp/global/theme.dart';
@@ -37,6 +38,7 @@ import 'main_view_model.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

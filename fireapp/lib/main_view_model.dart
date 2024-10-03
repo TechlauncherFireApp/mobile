@@ -12,7 +12,6 @@ import '../../domain/request_state.dart';
 import '../../global/di.dart';
 import 'domain/models/notification/fcm_token.dart';
 import 'domain/repository/notification_fcm_token_repository.dart';
-import 'firebase_options.dart';
 
 @injectable
 class MainViewModel {
