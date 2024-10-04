@@ -8,6 +8,7 @@ import 'package:fireapp/domain/repository/authentication_repository.dart';
 import 'package:fireapp/domain/repository/volunteer_information_repository.dart';
 import 'package:fireapp/domain/repository/volunteer_repository.dart';
 import 'package:fireapp/domain/request_state.dart';
+import 'package:fireapp/domain/use_cases/register_token_use_case.dart';
 import 'package:fireapp/presentation/login/login_navigation.dart';
 import 'package:fireapp/presentation/login/login_view_model.dart';
 import 'package:fireapp/presentation/volunteer_information/volunteer_information_viewmodel.dart';
@@ -21,11 +22,13 @@ import 'package:matcher/expect.dart' hide expectLater, expect;
 import '../../request_state_has_content_matcher.dart';
 @GenerateNiceMocks([
   MockSpec<AuthenticationRepository>(),
+  MockSpec<RegisterCurrentTokenUseCase>()
 ])
 import 'login_viewmodel_test.mocks.dart';
 
 void main() {
   late MockAuthenticationRepository mockAuthRepository;
+  late MockRegisterCurrentTokenUseCase mockRegisterCurrentTokenUseCase;
   late LoginViewModel viewModel;
   const tokenResponse = TokenResponse(
       accessToken: 'test_token',
@@ -35,7 +38,8 @@ void main() {
 
   setUp(() {
     mockAuthRepository = MockAuthenticationRepository();
-    viewModel = LoginViewModel(mockAuthRepository);
+    mockRegisterCurrentTokenUseCase = MockRegisterCurrentTokenUseCase();
+    viewModel = LoginViewModel(mockAuthRepository, mockRegisterCurrentTokenUseCase);
   });
 
   group('LoginViewModel', () {

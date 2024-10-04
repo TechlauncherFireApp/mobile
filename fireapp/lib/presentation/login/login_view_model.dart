@@ -1,7 +1,7 @@
-
 import 'dart:async';
 
 import 'package:fireapp/domain/repository/authentication_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/domain/request_state.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/global/di.dart';
@@ -11,12 +11,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/use_cases/register_token_use_case.dart';
+
 @injectable
 class LoginViewModel
     extends FireAppViewModel
     implements NavigationViewModel<LoginNavigation> {
 
   final AuthenticationRepository _authenticationRepository;
+  final RegisterCurrentTokenUseCase _registerCurrentTokenUseCase;
 
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -30,13 +33,14 @@ class LoginViewModel
   @override
   Stream<LoginNavigation> get navigate => _navigate.stream;
 
-  LoginViewModel(this._authenticationRepository);
+  LoginViewModel(this._authenticationRepository, this._registerCurrentTokenUseCase);
 
   void login() {
     _state.add(RequestState.loading());
     () async {
       try {
         await _authenticationRepository.login(email.text, password.text);
+        _registerCurrentTokenUseCase();
         _navigate.add(LoginNavigation.home());
         _state.add(RequestState.success(null));
       } catch (e, stacktrace) {
@@ -63,5 +67,4 @@ class LoginViewModel
     email.dispose();
     password.dispose();
   }
-
 }

@@ -60,4 +60,10 @@ class AuthenticationRepository {
     _authenticationPersistence.logout();
   }
 
+  Future<int?> getUserId() async {
+    final session = await _authenticationPersistence.get();
+    final userId = session?.userId;
+    return userId;
+  }
+
 }

@@ -1,14 +1,20 @@
 import 'package:fireapp/domain/repository/authentication_repository.dart';
+import 'package:fireapp/domain/repository/notification_fcm_token_repository.dart';
 import 'package:fireapp/global/access.dart';
 import 'package:fireapp/pages/settings/accountDetails.dart';
 import 'package:fireapp/pages/settings/dietaryPage.dart';
 import 'package:fireapp/pages/settings/reset_pw_simple.dart';
+import 'package:fireapp/pages/settings/setting_navigation.dart';
+import 'package:fireapp/pages/settings/setting_view_model.dart';
 import 'package:fireapp/widgets/fireapp_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class SettingPage extends StatelessWidget {
+import '../../base/widget.dart';
+import '../../presentation/fireapp_page.dart';
+
+class SettingPage extends StatefulWidget {
   final String email;
   SettingPage({Key? key, required this.email}) : super(key: key);
 
@@ -23,6 +29,9 @@ class SettingPage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  State createState() => _SettingsState();
 }
 
 class SettingBox extends StatefulWidget {
@@ -33,11 +42,22 @@ class SettingBox extends StatefulWidget {
   State<StatefulWidget> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<SettingBox> {
-
+class _SettingsState extends FireAppState<SettingPage>
+    with Navigable<SettingNavigation, SettingPage>
+    implements ViewModelHolder<SettingViewModel> {
   // Add modern concept to legacy stuff
   final AuthenticationRepository _authenticationRepository =
-    GetIt.instance.get();
+      GetIt.instance.get();
+  @override
+  SettingViewModel viewModel = GetIt.instance.get();
+
+  @override
+  void handleNavigationEvent(SettingNavigation event) {
+    if (event is LoginSettingNavigation) {
+      Navigator.of(context).pushNamedAndRemoveUntil("/login", (route) => false);
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +112,11 @@ class _SettingsState extends State<SettingBox> {
                     );
                   }),
               SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                title: const Text('Sign Out'),
-                onPressed: (_) {
-                  _authenticationRepository.logout();
-                  Navigator.popUntil(context, (route) => true);
-                  Navigator.pushNamed(context, "/login");
-                }
-              ),
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Sign Out'),
+                  onPressed: (_) async {
+                    await viewModel.signOut();
+                  }),
             ],
           ),
           SettingsSection(
@@ -141,7 +158,6 @@ class _SettingsState extends State<SettingBox> {
             ],
           ),
         ],
-
       ),
     );
   }
