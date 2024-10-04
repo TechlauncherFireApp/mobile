@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../../domain/models/calendar_event.dart';
+import '../../domain/models/shift.dart';
 import '../unavailability_form/unavailability_form_widget.dart';
 import 'calendar_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -130,11 +131,16 @@ class _CalendarState extends FireAppState<CalendarView>
 
 
 
-  Widget _buildEventCard(CalendarEvent event, int index, int totalEvents) {
-    // Parse parameters from event
-    final unavailabilityEvent = event.event;
+  Widget _buildEventCard(CalendarEvent calendarEvent, int index, int totalEvents) {
+    return calendarEvent.event.when(
+      unavailability: (unavailabilityEvent) => _buildUnavailabilityCard(unavailabilityEvent, calendarEvent, index, totalEvents),
+      shift: (shiftEvent) => _buildShiftCard(shiftEvent, calendarEvent, index, totalEvents),
+    );
+  }
+
+  Widget _buildUnavailabilityCard(UnavailabilityTime unavailabilityEvent, CalendarEvent calendarEvent, int index, int totalEvents) {
     final title = unavailabilityEvent.title;
-    final displayTime = event.displayTime;
+    final displayTime = calendarEvent.displayTime;
     final eventId = unavailabilityEvent.eventId;
     final cardColor = viewModel.getColorForEvent(eventId.toString());
 
@@ -148,20 +154,41 @@ class _CalendarState extends FireAppState<CalendarView>
           onSelected: (value) {},
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             PopupMenuItem<String>(
-                value: 'Edit',
-                onTap: () {
-                  viewModel.editEventNavigate(unavailabilityEvent);
-                },
-                child: Text(
-                    AppLocalizations.of(context)?.calendarItemEdit ?? "Edit")),
+              value: 'Edit',
+              onTap: () {
+                viewModel.editEventNavigate(unavailabilityEvent);
+              },
+              child: Text(AppLocalizations.of(context)?.calendarItemEdit ?? "Edit"),
+            ),
             PopupMenuItem<String>(
               value: 'Delete',
-              child: Text(
-                  AppLocalizations.of(context)?.calendarItemDelete ?? "Delete"),
+              child: Text(AppLocalizations.of(context)?.calendarItemDelete ?? "Delete"),
               onTap: () {
                 viewModel.deleteUnavailability(eventId);
               },
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShiftCard(Shift shiftEvent, CalendarEvent calendarEvent, int index, int totalEvents) {
+    final title = shiftEvent.title;
+    final displayTime = calendarEvent.displayTime;
+    final eventId = shiftEvent.shiftId;
+    final cardColor = viewModel.getColorForEvent(eventId.toString());
+
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: ListTile(
+        title: Text(title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(displayTime),
+            Text('Status: ${shiftEvent.status}'),
           ],
         ),
       ),
