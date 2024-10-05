@@ -2,11 +2,15 @@ import 'package:fireapp/data/client/shift_request_client.dart';
 import 'package:fireapp/domain/models/shift_request.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../exception/shift_request_exception.dart';
+import 'authentication_repository.dart';
+
 @injectable
 class ShiftRequestRepository {
   final ShiftRequestClient shiftRequestClient;
+  final AuthenticationRepository _authenticationRepository;
 
-  ShiftRequestRepository(this.shiftRequestClient);
+  ShiftRequestRepository(this.shiftRequestClient, this._authenticationRepository);
 
   Future<List<ShiftRequest>> getShiftRequestsByRequestID(String requestID) {
     return shiftRequestClient.getShiftRequestsByRequestID(requestID);

@@ -1,6 +1,7 @@
 import 'package:fireapp/pages/Supervisor/schedulerForm.dart';
 import 'package:fireapp/pages/settings/setting.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_view.dart';
+import 'package:fireapp/presentation/supervisor_shifts/supervisor_shifts_page.dart';
 import 'package:fireapp/presentation/volunteer_list/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import '../global/access.dart';
@@ -86,7 +87,7 @@ class SupervisorRoute extends StatefulWidget {
 
 // Main Navigation Screens - For SuperVisor  (Will show on navbar)
 final supervisorScreens = [
-  const Center(child: Text('Home', style: TextStyle(fontSize: 60))),
+  const SupervisorShiftsPage(),
   const SchedulerConstraintPage(),
   const VolunteerList(),
   SettingPage(

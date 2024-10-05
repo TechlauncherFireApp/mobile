@@ -4,6 +4,7 @@ import 'package:fireapp/domain/models/reference/qualification.dart';
 import 'package:fireapp/domain/models/reference/volunteer_role.dart';
 import 'package:fireapp/domain/models/register_request.dart';
 import 'package:fireapp/domain/models/role_response.dart';
+import 'package:fireapp/domain/models/scheduler/new_shift_request.dart';
 import 'package:fireapp/domain/models/shift.dart';
 import 'package:fireapp/domain/models/token_request.dart';
 import 'package:fireapp/domain/models/token_response.dart';
@@ -133,6 +134,11 @@ abstract class RestClient {
   @DELETE("/v2/user/{userId}/token")
   Future<void> unregisterFCMToken(
       @Path("userId") int userId,
-      @Body() FCMTokenUnregister token
+        @Body() FCMTokenUnregister token
+        );
+  @POST("/v2/volunteers/{userId}/shift")
+  Future<NewRequestResponse> postShiftRequest(
+      @Path("userId") int userId,
+      @Body() NewShiftRequest shift
       );
 }

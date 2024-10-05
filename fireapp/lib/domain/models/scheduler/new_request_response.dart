@@ -8,7 +8,7 @@ part 'new_request_response.g.dart';
 class NewRequestResponse with _$NewRequestResponse {
 
   const factory NewRequestResponse({
-    required String id,
+    @JsonKey(name: 'shift_id') required int id,
   }) = _NewRequestResponse;
 
   factory NewRequestResponse.fromJson(Map<String, Object?> json) => _$NewRequestResponseFromJson(json);

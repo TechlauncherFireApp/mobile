@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:fireapp/base/date_extensions.dart';
 import 'package:fireapp/domain/models/new/vehicle_request.dart';
 import 'package:fireapp/domain/models/scheduler/new_request.dart';
+import 'package:fireapp/domain/models/scheduler/new_request_response.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/domain/repository/scheduler_constraint_form_repository.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
@@ -59,24 +60,32 @@ class SchedulerConstraintFormViewModel
     _submissionState.add(RequestState.loading());
     () async {
       try {
-        var request = await _schedulerConstraintFormRepository.makeNewRequest(NewRequest(
-          title: titleController.text,
-          status:"",
-        ));
-        await _schedulerConstraintFormRepository.makeVehicleRequest(VehicleRequest(
-            requestId: request.id,
-            startDate: _selectedDate.value!.withTime(_selectedStartTime.value!),
-            endDate: _selectedDate.value!.withTime(_selectedEndTime.value!),
-            assetType: selectedAsset!.code
-        ));
+        String title = titleController.text;
+        int selectedVehicle = mapVehicleTypeToNumber(selectedAsset!.code);
+        var startDate = _selectedDate.value!.withTime(_selectedStartTime.value!);
+        var endDate = _selectedDate.value!.withTime(_selectedEndTime.value!);
+        NewRequestResponse response = await _schedulerConstraintFormRepository.makeNewShiftRequest(title, selectedVehicle, startDate, endDate);
         _submissionState.add(RequestState.success(null));
-        _navigate.add(ConstraintFormNavigation.shiftRequest(request.id));
+        _navigate.add(ConstraintFormNavigation.shiftRequest(response.id.toString()));
       } catch(e, stacktrace) {
         print(stacktrace);
         logger.e(e, stackTrace: stacktrace);
         _submissionState.add(RequestState.exception(e));
       }
     }();
+  }
+  
+  int mapVehicleTypeToNumber(String vehicleType) {
+    switch (vehicleType.toLowerCase()) {
+      case 'lightunit':
+        return 1;
+      case 'mediumtanker':
+        return 2;
+      case 'heavytanker':
+        return 3;
+      default:
+        throw ArgumentError("Invalid vehicle type: $vehicleType");
+    }
   }
 
   void selectDate(DateTime? date) {
