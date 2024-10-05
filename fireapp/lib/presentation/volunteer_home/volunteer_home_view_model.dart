@@ -33,7 +33,10 @@ class VolunteerHomeViewModel extends FireAppViewModel {
       }
       var shifts =
         await _shiftsRepository.getVolunteerShifts(userID);
-      _shifts.add(RequestState.success(shifts));
+      // Filter shifts where status is 'accepted'
+      var acceptedShifts = shifts.where((shift) => shift.status == 'accepted').toList();
+
+      _shifts.add(RequestState.success(acceptedShifts));
     } catch (e, stacktrace) {
       logger.e(e, stackTrace: stacktrace);
       _shifts.add(RequestState.exception(e));
