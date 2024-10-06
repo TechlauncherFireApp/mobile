@@ -134,8 +134,8 @@ abstract class RestClient {
   @DELETE("/v2/user/{userId}/token")
   Future<void> unregisterFCMToken(
       @Path("userId") int userId,
-        @Body() FCMTokenUnregister token
-        );
+      @Body() FCMTokenUnregister token
+      );
   @POST("/v2/volunteers/{userId}/shift")
   Future<NewRequestResponse> postShiftRequest(
       @Path("userId") int userId,

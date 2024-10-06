@@ -46,7 +46,4 @@ class SchedulerConstraintFormRepository {
     // Make the request using the client
     return schedulerConstraintFormClient.makeNewShiftRequest(userId, newShiftRequest);
   }
-
-// Helper function to map vehicle type string to a corresponding number
-
 }
