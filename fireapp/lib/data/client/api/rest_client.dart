@@ -141,4 +141,6 @@ abstract class RestClient {
       @Path("userId") int userId,
       @Body() NewShiftRequest shift
       );
+  @POST("/v2/optimiser")
+  Future<void> optimiseShifts();
 }

@@ -1,12 +1,13 @@
 import 'package:fireapp/presentation/supervisor_shifts/supervisor_shifts_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class SupervisorShiftsPage extends StatelessWidget {
   const SupervisorShiftsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = SupervisorShiftsViewModel();
+    SupervisorShiftsViewModel viewModel = GetIt.instance.get();
 
     return Scaffold(
       appBar: AppBar(

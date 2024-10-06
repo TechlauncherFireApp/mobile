@@ -11,4 +11,8 @@ class ShiftsRepository {
   Future<List<Shift>> getVolunteerShifts(int userId) {
     return shiftsClient.getVolunteerShifts(userId);
   }
+
+  Future<void> optimiseShifts() {
+    return shiftsClient.optimiseShifts();
+  }
 }
