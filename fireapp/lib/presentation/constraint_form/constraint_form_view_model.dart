@@ -61,7 +61,7 @@ class SchedulerConstraintFormViewModel
     () async {
       try {
         String title = titleController.text;
-        int selectedVehicle = mapVehicleTypeToNumber(selectedAsset!.code);
+        int selectedVehicle = selectedAsset!.id;
         var startDate = _selectedDate.value!.withTime(_selectedStartTime.value!);
         var endDate = _selectedDate.value!.withTime(_selectedEndTime.value!);
         NewRequestResponse response = await _schedulerConstraintFormRepository.makeNewShiftRequest(title, selectedVehicle, startDate, endDate);
@@ -73,19 +73,6 @@ class SchedulerConstraintFormViewModel
         _submissionState.add(RequestState.exception(e));
       }
     }();
-  }
-  
-  int mapVehicleTypeToNumber(String vehicleType) {
-    switch (vehicleType.toLowerCase()) {
-      case 'lightunit':
-        return 1;
-      case 'mediumtanker':
-        return 2;
-      case 'heavytanker':
-        return 3;
-      default:
-        throw ArgumentError("Invalid vehicle type: $vehicleType");
-    }
   }
 
   void selectDate(DateTime? date) {

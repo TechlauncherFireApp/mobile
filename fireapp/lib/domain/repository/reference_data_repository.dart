@@ -61,21 +61,21 @@ class ReferenceDataRepository {
   Future<List<AssetType>> getAssetTypeHardCoded() async {
     return Future.value([
       AssetType(
-        id: 11,
+        id: 3,
         code: 'heavyTanker',
         name: 'Heavy Tanker',
         updated: DateTime.parse('2021-04-04 10:22:41'),
         created: DateTime.parse('2021-04-04 10:22:41'),
       ),
       AssetType(
-        id: 12,
+        id: 2,
         code: 'mediumTanker',
         name: 'Medium Tanker',
         updated: DateTime.parse('2021-04-04 10:22:41'),
         created: DateTime.parse('2021-04-04 10:22:41'),
       ),
       AssetType(
-        id: 13,
+        id: 1,
         code: 'lightUnit',
         name: 'Light Unit',
         updated: DateTime.parse('2021-04-04 10:22:41'),
