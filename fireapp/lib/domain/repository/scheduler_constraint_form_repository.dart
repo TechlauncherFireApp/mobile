@@ -2,7 +2,7 @@ import 'package:fireapp/data/client/scheduler_constraint_form_client.dart';
 import 'package:fireapp/domain/models/reference/asset_type.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../exception/make_new_shift_exception.dart';
+import '../../exception/null_user_id_shift_exception.dart';
 import '../models/new/vehicle_request.dart';
 import '../models/scheduler/new_request.dart';
 import '../models/scheduler/new_request_response.dart';
@@ -26,19 +26,19 @@ class SchedulerConstraintFormRepository {
 
   Future<NewRequestResponse> makeNewShiftRequest(
     String title,
-    int selectedVehicle,
+    int vehicleTypeId,
     DateTime startDate,
     DateTime endDate,
   ) async {
     // Fetch the userId from the authentication repository
     int? userId = await _authenticationRepository.getUserId();
     if (userId == null) {
-      throw MakeNewShiftException("User Id is null while trying to make new shift request");
+      throw NullUserIdShiftException("User Id is null while trying to make new shift request");
     }
     // Create the NewShiftRequest object
     NewShiftRequest newShiftRequest = NewShiftRequest(
       title: title,
-      vehicleType: selectedVehicle,
+      vehicleType: vehicleTypeId,
       startTime: startDate,
       endTime: endDate,
     );
