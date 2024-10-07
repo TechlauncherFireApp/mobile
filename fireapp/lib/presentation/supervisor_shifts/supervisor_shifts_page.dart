@@ -3,6 +3,7 @@ import 'package:fireapp/style/theme.dart';
 import 'package:fireapp/style/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // Import localization
 import '../../domain/request_state.dart'; // Ensure you import the RequestState to use the state classes
 
 class SupervisorShiftsPage extends StatelessWidget {
@@ -14,16 +15,16 @@ class SupervisorShiftsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Supervisor Shifts'),
+        title: Text(AppLocalizations.of(context)?.supervisor_shifts ?? 'Supervisor Shifts'),
       ),
       body: Center(
         child: Text(
-          'Shifts management view here',
+          AppLocalizations.of(context)?.shifts_management_view ?? 'Shifts management view here',
           style: textTheme.bodyMedium,
         ),
       ),
       bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(1.0.rdp()), // Adjusted padding for better UI layout
+        padding: EdgeInsets.all(1.0.rdp()),
         child: StreamBuilder(
           stream: viewModel.loadingState,
           builder: (context, snapshot) {
@@ -37,7 +38,7 @@ class SupervisorShiftsPage extends StatelessWidget {
               onPressed: () async {
                 await viewModel.optimiseShifts();
               },
-              child: const Text('Optimise Shifts'),
+              child: Text(AppLocalizations.of(context)?.optimise_shifts ?? 'Optimise Shifts'),
             );
           },
         ),

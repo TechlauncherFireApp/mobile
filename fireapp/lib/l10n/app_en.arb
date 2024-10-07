@@ -222,6 +222,8 @@
         "example": "15:30"
       }
     }
-  }
-
+  },
+  "supervisor_shifts": "Supervisor Shifts",
+  "shifts_management_view": "Shifts management view here",
+  "optimise_shifts": "Optimise Shifts"
 }
