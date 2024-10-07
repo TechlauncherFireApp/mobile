@@ -114,7 +114,7 @@ class SchedulerConstraintFormViewModel
     _assetTypes.add(RequestState.loading());
     () async {
       try {
-        var assetTypes = await _referenceDataRepository.getAssetType();
+        var assetTypes = await _referenceDataRepository.getAssetTypeHardCoded();
         if (assetTypes.isEmpty) {
           assetTypes = [];
         }

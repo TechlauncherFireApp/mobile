@@ -42,7 +42,7 @@ void main() {
 
     test('SubmitForm sets submission state to loading', () async {
       var title = "Test title";
-      var id = "test";
+      var id = 1;
       viewModel.titleController.text = title;
       var request = NewRequest(title: title, status: "");
       var response = NewRequestResponse(id: id);
@@ -63,7 +63,7 @@ void main() {
           updated: DateTime.now(),
           created: DateTime.now()
       );
-      var vehicleRequest = VehicleRequest(requestId: id,
+      var vehicleRequest = VehicleRequest(requestId: id.toString(),
           startDate: date.withTime(start),
           endDate: date.withTime(end),
           assetType: assetType);
