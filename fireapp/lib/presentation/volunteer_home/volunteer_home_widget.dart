@@ -127,12 +127,17 @@ class _VolunteerHomePageState extends FireAppState<VolunteerHomePage>
                 Text(AppLocalizations.of(context)!.shift_id_display_home(shift.shiftId))
               ].spacedBy(1.0.rdp()),
             ),
-            Text(dateFormat.format(shift.start),
-                style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
-            Text(AppLocalizations.of(context)!.shift_time_range(
-                timeFormat.format(shift.start),
-                timeFormat.format(shift.end)
-            ))
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(dateFormat.format(shift.start),
+                    style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+                Text(AppLocalizations.of(context)!.shift_time_range(
+                    timeFormat.format(shift.start),
+                    timeFormat.format(shift.end)
+                ))
+              ].spacedBy(0.25.rdp()),
+            )
           ].spacedBy(1.0.rdp())
         ),
       ),
