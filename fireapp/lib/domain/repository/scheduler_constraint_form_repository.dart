@@ -3,7 +3,6 @@ import 'package:fireapp/domain/models/reference/asset_type.dart';
 import 'package:fireapp/exception/signed_out_exception.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../exception/null_user_id_shift_exception.dart';
 import '../models/new/vehicle_request.dart';
 import '../models/scheduler/new_request.dart';
 import '../models/scheduler/new_request_response.dart';
