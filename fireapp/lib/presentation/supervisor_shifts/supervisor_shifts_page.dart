@@ -1,6 +1,9 @@
 import 'package:fireapp/presentation/supervisor_shifts/supervisor_shifts_view_model.dart';
+import 'package:fireapp/style/theme.dart';
+import 'package:fireapp/style/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../../domain/request_state.dart'; // Ensure you import the RequestState to use the state classes
 
 class SupervisorShiftsPage extends StatelessWidget {
   const SupervisorShiftsPage({super.key});
@@ -13,20 +16,29 @@ class SupervisorShiftsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Supervisor Shifts'),
       ),
-      body: const Center(
+      body: Center(
         child: Text(
           'Shifts management view here',
-          style: TextStyle(fontSize: 24),
+          style: textTheme.bodyMedium,
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () async {
-            // Call the view model's method to handle the API call
-            await viewModel.optimiseShifts();
+        padding: EdgeInsets.all(16.0), // Adjusted padding for better UI layout
+        child: StreamBuilder<RequestState<void>>(
+          stream: viewModel.loadingState,
+          builder: (context, data) {
+            if (data is LoadingRequestState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ElevatedButton(
+              onPressed: () async {
+                await viewModel.optimiseShifts();
+              },
+              child: const Text('Optimise Shifts'),
+            );
           },
-          child: const Text('Optimise Shifts'),
         ),
       ),
     );
