@@ -24,9 +24,10 @@ class SupervisorShiftsPage extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0), // Adjusted padding for better UI layout
-        child: StreamBuilder<RequestState<void>>(
+        child: StreamBuilder(
           stream: viewModel.loadingState,
-          builder: (context, data) {
+          builder: (context, snapshot) {
+            final data = snapshot.data;
             if (data is LoadingRequestState) {
               return const Center(
                 child: CircularProgressIndicator(),
