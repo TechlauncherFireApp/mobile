@@ -45,7 +45,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Firebase related
 /android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/ios/GoogleService-Info.plist
 
 # FVM Version Cache
 .fvm/
