@@ -188,7 +188,7 @@ class _CalendarState extends FireAppState<CalendarView>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(displayTime),
-            Text('Status: ${shiftEvent.status}'),
+            Text('${AppLocalizations.of(context)?.status}: ${shiftEvent.status}'),
           ],
         ),
       ),

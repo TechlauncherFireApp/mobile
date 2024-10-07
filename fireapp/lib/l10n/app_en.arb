@@ -222,6 +222,10 @@
         "example": "15:30"
       }
     }
+  },
+  "shift_status": "Status:",
+  "@shift_status": {
+    "description": "Label for shift status"
   }
 
 }
