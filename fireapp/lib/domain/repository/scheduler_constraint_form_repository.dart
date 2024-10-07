@@ -1,5 +1,6 @@
 import 'package:fireapp/data/client/scheduler_constraint_form_client.dart';
 import 'package:fireapp/domain/models/reference/asset_type.dart';
+import 'package:fireapp/exception/signed_out_exception.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../exception/null_user_id_shift_exception.dart';
@@ -33,7 +34,7 @@ class SchedulerConstraintFormRepository {
     // Fetch the userId from the authentication repository
     int? userId = await _authenticationRepository.getUserId();
     if (userId == null) {
-      throw NullUserIdShiftException("User Id is null while trying to make new shift request");
+      throw SignedOutException("User Id is null while trying to make new shift request");
     }
     // Create the NewShiftRequest object
     NewShiftRequest newShiftRequest = NewShiftRequest(
