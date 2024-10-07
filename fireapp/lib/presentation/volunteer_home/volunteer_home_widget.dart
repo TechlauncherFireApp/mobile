@@ -68,7 +68,7 @@ class _VolunteerHomePageState extends FireAppState<VolunteerHomePage>
                                 AppLocalizations
                                     .of(context)
                                     ?.next_shift ?? "",
-                                style: textTheme.titleLarge,
+                                style: textTheme.headlineLarge,
                               ),
                               _buildShiftCard(nextShift, isNextShift: true),
                             ].spacedBy(1.0.rdp()),
