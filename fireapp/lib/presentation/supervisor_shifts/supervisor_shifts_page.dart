@@ -23,7 +23,7 @@ class SupervisorShiftsPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(16.0), // Adjusted padding for better UI layout
+          padding: EdgeInsets.all(1.0.rdp()), // Adjusted padding for better UI layout
         child: StreamBuilder(
           stream: viewModel.loadingState,
           builder: (context, snapshot) {
