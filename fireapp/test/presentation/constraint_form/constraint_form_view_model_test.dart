@@ -52,7 +52,7 @@ void main() {
       DateTime date = DateTime.timestamp();
       TimeOfDay start = TimeOfDay.now();
       TimeOfDay end = TimeOfDay.now();
-      var assetType = "test asset type";
+      var assetType = "mediumtanker";
       viewModel.selectDate(date);
       viewModel.selectStartTime(start);
       viewModel.selectEndTime(end);
@@ -131,7 +131,7 @@ void main() {
 
     test('FetchAssetTypes handles errors', () async {
       const errorMessage = 'Error fetching asset types';
-      when(mockReferenceDataRepository.getAssetType()).thenThrow(errorMessage);
+      when(mockReferenceDataRepository.getAssetTypeHardCoded()).thenThrow(errorMessage);
 
       expectLater(
           viewModel.assetsStream,
