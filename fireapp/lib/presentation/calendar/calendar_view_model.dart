@@ -4,11 +4,13 @@ import 'dart:ui';
 import 'package:fireapp/domain/models/calendar_event.dart';
 import 'package:fireapp/domain/models/unavailability/unavailability_time.dart';
 import 'package:fireapp/domain/repository/authentication_repository.dart';
+import 'package:fireapp/domain/repository/shifts_repository.dart';
 import 'package:fireapp/presentation/fireapp_view_model.dart';
 import 'package:fireapp/style/colors.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../domain/models/shift.dart';
 import '../../domain/request_state.dart';
 import 'package:fireapp/domain/repository/unavailability_repository.dart';
 
@@ -21,6 +23,7 @@ class CalendarViewModel extends FireAppViewModel
   //Load in authentication and unavailability actions
   late final AuthenticationRepository _authenticationRepository;
   late final UnavailabilityRepository _unavailabilityRepository;
+  late final ShiftsRepository _shiftsRepository;
 
   final BehaviorSubject<int> selectedMonth =
       BehaviorSubject.seeded(DateTime.now().month);
@@ -33,6 +36,10 @@ class CalendarViewModel extends FireAppViewModel
       _unavailabilityEvents = BehaviorSubject.seeded(RequestState.initial());
   Stream<RequestState<List<UnavailabilityTime>>> get eventsStream =>
       _unavailabilityEvents.stream;
+
+  final BehaviorSubject<RequestState<List<Shift>>> _shifts =
+  BehaviorSubject.seeded(RequestState.initial());
+  Stream<RequestState<List<Shift>>> get shiftsStream => _shifts.stream;
 
   // List of restructured UI event data structures
   final BehaviorSubject<List<CalendarEvent>> _displayEvents =
@@ -64,7 +71,7 @@ class CalendarViewModel extends FireAppViewModel
   }
 
   CalendarViewModel(
-      this._authenticationRepository, this._unavailabilityRepository);
+      this._authenticationRepository, this._unavailabilityRepository, this._shiftsRepository);
 
   // Fetch the volunteer's unavailability events
   Future<void> fetchUnavailabilityEvents() async {
@@ -87,6 +94,26 @@ class CalendarViewModel extends FireAppViewModel
       logger.e(e, stackTrace: stacktrace);
       _unavailabilityEvents.add(RequestState.exception(e));
     } finally {}
+  }
+  
+  Future<void> fetchShifts() async {
+    _loadingState.add(RequestState.loading());
+    try {
+      var userId = (await _authenticationRepository.getCurrentSession())?.userId;
+      if (userId == null) {
+        throw Exception(
+            'User ID is null. Cannot update roles without a valid user ID.');
+      }
+      var shifts = await _shiftsRepository.getVolunteerShifts(userId);
+      if (shifts.isEmpty) {
+        shifts = [];
+      }
+
+      _shifts.add(RequestState.success(shifts));
+    } catch (e, stacktrace) {
+      logger.e(e, stackTrace: stacktrace);
+      _shifts.add(RequestState.exception(e));
+    }
   }
 
   // Check if two timeframes overlap
@@ -122,43 +149,81 @@ class CalendarViewModel extends FireAppViewModel
     return filteredList;
   }
 
-  Future<void> loadAndSetDisplayEvents() async {
-    await fetchUnavailabilityEvents();
-    final eventsState = _unavailabilityEvents.value;
+  List<Shift> filterShifts(List<Shift> shiftsList) {
+    final filteredList = shiftsList.where((shift) {
+      final selectedStartTime =
+        DateTime(selectedYear.value, selectedMonth.value, 1);
+      DateTime firstDayOfNextMonth =
+        DateTime(selectedYear.value, selectedMonth.value + 1, 1);
+      final selectedEndTime =
+        firstDayOfNextMonth.subtract(const Duration(days: 1));
+      return doPeriodsOverlap(shift.start, shift.end,
+          selectedStartTime, selectedEndTime);
+    }).toList();
+    return filteredList;
+  }
 
-    // Check if current state has successfully loaded events
-    if (eventsState is SuccessRequestState<List<UnavailabilityTime>>) {
-      final unavailabilityList = eventsState.result;
-      var filteredEvents = filterEvents(unavailabilityList);
-      //Filter the events to the selected month period
-      //Take unavailability events and turn them into UI information
-      _displayEvents.add(mapToCalendarEvents(filteredEvents));
+  Future<void> loadAndSetDisplayEvents() async {
+    _loadingState.add(RequestState.loading());
+    await Future.wait([fetchUnavailabilityEvents(), fetchShifts()]);
+
+    final unavailabilityState = _unavailabilityEvents.value;
+    final shiftsState = _shifts.value;
+
+    if (unavailabilityState is SuccessRequestState<List<UnavailabilityTime>> &&
+        shiftsState is SuccessRequestState<List<Shift>>) {
+      final unavailabilityList = unavailabilityState.result;
+      final shiftsList = shiftsState.result;
+
+      var filteredUnavailability = filterEvents(unavailabilityList);
+      var filteredShifts = filterShifts(shiftsList);
+
+      _displayEvents.add(mapToCalendarEvents(filteredUnavailability, filteredShifts));
     } else {
-      // No events to be displayed
       _displayEvents.add([]);
     }
+
+    _loadingState.add(RequestState.success(null));
   }
 
   // Convert list of unavailability events to displayable calendar events
-  List<CalendarEvent> mapToCalendarEvents(List<UnavailabilityTime> events) {
+  List<CalendarEvent> mapToCalendarEvents(List<UnavailabilityTime> unavailability, List<Shift> shifts) {
     List<CalendarEvent> displayEventList = [];
-    for (var event in events) {
+    for (var event in [...unavailability, ...shifts]) {
       final firstDayOfMonth =
           DateTime(selectedYear.value, selectedMonth.value, 1);
       //Fix start date
-      final startDate = (event.startTime.isBefore(firstDayOfMonth) &&
-              !isSameDay(event.startTime, firstDayOfMonth))
-          ? firstDayOfMonth
-          : event.startTime;
+      final startDate;
+      if (event is Shift) {
+        startDate = (event.start.isBefore(firstDayOfMonth) && !isSameDay(event.start, firstDayOfMonth))
+            ? firstDayOfMonth
+            : event.start;
+      } else if (event is UnavailabilityTime) {
+        startDate = (event.startTime.isBefore(firstDayOfMonth) && !isSameDay(event.startTime, firstDayOfMonth))
+            ? firstDayOfMonth
+            : event.startTime;
+      } else {
+        startDate = firstDayOfMonth;
+      }
+
       DateTime firstDayOfNextMonth =
           DateTime(selectedYear.value, selectedMonth.value + 1, 1, 23, 59);
       final lastDayOfMonth =
           firstDayOfNextMonth.subtract(const Duration(days: 1));
       //Fix end date
-      final endDate = (event.endTime.isAfter(lastDayOfMonth) &&
-              !isSameDay(event.endTime, lastDayOfMonth))
-          ? lastDayOfMonth
-          : event.endTime;
+      final endDate;
+      if (event is Shift) {
+        endDate = (event.end.isAfter(lastDayOfMonth) && !isSameDay(event.end, lastDayOfMonth))
+            ? lastDayOfMonth
+            : event.end;
+      } else if (event is UnavailabilityTime) {
+        endDate = (event.endTime.isAfter(lastDayOfMonth) && !isSameDay(event.endTime, lastDayOfMonth))
+            ? lastDayOfMonth
+            : event.endTime;
+      } else {
+        endDate = firstDayOfNextMonth;
+      }
+
       final numDays = endDate.difference(startDate).inDays;
       // For each day in the event
       for (int i = 0; i <= numDays; i++) {
@@ -167,7 +232,7 @@ class CalendarViewModel extends FireAppViewModel
         String displayTimeLabel =
             getDisplayTimeLabel(i, numDays, startDate, endDate);
         displayEventList.add(CalendarEvent(
-            event: event,
+            event: event is Shift ? EventType.shift(event) : EventType.unavailability(event as UnavailabilityTime),
             displayTime: displayTimeLabel,
             displayDate: currentDate));
       }
@@ -213,7 +278,12 @@ class CalendarViewModel extends FireAppViewModel
             userID, eventID);
 
         // Remove the deleted event from the display events
-        _displayEvents.add(_displayEvents.value.where((event) => event.event.eventId != eventID).toList());
+        _displayEvents.add(_displayEvents.value.where((calendarEvent) {
+          return calendarEvent.event.when(
+            unavailability: (unavailabilityTime) => unavailabilityTime.eventId != eventID,
+            shift: (_) => true, // Keep all shifts
+          );
+        }).toList());
 
         _loadingState.add(RequestState.success(null));
       } catch (e, stacktrace) {

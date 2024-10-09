@@ -5,6 +5,8 @@ part 'shift.g.dart';
 
 @freezed
 class Shift with _$Shift {
+  static const String STATUS_ACCEPTED = 'accepted';
+
   const factory Shift({
     required int shiftId,
     required String title,
