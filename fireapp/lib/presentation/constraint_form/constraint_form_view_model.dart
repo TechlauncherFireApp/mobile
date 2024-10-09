@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:fireapp/base/date_extensions.dart';
 import 'package:fireapp/domain/models/new/vehicle_request.dart';
 import 'package:fireapp/domain/models/scheduler/new_request.dart';
+import 'package:fireapp/domain/models/scheduler/new_request_response.dart';
 import 'package:fireapp/domain/repository/reference_data_repository.dart';
 import 'package:fireapp/domain/repository/scheduler_constraint_form_repository.dart';
 import 'package:fireapp/presentation/constraint_form/constraint_form_navigation.dart';
@@ -59,18 +60,13 @@ class SchedulerConstraintFormViewModel
     _submissionState.add(RequestState.loading());
     () async {
       try {
-        var request = await _schedulerConstraintFormRepository.makeNewRequest(NewRequest(
-          title: titleController.text,
-          status:"",
-        ));
-        await _schedulerConstraintFormRepository.makeVehicleRequest(VehicleRequest(
-            requestId: request.id,
-            startDate: _selectedDate.value!.withTime(_selectedStartTime.value!),
-            endDate: _selectedDate.value!.withTime(_selectedEndTime.value!),
-            assetType: selectedAsset!.code
-        ));
+        String title = titleController.text;
+        int selectedVehicle = selectedAsset!.id;
+        var startDate = _selectedDate.value!.withTime(_selectedStartTime.value!);
+        var endDate = _selectedDate.value!.withTime(_selectedEndTime.value!);
+        NewRequestResponse response = await _schedulerConstraintFormRepository.makeNewShiftRequest(title, selectedVehicle, startDate, endDate);
         _submissionState.add(RequestState.success(null));
-        _navigate.add(ConstraintFormNavigation.shiftRequest(request.id));
+        _navigate.add(ConstraintFormNavigation.shiftRequest(response.id.toString()));
       } catch(e, stacktrace) {
         print(stacktrace);
         logger.e(e, stackTrace: stacktrace);
@@ -105,7 +101,7 @@ class SchedulerConstraintFormViewModel
     _assetTypes.add(RequestState.loading());
     () async {
       try {
-        var assetTypes = await _referenceDataRepository.getAssetType();
+        var assetTypes = await _referenceDataRepository.getAssetTypeHardCoded();
         if (assetTypes.isEmpty) {
           assetTypes = [];
         }

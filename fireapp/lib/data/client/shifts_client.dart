@@ -10,4 +10,8 @@ class ShiftsClient {
   Future<List<Shift>> getVolunteerShifts(int userId) {
     return restClient.getShifts(userId);
   }
+
+  Future<void> optimiseShifts() {
+    return restClient.optimiseShifts();
+  }
 }

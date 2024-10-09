@@ -226,6 +226,8 @@
   "shift_status": "Status: {status}",
   "@shift_status": {
     "description": "Label for shift status"
-  }
-
+  },
+  "supervisor_shifts": "Supervisor Shifts",
+  "shifts_management_view": "Shifts management view here",
+  "optimise_shifts": "Optimise Shifts"
 }

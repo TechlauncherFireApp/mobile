@@ -42,7 +42,7 @@ void main() {
 
     test('SubmitForm sets submission state to loading', () async {
       var title = "Test title";
-      var id = "test";
+      var id = 1;
       viewModel.titleController.text = title;
       var request = NewRequest(title: title, status: "");
       var response = NewRequestResponse(id: id);
@@ -52,7 +52,7 @@ void main() {
       DateTime date = DateTime.timestamp();
       TimeOfDay start = TimeOfDay.now();
       TimeOfDay end = TimeOfDay.now();
-      var assetType = "test asset type";
+      var assetType = "mediumtanker";
       viewModel.selectDate(date);
       viewModel.selectStartTime(start);
       viewModel.selectEndTime(end);
@@ -63,7 +63,7 @@ void main() {
           updated: DateTime.now(),
           created: DateTime.now()
       );
-      var vehicleRequest = VehicleRequest(requestId: id,
+      var vehicleRequest = VehicleRequest(requestId: id.toString(),
           startDate: date.withTime(start),
           endDate: date.withTime(end),
           assetType: assetType);
@@ -131,7 +131,7 @@ void main() {
 
     test('FetchAssetTypes handles errors', () async {
       const errorMessage = 'Error fetching asset types';
-      when(mockReferenceDataRepository.getAssetType()).thenThrow(errorMessage);
+      when(mockReferenceDataRepository.getAssetTypeHardCoded()).thenThrow(errorMessage);
 
       expectLater(
           viewModel.assetsStream,

@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:matcher/expect.dart' hide expectLater, expect;
 
+import '../../presentation/login/login_viewmodel_test.mocks.dart';
 @GenerateNiceMocks([
   MockSpec<ConcreteShiftRequestClient>(),
 ])
@@ -15,10 +16,12 @@ void main() {
   group('ShiftRequestRepository', () {
     late ShiftRequestClient mockShiftRequestClient;
     late ShiftRequestRepository shiftRequestRepository;
+    late MockAuthenticationRepository mockAuthenticationRepository;
 
     setUp(() {
+      mockAuthenticationRepository = MockAuthenticationRepository();
       mockShiftRequestClient = MockConcreteShiftRequestClient();
-      shiftRequestRepository = ShiftRequestRepository(mockShiftRequestClient);
+      shiftRequestRepository = ShiftRequestRepository(mockShiftRequestClient, mockAuthenticationRepository);
     });
 
     test('getShiftRequestsByRequestID should return a list of ShiftRequest', () async {
