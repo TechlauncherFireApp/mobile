@@ -223,7 +223,7 @@
       }
     }
   },
-  "shift_status": "Status:",
+  "shift_status": "Status: {status}",
   "@shift_status": {
     "description": "Label for shift status"
   }
